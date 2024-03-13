@@ -1,0 +1,50 @@
+.garage-service {
+    margin-left: 40px ;
+    margin-right: 40px;
+    margin-top: 30px;
+    align-items: flex-start;
+}
+
+.service-edit {
+    border: 1px solid #ccc;
+    border-radius: 16px;
+    background-color: #fff;
+    padding: 24px 12px 24px 32px;
+    margin-top: 20px;
+}
+
+.garage-service .service-edit .edit-service-span {
+    font-weight: 400;
+    color: rgb(122, 117, 117);
+}
+
+.garage-service .service-edit .edit-service-input input{
+    height: 32px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 90%;
+    padding: 4px;
+}
+
+.garage-service .service-edit .edit-service-textarea textarea{
+    height: 120px;
+    width: 97%;
+    border-radius: 6px;
+    padding: 4px;
+}
+
+.garage-service .service-edit .row-editservice {
+    padding-top: 8px;
+    padding-bottom: 12px;
+}
+
+.garage-service .service-edit .detail-description-service p{
+    height: 80px;
+    width: 97%;
+    border-radius: 6px;
+    padding: 4px;
+}
+
+.garage-service .service-edit .detail-p {
+    margin-top: 8px;
+}

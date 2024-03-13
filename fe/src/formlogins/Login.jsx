@@ -1,8 +1,8 @@
-import { Button, Form, Input, notification } from "antd";
-import "../assets/styles/login.css";
-import { loginAPI } from "../services/UserService";
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Button, Form, Input, notification } from 'antd';
+import '../assets/styles/login.css';
+import { loginAPI } from '../services/UserService';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -10,25 +10,25 @@ const Login = () => {
   const onFinish = async (values) => {
     let res = await loginAPI(values.email, values.password);
 
-    localStorage.setItem("accessToken", res.accessToken);
+    localStorage.setItem('accessToken', res.accessToken);
 
     openNotification();
 
-    navigate("/managementall");
+    navigate('/managementall');
   };
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    console.log('Failed:', errorInfo);
   };
 
   const openNotification = () => {
     notification.open({
-      message: "LOGIN SUCCESS",
+      message: 'LOGIN SUCCESS',
     });
   };
   return (
     <div className="loginContainer">
       <h1 className="heading-login">welcome</h1>
-      <h3 className="heading-login">Log in with your working account</h3>
+      <h3 className="heading-login">Login to your account</h3>
       <Form
         name="basic"
         style={{
@@ -48,7 +48,7 @@ const Login = () => {
           rules={[
             {
               required: true,
-              message: "Please input your username!",
+              message: 'Please input your username!',
             },
           ]}
         >
@@ -61,7 +61,7 @@ const Login = () => {
           rules={[
             {
               required: true,
-              message: "Please input your password!",
+              message: 'Please input your password!',
             },
           ]}
         >

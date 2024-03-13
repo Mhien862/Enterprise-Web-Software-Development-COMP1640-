@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, GroupOutlined, UserOutlined, IdcardOutlined } from '@ant-design/icons';
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  GroupOutlined,
+  GithubOutlined,
+  UserOutlined,
+  IdcardOutlined,
+} from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import '../assets/styles/headerlayout.css';
@@ -56,17 +63,22 @@ const LayOut = () => {
             {
               key: '1',
               icon: <IdcardOutlined />,
-              label: <Link to="/managementall">Garages</Link>,
+              label: <Link to="/managementall">Home</Link>,
             },
             {
               key: '2',
               icon: <UserOutlined />,
-              label: <Link to="/owner">User</Link>,
+              label: <Link to="/owner">Profile</Link>,
             },
             {
               key: '3',
               icon: <GroupOutlined />,
-              label: <Link to="/service">Garage Service</Link>,
+              label: <Link to="/service">Branch</Link>,
+            },
+            {
+              key: '3',
+              icon: <GithubOutlined />,
+              label: <Link to="/service">About us</Link>,
             },
           ]}
         />

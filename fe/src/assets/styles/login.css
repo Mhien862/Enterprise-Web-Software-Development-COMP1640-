@@ -3,9 +3,7 @@
 }
 
 body {
-    background-image: url(../lake.png);
+    background-image: url(../styles/lake.png);
     background-repeat: no-repeat;
     background-size: cover;
-
-   
 }
