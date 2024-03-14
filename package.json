@@ -24,6 +24,7 @@
   "devDependencies": {},
   "scripts": {
     "backend": "nodemon be/index.js",
+    "frontend": "npm run dev --prefix fe",
     "dev": "concurrently \"npm run be\" \"npm run fe\""
   },
   "repository": {
