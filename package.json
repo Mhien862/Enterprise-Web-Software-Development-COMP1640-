@@ -19,9 +19,9 @@
     "node": "^18.19.1",
     "nodemon": "^3.1.0",
     "package-lock.json": "^1.0.0",
-    "package.json": "^2.0.1"
+    "package.json": "^2.0.1",
+    "validator": "^13.11.0"
   },
-  "devDependencies": {},
   "scripts": {
     "backend": "nodemon be/index.js",
     "frontend": "npm run dev --prefix frontend",
