@@ -33,7 +33,7 @@ const registerUser = async (req, res) => {
     // Lưu user mới vào cơ sở dữ liệu
     await newUser.save();
     // Tạo và gửi token cho user sau khi đăng ký thành công
-    createToken(res, newUser._id);
+    // createToken(res, newUser._id);
     // Trả về phản hồi thành công
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
