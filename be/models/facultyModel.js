@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const facultySchema = new mongoose.Schema({
+const facultySchema = mongoose.Schema({
   facultyName: {
     type: String,
     required: true,

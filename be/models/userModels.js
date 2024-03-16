@@ -17,11 +17,11 @@ const userSchema = mongoose.Schema(
       required: true,
     },
     role: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Role",
     },
     faculty: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Faculty",
     },
     agreement: {
