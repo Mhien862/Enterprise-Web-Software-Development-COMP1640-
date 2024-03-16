@@ -1,19 +1,23 @@
 import User from "../models/userModels.js";
 import { Role } from "../models/roleModel.js"; // Import Role model
 import bcrypt from "bcryptjs";
+import { Faculty } from "../models/facultyModel.js";
 const registerUser = async (req, res) => {
   try {
-    const { username, password, email, roleName } = req.body;
+    const { username, password, email, roleName, facultyName } = req.body;
 
     // Mã hóa mật khẩu
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Tìm vai trò dựa trên tên vai trò
     const role = await Role.findOne({ roleName });
-
+    const faculty = await Faculty.findOne({ facultyName });
     // Kiểm tra xem vai trò có tồn tại không
     if (!role) {
       return res.status(400).json({ message: "Role not found" });
+    }
+    if (!faculty) {
+      return res.status(400).json({ message: "Faculty not found" });
     }
 
     // Tạo một đối tượng user mới từ dữ liệu được gửi từ client
@@ -21,7 +25,8 @@ const registerUser = async (req, res) => {
       username,
       password: hashedPassword,
       email,
-      role: roleName, // Lưu tên của vai trò vào cơ sở dữ liệu
+      role: roleName,
+      faculty: facultyName, // Lưu tên của vai trò vào cơ sở dữ liệu
     });
 
     // Lưu user mới vào cơ sở dữ liệu

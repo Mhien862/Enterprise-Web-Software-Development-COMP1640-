@@ -8,7 +8,7 @@ import Comment from "./models/commentModel.js";
 import Contribution from "./models/contributionModel.js";
 import EventDetail from "./models/eventDetailModel.js";
 import Event from "./models/eventModel.js";
-import Faculty from "./models/facultyModel.js";
+import { Faculty } from "./models/facultyModel.js";
 import Statistic from "./models/statisticModel.js";
 import { Role } from "./models/roleModel.js";
 import User from "./models/userModels.js";
