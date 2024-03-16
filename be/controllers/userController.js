@@ -58,6 +58,8 @@ const loginUser = async (req, res) => {
         username: existingUser.username,
         email: existingUser.email,
         isAdmin: existingUser.isAdmin,
+        role: existingUser.role,
+        faculty: existingUser.faculty,
       });
       return;
     }
