@@ -2,6 +2,7 @@ import User from "../models/userModels.js";
 import { Role } from "../models/roleModel.js"; // Import Role model
 import bcrypt from "bcryptjs";
 import { Faculty } from "../models/facultyModel.js";
+import createToken from "../utils/createToken.js";
 const registerUser = async (req, res) => {
   try {
     const { username, password, email, roleName, facultyName } = req.body;
@@ -31,7 +32,8 @@ const registerUser = async (req, res) => {
 
     // Lưu user mới vào cơ sở dữ liệu
     await newUser.save();
-
+    // Tạo và gửi token cho user sau khi đăng ký thành công
+    createToken(res, newUser._id);
     // Trả về phản hồi thành công
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
@@ -41,5 +43,32 @@ const registerUser = async (req, res) => {
   }
 };
 
-const loginUser = async (req, res) => {};
-export { registerUser, loginUser };
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
+    if (isPasswordValid) {
+      createToken(res, existingUser._id);
+      res.status(200).json({
+        _id: existingUser._id,
+        username: existingUser.username,
+        email: existingUser.email,
+        isAdmin: existingUser.isAdmin,
+      });
+      return;
+    }
+  }
+};
+const logoutUser = async (req, res) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  res.status(200).json({ message: "Logged out successfully" });
+};
+export { registerUser, loginUser, logoutUser };
