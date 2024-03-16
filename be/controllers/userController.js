@@ -25,5 +25,5 @@ const registerUser = async (req, res) => {
       .json({ message: "An error occurred while registering user" });
   }
 };
-
-export { registerUser };
+const loginUser = async (req, res) => {};
+export { registerUser, loginUser };
