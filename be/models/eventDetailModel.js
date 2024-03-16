@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const eventDetailSchema = new mongoose.Schema({
+const eventDetailSchema = mongoose.Schema({
   event: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Event",

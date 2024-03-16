@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const eventSchema = new mongoose.Schema({
+const eventSchema = mongoose.Schema({
   eventName: String,
   firstClosureDate: Date,
   finalClosureDate: Date,
