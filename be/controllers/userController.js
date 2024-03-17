@@ -52,7 +52,7 @@ const loginUser = async (req, res) => {
       existingUser.password
     );
     if (isPasswordValid) {
-      createToken(res, existingUser._id);
+      const token = createToken(res, existingUser._id);
       res.status(200).json({
         _id: existingUser._id,
         username: existingUser.username,
@@ -60,6 +60,7 @@ const loginUser = async (req, res) => {
         isAdmin: existingUser.isAdmin,
         role: existingUser.role,
         faculty: existingUser.faculty,
+        token: token,
       });
       return;
     }
