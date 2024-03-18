@@ -1,7 +1,7 @@
 import axiosInstance from "./axios.service";
 
 const loginAPI = async (email, password) => {
-    const res = await axiosInstance.post("auth/sign-in ",{email, password})
+    const res = await axiosInstance.post("http://localhost:1000/login ",{email, password})
 
     return res.data.data
 }
@@ -18,8 +18,8 @@ const resetAPI = async (token, password, confirmPassword) => {
     return res.data.data
 }
 
-const serviceAPI = async (name, description, minPrice, maxPrice) => {
-    const res = await axiosInstance.post("/services ",{name, description, minPrice, maxPrice})
+const userAPI = async (username, email, password, role, faculty) => {
+    const res = await axiosInstance.post("http://localhost:1000/register ",{username, email, password, role, faculty})
 
     return res.data.data
 }
@@ -29,6 +29,6 @@ const getserviceAPI = async (name, description, minPrice, maxPrice) => {
 
     return res.data.data
 }
- export {loginAPI, serviceAPI, forgotAPI, resetAPI, getserviceAPI };
+ export {loginAPI, userAPI, forgotAPI, resetAPI, getserviceAPI };
 
 

@@ -2,22 +2,29 @@ import { Button, Form, Input, notification } from "antd";
 import "../assets/styles/login.css";
 import { loginAPI } from "../services/UserService";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { CookiesProvider, useCookies } from "react-cookie";
 
 const Login = () => {
   const navigate = useNavigate();
-
+  const [cookies, setCookie] = useCookies(["user"]);
   const onFinish = async (values) => {
-    let res = await loginAPI(values.email, values.password);
+    try {
+      let res = await loginAPI(values.email, values.password);
+      setCookie("user", values, { path: "/" });
 
-    localStorage.setItem("accessToken", res.accessToken);
+      console.log(res);
+      console.log(values);
+      if (res && res.accessToken)
+        localStorage.setItem("accessToken", res.accessToken);
 
-    openNotification();
-
-    navigate("/managementall");
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+      openNotification();
+      navigate("/createuser");
+    } catch (error) {
+      console.log(222, error);
+      notification.open({
+        message: "LOGIN Fail",
+      });
+    }
   };
 
   const openNotification = () => {
@@ -25,6 +32,7 @@ const Login = () => {
       message: "LOGIN SUCCESS",
     });
   };
+
   return (
     <div className="loginContainer">
       <h1 className="heading-login">welcome</h1>
@@ -38,7 +46,6 @@ const Login = () => {
           remember: true,
         }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
         layout="vertical"
       >
@@ -68,11 +75,14 @@ const Login = () => {
           <Input.Password />
         </Form.Item>
         <div className="button">
-          <Button block type="primary" htmlType="submit">
+          <Button block type="primary" htmlType="submit" onClick={onFinish}>
             Login
           </Button>
           <div style={{ marginTop: 12 }}>
             <Link to="/forgot">Forgot password</Link>
+          </div>
+          <div style={{ marginTop: 12 }}>
+            <Link to="/register">Register</Link>
           </div>
         </div>
       </Form>
