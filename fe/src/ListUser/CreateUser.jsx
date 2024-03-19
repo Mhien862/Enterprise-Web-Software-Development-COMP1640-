@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { notification } from "antd";
+import { userAPI } from "../services/UserService";
 
 const Signup = () => {
   const [data, setData] = useState({
@@ -22,8 +23,9 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:1000/register";
-      const { data: res } = await axios.post(url, data);
+      // const url = "http://localhost:1000/register";
+      const { data: res } = await userAPI(data.username, data.email, data.password, data.role);
+
       navigate("/");
       notification.open({
         message: "Create Success",
