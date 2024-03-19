@@ -1,9 +1,9 @@
 import axiosInstance from "./axios.service";
 
 const loginAPI = async (email, password) => {
-    const res = await axiosInstance.post("http://localhost:1000/login ", { email, password })
+    const res = await axiosInstance.post("login ", { email, password })
 
-    return res.data.data
+    return res.data
 }
 
 const forgotAPI = async (email) => {
@@ -19,7 +19,7 @@ const resetAPI = async (token, password, confirmPassword) => {
 }
 
 const userAPI = async (username, email, password, role, faculty) => {
-    const res = await axiosInstance.post("/register ", { username, email, password, role, faculty })
+    const res = await axiosInstance.post("register ", { username, email, password, role, faculty })
 
     return res.data.data
 }

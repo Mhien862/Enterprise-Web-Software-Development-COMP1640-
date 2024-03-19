@@ -12,7 +12,7 @@ const Login = () => {
       let res = await loginAPI(values.email, values.password);
       setCookie("user", values, { path: "/" });
 
-      console.log(res);
+      console.log(`this res:`, res);
       console.log(values);
       if (res && res.accessToken)
         localStorage.setItem("accessToken", res.accessToken);
