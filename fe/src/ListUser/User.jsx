@@ -158,6 +158,8 @@ const User = () => {
       className="profile"
       style={{
         marginTop: 30,
+        paddingLeft: 40,
+        paddingRight: 40,
       }}
     >
       <div>
@@ -191,7 +193,7 @@ const User = () => {
                 allowClear
                 onChange={handleTypeChange}
               >
-                <Option value="Name">Usernamr</Option>
+                <Option value="Name">User Name</Option>
                 <Option value="Email">Email</Option>
               </Select>
               <Search
