@@ -18,8 +18,8 @@ const resetAPI = async (token, password, confirmPassword) => {
     return res.data.data
 }
 
-const userAPI = async (username, email, password, role, faculty) => {
-    const res = await axiosInstance.post("register ", { username, email, password, role, faculty })
+const userAPI = async (username, email, password, roleName, facultyName) => {
+    const res = await axiosInstance.post("register ", { username, email, password, roleName, facultyName })
 
     return res.data.data
 }

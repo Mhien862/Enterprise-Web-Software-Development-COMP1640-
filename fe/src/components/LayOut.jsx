@@ -67,12 +67,12 @@ const LayOut = () => {
             {
               key: "2",
               icon: <UserOutlined />,
-              label: <Link to="/">User</Link>,
+              label: <Link to="/user">User</Link>,
             },
             {
               key: "3",
               icon: <GroupOutlined />,
-              label: <Link to="/user">About us </Link>,
+              label: <Link to="/">About us </Link>,
             },
           ]}
         />
