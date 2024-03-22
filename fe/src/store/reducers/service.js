@@ -6,7 +6,7 @@ const initialState = {
   service: null,
 };
 
-const token =  localStorage.getItem('accessToken') ?? '';
+const token =  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWY1NzVjN2UzNTM2MzM5NmFhYjQxYTMiLCJpYXQiOjE3MTA3MjU4MjUsImV4cCI6MTcxMzMxNzgyNX0.N34sr5pBM6101qGfhVf0OREHspTO4RKROSRuCgZNMsQ	';
 
 localStorage.setItem('accessToken', token )
 
@@ -39,15 +39,21 @@ export const fetchServicesById = createAsyncThunk('service/fetchServicesById', a
   }
 });
 
-export const createNewService = createAsyncThunk('service/createNewService', async (serviceData) => {
+export const createNewUser = createAsyncThunk('http://localhost:1000/register', async (data) => {
   try {
-    const response = await axiosInstance.post('services', serviceData);
-    console.log(serviceData);
-    return response.data.data;
+    const response = await axiosInstance.post('http://localhost:1000/register', data);
+    console.log(data);
+    return response;
   } catch (error) {
     throw error;
   }
 });
+
+const loginAPI = async (email, password) => {
+  const res = await axiosInstance.post("http://localhost:1000/login ",{email, password})
+
+  return res.data.data
+}
 
 const ownerSlice = createSlice({
   name: 'service',

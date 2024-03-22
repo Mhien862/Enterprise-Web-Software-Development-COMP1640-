@@ -4,12 +4,23 @@ import Login from "./formlogins/Login";
 import ForgotPassword from "./formlogins/ForgotPassword";
 import ResetPassword from "./formlogins/ResetPassword";
 import LayoutLogin from "./formlogins/LayoutLogin";
+import User from "./ListUser/User";
+import CreateUser from "./ListUser/CreateUser";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <LayOut />,
-    children: [],
+    children: [
+      {
+        path: "/user",
+        element: <User />,
+      },
+      {
+        path: "/createuser",
+        element: <CreateUser />,
+      },
+    ],
   },
   {
     element: <LayoutLogin />,
@@ -25,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "/reset",
         element: <ResetPassword />,
+      },
+      {
+        path: "/user",
+        element: <User />,
       },
     ],
   },
