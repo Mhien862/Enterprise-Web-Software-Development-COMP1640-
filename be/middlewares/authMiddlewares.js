@@ -1,12 +1,14 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModels.js";
 const authenticate = async (req, res, next) => {
-  let authHeader = req.headers.authorization || req.headers.Authorization
+  // let authHeader = req.headers.authorization || req.headers.Authorization
 
-  if (!authHeader?.startsWith('Bearer ')) {
-    return res.status(401).send('Unauthorized')
-  }
-  let token = authHeader.split(' ')[1]
+  // if (!authHeader?.startsWith('Bearer ')) {
+  //   return res.status(401).send('Unauthorized')
+  // }
+  // let token = authHeader.split(' ')[1]
+  let token;
+  token = req.cookies.jwt;
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
