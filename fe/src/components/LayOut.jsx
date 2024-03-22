@@ -1,8 +1,14 @@
-import { useState } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, GroupOutlined, UserOutlined, IdcardOutlined } from '@ant-design/icons';
-import { Layout, Menu, Button, theme } from 'antd';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
-import '../assets/styles/headerlayout.css';
+import { useState } from "react";
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  GroupOutlined,
+  UserOutlined,
+  IdcardOutlined,
+} from "@ant-design/icons";
+import { Layout, Menu, Button, theme } from "antd";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import "../assets/styles/headerlayout.css";
 
 const { Header, Sider } = Layout;
 
@@ -12,12 +18,12 @@ const LayOut = () => {
 
   // tới trang profile
   const toProfile = () => {
-    navigate('/profile');
+    navigate("/profile");
   };
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/login');
+    navigate("/login");
     // localStorage.removeItem('accessToken') ?? '';
     // window.location.href = '/login';
   };
@@ -30,15 +36,15 @@ const LayOut = () => {
     <Layout
       style={{
         minHeight: 740,
-        width: '100%',
+        width: "100%",
       }}
     >
       <Sider trigger={null} theme="light" collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
         <div
           style={{
-            color: 'black',
-            backgroundColor: 'white',
+            color: "black",
+            backgroundColor: "white",
             paddingTop: 4,
             paddingBottom: 4,
             paddingLeft: 28,
@@ -51,22 +57,22 @@ const LayOut = () => {
         <Menu
           theme="light"
           mode="inline"
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={["1"]}
           items={[
             {
-              key: '1',
+              key: "1",
               icon: <IdcardOutlined />,
-              label: <Link to="/managementall">Garages</Link>,
+              label: <Link to="/">Home</Link>,
             },
             {
-              key: '2',
+              key: "2",
               icon: <UserOutlined />,
-              label: <Link to="/owner">User</Link>,
+              label: <Link to="/user">User</Link>,
             },
             {
-              key: '3',
+              key: "3",
               icon: <GroupOutlined />,
-              label: <Link to="/service">Garage Service</Link>,
+              label: <Link to="/">About us </Link>,
             },
           ]}
         />
@@ -83,13 +89,17 @@ const LayOut = () => {
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
             style={{
-              fontSize: '16px',
+              fontSize: "16px",
               width: 64,
               height: 64,
             }}
           />
           <div className="dropdown">
-            <img src="src/assets/witch-155291_640.webp" alt="" className="img" />
+            <img
+              src="src/assets/witch-155291_640.webp"
+              alt=""
+              className="img"
+            />
             <p className="nameAdmin">Admin</p>
             <div className="dropAdmin">
               <ul>
