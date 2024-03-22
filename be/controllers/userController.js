@@ -14,12 +14,7 @@ const loginUser = async (req, res) => {
     );
     if (isPasswordValid) {
       const token = createToken(res, existingUser._id);
-      res.cookie("refresh_token", token, {
-        httpOnly: true,
-        sameSite: "Lax",
-        secure: true,
-        maxAge: 24 * 60 * 60 * 1000,
-      });
+      res.cookie('jwt', token, { httpOnly: true, sameSite: 'Lax', secure: true, maxAge: 24 * 60 * 60 * 1000 });
       res.status(200).json({
         _id: existingUser._id,
         username: existingUser.username,
