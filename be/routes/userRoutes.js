@@ -4,7 +4,12 @@ import {
   logoutUser,
   getProfile,
 } from "../controllers/userController.js";
-import { registerUser, getAllUser } from "../controllers/adminController.js";
+import {
+  registerUser,
+  getAllUser,
+  updateUser,
+  deleteUser,
+} from "../controllers/adminController.js";
 
 import {
   authenticate,
@@ -17,6 +22,12 @@ const router = express.Router();
 router.post("/register", authenticate, authenticateAdmin, registerUser);
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
-router.get("/user-list", authenticate, authenticateAdmin, getAllUser);
+// router.get("/user-list/", authenticate, authenticateAdmin, getAllUser);
+
+router
+  .route("/user-list/:userId")
+  .get(authenticate, authenticateAdmin, getAllUser)
+  .put(authenticate, authenticateAdmin, updateUser)
+  .delete(authenticate, authenticateAdmin, deleteUser);
 router.get("/profile", authenticate, getProfile);
 export default router;
