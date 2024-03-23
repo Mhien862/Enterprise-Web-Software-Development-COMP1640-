@@ -18,16 +18,19 @@ import {
 
 const router = express.Router();
 
-// Định nghĩa route cho API đăng ký người dùng
-router.post("/register", authenticate, authenticateAdmin, registerUser);
+//User role
+
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
+router.get("/profile", authenticate, getProfile);
 // router.get("/user-list/", authenticate, authenticateAdmin, getAllUser);
 
+//Admin role
+router.post("/register", authenticate, authenticateAdmin, registerUser);
 router
   .route("/user-list/:userId")
   .get(authenticate, authenticateAdmin, getAllUser)
   .put(authenticate, authenticateAdmin, updateUser)
   .delete(authenticate, authenticateAdmin, deleteUser);
-router.get("/profile", authenticate, getProfile);
+
 export default router;
