@@ -31,4 +31,4 @@ const authenticateAdmin = async (req, res, next) => {
     res.status(403).json({ message: "Only admin can perform this action" });
   }
 };
-export { authenticateAdmin, authenticate };
+export { authenticate, authenticateAdmin };
