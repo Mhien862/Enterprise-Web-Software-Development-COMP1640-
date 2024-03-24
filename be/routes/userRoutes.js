@@ -9,6 +9,11 @@ import {
   getAllUser,
   updateUser,
   deleteUser,
+  createEvent,
+  updateEvent,
+  createAcademicYear,
+  updateAcademicYear,
+  deleteAcademicYear,
 } from "../controllers/adminController.js";
 
 import {
@@ -32,5 +37,14 @@ router
   .get(authenticate, authenticateAdmin, getAllUser)
   .put(authenticate, authenticateAdmin, updateUser)
   .delete(authenticate, authenticateAdmin, deleteUser);
+router
+  .route("/event/:eventId")
+  .post(authenticate, authenticateAdmin, createEvent)
+  .put(authenticate, authenticateAdmin, updateEvent);
 
+router
+  .route("/academic-year/:academicYearId")
+  .post(authenticate, authenticateAdmin, createAcademicYear)
+  .put(authenticate, authenticateAdmin, updateAcademicYear)
+  .delete(authenticate, authenticateAdmin, deleteAcademicYear);
 export default router;

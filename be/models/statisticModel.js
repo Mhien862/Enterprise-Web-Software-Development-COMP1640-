@@ -14,6 +14,30 @@ const statisticSchema = mongoose.Schema({
   numberOfContributions: Number,
   percentageOfContribution: Number,
   numberOfContributors: Number,
+  mostPopularIdeas: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Contribution",
+    },
+  ],
+  mostViewedIdeas: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Contribution",
+    },
+  ],
+  latestIdeas: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Contribution",
+    },
+  ],
+  latestComments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
 });
 
 const Statistic = mongoose.model("Statistic", statisticSchema);
