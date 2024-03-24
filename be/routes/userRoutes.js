@@ -28,7 +28,7 @@ router.get("/profile", authenticate, getProfile);
 //Admin role
 router.post("/register", authenticate, authenticateAdmin, registerUser);
 router
-  .route("/user-list/:userId")
+  .route("/user-list")
   .get(authenticate, authenticateAdmin, getAllUser)
   .put(authenticate, authenticateAdmin, updateUser)
   .delete(authenticate, authenticateAdmin, deleteUser);

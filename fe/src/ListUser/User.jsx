@@ -82,7 +82,7 @@ const User = () => {
 
   const dispatch = useDispatch();
   const fetchService = async () => {
-    const response = await axiosInstance.get("/user-list/userid", {
+    const response = await axiosInstance.get("/user-list", {
       params: query,
     });
     console.log(response);
@@ -129,7 +129,7 @@ const User = () => {
   // //xoa
   const token = localStorage.getItem("accessToken") ?? "";
 
-  const apiURL = `user-list/:${idNew}`;
+  const apiURL = `user-list/?userId=${idNew}`;
 
   const deleteService = () => {
     axiosInstance
