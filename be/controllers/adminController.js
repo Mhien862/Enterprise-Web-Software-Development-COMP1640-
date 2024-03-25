@@ -71,7 +71,7 @@ const updateUser = async (req, res) => {
   }
 };
 const deleteUser = async (req, res) => {
-  const user = await User.findById(req.params.userId);
+  const user = await User.findById(req.query.userId);
   if (user) {
     await User.deleteOne({ _id: user._id });
     res.json({ message: "User removed successfully" });

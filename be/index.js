@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/userRoutes.js";
 import connectDB from "./config/db.js";
+import cors from "cors";
 // import Comment from "./models/commentModel.js";
 // import Contribution from "./models/contributionModel.js";
 // import Event from "./models/eventModel.js";
