@@ -32,7 +32,7 @@ const Signup = () => {
         data.facultyName
       );
 
-      navigate("/");
+      navigate("/user");
       notification.open({
         message: "Create Success",
       });
