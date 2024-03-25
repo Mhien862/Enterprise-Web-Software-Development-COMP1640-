@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../services/axios.service";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchServicesById } from "../store/reducers/service";
+// import { fetchServicesById } from "../store/reducers/service";
 import { useDispatch } from "react-redux";
 import { Option } from "rc-select";
 import Search from "antd/es/input/Search";
@@ -12,8 +12,8 @@ const User = () => {
   const columns = [
     {
       title: "#",
-      dataIndex: "id",
-      key: "id",
+      dataIndex: "_id",
+      key: "_id",
     },
     {
       title: "User Name",
@@ -82,17 +82,16 @@ const User = () => {
 
   const dispatch = useDispatch();
   const fetchService = async () => {
-    const response = await axiosInstance.get("/services", {
+    const response = await axiosInstance.get("/user-list", {
       params: query,
     });
+    console.log(response);
 
-    dispatch(fetchServicesById(response));
-    setService(response.data.data.items);
-    setPagination(response.data.data.pagination);
+    setService(response.data);
   };
 
   const onTableChange = (values) => {
-    setQuery({ ...query, page: values.current });
+    setQuery({ ...query, page: values });
   };
 
   const handleTypeChange = (value) => {
@@ -125,12 +124,12 @@ const User = () => {
   let idNew = null;
   const data = owners;
   if (data && data.length > 0) {
-    idNew = data[0].id;
+    idNew = data[0]._id;
   }
   // //xoa
   const token = localStorage.getItem("accessToken") ?? "";
 
-  const apiURL = `services/${idNew}`;
+  const apiURL = `user-list/?userId=${idNew}`;
 
   const deleteService = () => {
     axiosInstance
@@ -144,9 +143,9 @@ const User = () => {
         console.log(result);
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
         notification.open({
-          message: error.response.data.message,
+          message: error.response,
         });
       });
 

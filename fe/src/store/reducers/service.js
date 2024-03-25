@@ -30,14 +30,14 @@ export const fetchServices = createAsyncThunk('service/fetchServices', async (pa
 //   }
 // });
 
-export const fetchServicesById = createAsyncThunk('service/fetchServicesById', async (payload) => {
-  try {
-    const response = await axiosInstance.get(`/services/${payload}`);
-    return response.data.data;
-  } catch (error) {
-    throw error;
-  }
-});
+// export const fetchServicesById = createAsyncThunk('service/fetchServicesById', async (payload) => {
+//   try {
+//     const response = await axiosInstance.get(`/services/${payload}`);
+//     return response.data.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// });
 
 export const createNewUser = createAsyncThunk('http://localhost:1000/register', async (data) => {
   try {
@@ -67,9 +67,7 @@ const ownerSlice = createSlice({
     builder.addCase(fetchServices.fulfilled, (state, action) => {
       state.manageService = action.payload;
     });
-    builder.addCase(fetchServicesById.fulfilled, (state, action) => {
-      state.serviceByIdData = action.payload;
-    });
+  
 
   
   },
