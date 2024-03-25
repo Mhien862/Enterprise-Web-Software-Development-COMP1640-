@@ -127,6 +127,7 @@ const User = () => {
     idNew = data[0]._id;
   }
   // //xoa
+
   const token = localStorage.getItem("accessToken") ?? "";
 
   const apiURL = `user-list/?userId=${idNew}`;
