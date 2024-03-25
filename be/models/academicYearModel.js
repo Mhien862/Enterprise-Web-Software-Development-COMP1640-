@@ -6,6 +6,12 @@ const academicYearSchema = mongoose.Schema({
     unique: true,
     required: true,
   },
+  events: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Event",
+    },
+  ],
   firstClosureDate: Date,
   finalClosureDate: Date,
 });

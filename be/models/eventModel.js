@@ -13,6 +13,11 @@ const eventSchema = mongoose.Schema({
     ref: "Faculty",
     required: true,
   },
+  academicYear: {
+    type: Number,
+    ref: "AcademicYear",
+    required: true,
+  },
 });
 
 const Event = mongoose.model("Event", eventSchema);

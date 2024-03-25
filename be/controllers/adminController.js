@@ -51,7 +51,7 @@ const getAllUser = async (req, res) => {
   res.json(users);
 };
 const updateUser = async (req, res) => {
-  const user = await User.findById(req.params.userId);
+  const user = await User.findById(req.query.userId);
   if (user) {
     user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;
@@ -71,7 +71,7 @@ const updateUser = async (req, res) => {
   }
 };
 const deleteUser = async (req, res) => {
-  const user = await User.findById(req.params.userId);
+  const user = await User.findById(req.query.userId);
   if (user) {
     await User.deleteOne({ _id: user._id });
     res.json({ message: "User removed successfully" });
@@ -82,7 +82,13 @@ const deleteUser = async (req, res) => {
 };
 const createEvent = async (req, res) => {
   try {
-    const { eventName, firstClosureDate, finalClosureDate, faculty } = req.body;
+    const {
+      eventName,
+      firstClosureDate,
+      finalClosureDate,
+      faculty,
+      academicYearId,
+    } = req.body;
 
     if (!eventName || !firstClosureDate || !finalClosureDate || !faculty) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -94,9 +100,13 @@ const createEvent = async (req, res) => {
       firstClosureDate,
       finalClosureDate,
       faculty,
+      academicYear: academicYearId,
     });
 
     await newEvent.save();
+    await AcademicYear.findByIdAndUpdate(academicYearId, {
+      $push: { events: newEvent._id },
+    });
 
     return res
       .status(201)
@@ -108,7 +118,7 @@ const createEvent = async (req, res) => {
 };
 const updateEvent = async (req, res) => {
   try {
-    const eventId = req.params.eventId;
+    const eventId = req.query.eventId;
     const { eventName, firstClosureDate, finalClosureDate, faculty } = req.body;
 
     // Tìm sự kiện trong cơ sở dữ liệu dựa trên eventId
@@ -144,6 +154,28 @@ const updateEvent = async (req, res) => {
     res.status(500).json({ message: "Failed to update event" });
   }
 };
+const deleteEvent = async (req, res) => {
+  try {
+    const eventId = req.query.eventId;
+
+    // Tìm sự kiện trong cơ sở dữ liệu dựa trên eventId
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    // Xóa sự kiện từ cơ sở dữ liệu
+    await Event.findByIdAndDelete(eventId);
+
+    // Trả về phản hồi thành công
+    res.status(200).json({ message: "Event deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    res.status(500).json({ message: "Failed to delete event" });
+  }
+};
+
 const createAcademicYear = async (req, res) => {
   try {
     const { year, firstClosureDate, finalClosureDate } = req.body;
@@ -216,6 +248,7 @@ export {
   deleteUser,
   createEvent,
   updateEvent,
+  deleteEvent,
   createAcademicYear,
   updateAcademicYear,
   deleteAcademicYear,

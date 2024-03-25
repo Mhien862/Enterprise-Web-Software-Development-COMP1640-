@@ -14,6 +14,7 @@ import {
   createAcademicYear,
   updateAcademicYear,
   deleteAcademicYear,
+  deleteEvent,
 } from "../controllers/adminController.js";
 
 import {
@@ -33,14 +34,15 @@ router.get("/profile", authenticate, getProfile);
 //Admin role
 router.post("/register", authenticate, authenticateAdmin, registerUser);
 router
-  .route("/user-list/:userId")
+  .route("/user-list")
   .get(authenticate, authenticateAdmin, getAllUser)
   .put(authenticate, authenticateAdmin, updateUser)
   .delete(authenticate, authenticateAdmin, deleteUser);
 router
-  .route("/event/:eventId")
+  .route("/event")
   .post(authenticate, authenticateAdmin, createEvent)
-  .put(authenticate, authenticateAdmin, updateEvent);
+  .put(authenticate, authenticateAdmin, updateEvent)
+  .delete(authenticate, authenticateAdmin, deleteEvent);
 
 router
   .route("/academic-year/:academicYearId")
