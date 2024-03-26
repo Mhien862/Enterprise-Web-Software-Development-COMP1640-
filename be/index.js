@@ -12,7 +12,7 @@ import cors from "cors";
 // import Statistic from "./models/statisticModel.js";
 // import { Role } from "./models/roleModel.js";
 // import User from "./models/userModels.js";
-import AcademicYear from "./models/academicYearModel.js";
+// import AcademicYear from "./models/academicYearModel.js";
 dotenv.config();
 const port = process.env.PORT || 5000;
 connectDB();
@@ -23,7 +23,7 @@ connectDB();
 // Statistic();
 // Role();
 // User();
-AcademicYear();
+// AcademicYear();
 
 const app = express();
 let whitelist = ["http://localhost:5173", "http://127.0.0.1:5173"];
