@@ -51,7 +51,7 @@ const User = () => {
       key: "action",
       render: (_, param2) => (
         <div>
-          <Link to={`/detailservice/${param2.id}`}>
+          <Link to={`/detailservice/${param2._id}`}>
             <EyeOutlined />
           </Link>
           <EditOutlined
@@ -60,7 +60,7 @@ const User = () => {
               paddingRight: 12,
             }}
           />
-          <DeleteOutlined onClick={deleteService} />
+          <DeleteOutlined onClick={() => deleteService(param2._id)} />
         </div>
       ),
     },
@@ -129,10 +129,9 @@ const User = () => {
   // //xoa
   const token = localStorage.getItem("accessToken") ?? "";
 
-  const apiURL = `user-list/?userId=${idNew}`;
-
-  const deleteService = () => {
-    axiosInstance
+  const deleteService = async (id) => {
+    const apiURL = `user-list/?userId=${id}`;
+    await axiosInstance
       .delete(apiURL, {
         headers: {
           "Content-Type": "application/json",
