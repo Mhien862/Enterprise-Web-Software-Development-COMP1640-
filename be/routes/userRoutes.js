@@ -3,6 +3,8 @@ import {
   loginUser,
   logoutUser,
   getProfile,
+  uploadFile,
+  handleUpload,
 } from "../controllers/userController.js";
 import {
   registerUser,
@@ -30,8 +32,7 @@ const router = express.Router();
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.get("/profile", authenticate, getProfile);
-// router.get("/user-list/", authenticate, authenticateAdmin, getAllUser);
-
+router.post("/upload", authenticate, uploadFile, handleUpload);
 //Admin role
 router.post("/register", authenticate, authenticateAdmin, registerUser);
 router
