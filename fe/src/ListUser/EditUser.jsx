@@ -5,14 +5,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { fetchServices } from "../store/reducers/service";
 import axiosInstance from "../services/axios.service";
+import { updateUser } from "../services/UserService";
 
 const EditService = () => {
   let location = useLocation();
-  const parts = location.pathname.split("/user-list");
+  console.log('location :', location);
+  const id = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
   const [data1 ,setData] = useState([]);
-  const id = parts[parts.length - 1];
   const [form] = Form.useForm();
   const SubmitButton = ({ form }) => {
+    
     const values = Form.useWatch([], form);
     React.useEffect(() => {}, [values, formSubmitted]);
 
@@ -28,20 +30,23 @@ const EditService = () => {
     );
   };
   const fetchService = async () => {
-    const response = await axiosInstance.get(`/user/${id}`);
-    console.log(response);
+    const response = await axiosInstance.get(`/user?userId=${id}`);
+    form.setFieldsValue(response.data)
   };
   useEffect(() => {
     fetchService();
   }, [id]);
+
+  
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const handleSubmit = () => {
     setFormSubmitted(true);
     form
       .validateFields()
-      .then((values) => {
-        console.log("Form values:", values);
+      .then(async(values) => {
+        const reponse = await updateUser(`http://localhost:1000/user-list?userId=${id}`, values )
+        console.log('reponse :', reponse);
       })
       .catch((error) => {
         console.error("Form validation error:", error);
@@ -70,7 +75,6 @@ const EditService = () => {
   useEffect(() => {
     dispatch(fetchServices(params));
   }, []);
-  console.log(manageService);
   return (
     <>
       <div>
@@ -80,11 +84,12 @@ const EditService = () => {
             name="validateOnly"
             layout="vertical"
             autoComplete="off"
+            onFinish={handleSubmit}
           >
             <Row gutter={16}>
               <Col className="gutter-row" span={6}>
                 <Form.Item
-                  name="name"
+                  name="username"
                   label="User Name"
                   rules={[{ required: true }]}
                 >

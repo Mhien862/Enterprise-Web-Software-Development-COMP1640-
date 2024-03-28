@@ -29,6 +29,13 @@ const getserviceAPI = async (name, description, minPrice, maxPrice) => {
 
     return res.data.data
 }
-export { loginAPI, userAPI, forgotAPI, resetAPI, getserviceAPI };
+
+const updateUser = async (url, data) => {
+    const res = await axiosInstance.put(url, data)
+
+    return res.data.data
+}
+
+export { loginAPI, userAPI, forgotAPI, resetAPI, getserviceAPI, updateUser };
 
 
