@@ -13,7 +13,7 @@ const contributionSchema = mongoose.Schema({
   },
   originalname: {
     type: String,
-    required: true,
+    require: true,
   },
   mimetype: {
     type: String,
