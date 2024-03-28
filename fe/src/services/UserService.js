@@ -36,6 +36,6 @@ const updateUser = async (url, data) => {
     return res.data.data
 }
 
-export { loginAPI, userAPI, forgotAPI, resetAPI, getserviceAPI, updateUser };
+export { loginAPI, userAPI, forgotAPI, resetAPI, getserviceAPI,updateUser };
 
 
