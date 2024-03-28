@@ -5,6 +5,7 @@ import { Faculty } from "../models/facultyModel.js";
 import Event from "../models/eventModel.js";
 import AcademicYear from "../models/academicYearModel.js";
 import createToken from "../utils/createToken.js";
+
 const registerUser = async (req, res) => {
   try {
     const { username, password, email, roleName, facultyName, agreement } =
@@ -80,18 +81,46 @@ const deleteUser = async (req, res) => {
     throw new Error("User not found");
   }
 };
+const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.query.userId);
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error retrieving user:", error);
+    res.status(500).json({ message: "Failed to retrieve user" });
+  }
+};
+const getUserList = async (req, res) => {
+  try {
+    const userList = await User.find({});
+    res.json(userList);
+  } catch (error) {
+    console.error("Error retrieving user list:", error);
+    res.status(500).json({ message: "Failed to retrieve user list" });
+  }
+};
 const createEvent = async (req, res) => {
   try {
     const {
       eventName,
-      firstClosureDate,
-      finalClosureDate,
+      firstClosureDate = new Date(firstClosureDate).toISOString(),
+      finalClosureDate = new Date(finalClosureDate).toISOString(),
       faculty,
       academicYearId,
     } = req.body;
 
     if (!eventName || !firstClosureDate || !finalClosureDate || !faculty) {
       return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    if (finalClosureDate <= firstClosureDate) {
+      return res.status(400).json({
+        message: "Final closure date must be after first closure date",
+      });
     }
 
     // Tạo sự kiện mới
@@ -116,10 +145,27 @@ const createEvent = async (req, res) => {
     return res.status(500).json({ message: "Event name already exists" });
   }
 };
+const getEventList = async (req, res) => {
+  try {
+    // Lấy danh sách sự kiện từ cơ sở dữ liệu
+    const events = await Event.find();
+
+    // Trả về danh sách sự kiện
+    res.status(200).json({ events });
+  } catch (error) {
+    console.error("Error fetching event list:", error);
+    res.status(500).json({ message: "Failed to fetch event list" });
+  }
+};
 const updateEvent = async (req, res) => {
   try {
     const eventId = req.query.eventId;
-    const { eventName, firstClosureDate, finalClosureDate, faculty } = req.body;
+    const {
+      eventName,
+      firstClosureDate = new Date(firstClosureDate).toISOString(),
+      finalClosureDate = new Date(firstClosureDate).toISOString(),
+      faculty,
+    } = req.body;
 
     // Tìm sự kiện trong cơ sở dữ liệu dựa trên eventId
     const event = await Event.findById(eventId);
@@ -128,18 +174,26 @@ const updateEvent = async (req, res) => {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    // Cập nhật thông tin của sự kiện
     if (eventName) {
       event.eventName = eventName;
     }
     if (firstClosureDate) {
+      // Chuyển đổi firstClosureDate sang đối tượng Moment với múi giờ Việt Nam
       event.firstClosureDate = firstClosureDate;
     }
     if (finalClosureDate) {
+      // Chuyển đổi finalClosureDate sang đối tượng Moment với múi giờ Việt Nam
       event.finalClosureDate = finalClosureDate;
     }
     if (faculty) {
       event.faculty = faculty;
+    }
+
+    // Kiểm tra nếu finalClosureDate trước hoặc bằng firstClosureDate
+    if (event.finalClosureDate <= event.firstClosureDate) {
+      return res.status(400).json({
+        message: "Final closure date must be after first closure date",
+      });
     }
 
     // Lưu lại sự kiện đã được cập nhật vào cơ sở dữ liệu
@@ -154,6 +208,7 @@ const updateEvent = async (req, res) => {
     res.status(500).json({ message: "Failed to update event" });
   }
 };
+
 const deleteEvent = async (req, res) => {
   try {
     const eventId = req.query.eventId;
@@ -178,7 +233,11 @@ const deleteEvent = async (req, res) => {
 
 const createAcademicYear = async (req, res) => {
   try {
-    const { year, firstClosureDate, finalClosureDate } = req.body;
+    const {
+      year,
+      firstClosureDate = new Date(firstClosureDate).toISOString(),
+      finalClosureDate = new Date(firstClosureDate).toISOString(),
+    } = req.body;
     const existingYear = await AcademicYear.findOne({ year });
 
     if (existingYear) {
@@ -203,16 +262,27 @@ const createAcademicYear = async (req, res) => {
 };
 const updateAcademicYear = async (req, res) => {
   try {
-    const { firstClosureDate, finalClosureDate } = req.body;
+    const {
+      year,
+      firstClosureDate = new Date(firstClosureDate).toISOString(),
+      finalClosureDate = new Date(firstClosureDate).toISOString(),
+    } = req.body;
 
-    const academicYear = await AcademicYear.findById(req.params.academicYearId);
+    const academicYear = await AcademicYear.findById(req.query.academicYearId);
 
     if (!academicYear) {
       return res.status(404).json({ message: "Academic year not found" });
     }
 
-    academicYear.firstClosureDate = firstClosureDate;
-    academicYear.finalClosureDate = finalClosureDate;
+    if (year) {
+      academicYear.year = year;
+    }
+    if (firstClosureDate) {
+      academicYear.firstClosureDate = firstClosureDate;
+    }
+    if (finalClosureDate) {
+      academicYear.finalClosureDate = finalClosureDate;
+    }
 
     await academicYear.save();
     res.json({
@@ -227,7 +297,7 @@ const updateAcademicYear = async (req, res) => {
 const deleteAcademicYear = async (req, res) => {
   try {
     // Kiểm tra xem năm học có tồn tại không
-    const academicYear = await AcademicYear.findById(req.params.academicYearId);
+    const academicYear = await AcademicYear.findById(req.query.academicYearId);
     if (!academicYear) {
       return res.status(404).json({ message: "Academic year not found" });
     }
@@ -246,10 +316,13 @@ export {
   getAllUser,
   updateUser,
   deleteUser,
+  getUserById,
+  getUserList,
   createEvent,
   updateEvent,
   deleteEvent,
   createAcademicYear,
   updateAcademicYear,
   deleteAcademicYear,
+  getEventList,
 };

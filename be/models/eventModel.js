@@ -14,7 +14,7 @@ const eventSchema = mongoose.Schema({
     required: true,
   },
   academicYear: {
-    type: Number,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "AcademicYear",
     required: true,
   },
