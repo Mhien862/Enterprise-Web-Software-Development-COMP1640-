@@ -94,6 +94,15 @@ const getUserById = async (req, res) => {
     res.status(500).json({ message: "Failed to retrieve user" });
   }
 };
+const getUserList = async (req, res) => {
+  try {
+    const userList = await User.find({});
+    res.json(userList);
+  } catch (error) {
+    console.error("Error retrieving user list:", error);
+    res.status(500).json({ message: "Failed to retrieve user list" });
+  }
+};
 const createEvent = async (req, res) => {
   try {
     const {
@@ -308,6 +317,7 @@ export {
   updateUser,
   deleteUser,
   getUserById,
+  getUserList,
   createEvent,
   updateEvent,
   deleteEvent,
