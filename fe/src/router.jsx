@@ -6,7 +6,7 @@ import ResetPassword from "./formlogins/ResetPassword";
 import LayoutLogin from "./formlogins/LayoutLogin";
 import User from "./ListUser/User";
 import CreateUser from "./ListUser/CreateUser";
-import EditUser from "./ListUser/EditUser";
+import Edituser from "./ListUser/EditUser";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: "/user",
         element: <User />,
+      },
+      {
+        path: "user/edit/:id",
+        element: <Edituser />,
       },
       {
         path: "/createuser",
