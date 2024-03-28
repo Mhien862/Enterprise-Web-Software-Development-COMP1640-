@@ -54,12 +54,15 @@ const User = () => {
           <Link to={`/detailservice/${param2._id}`}>
             <EyeOutlined />
           </Link>
-          <EditOutlined
-            style={{
-              paddingLeft: 12,
-              paddingRight: 12,
-            }}
-          />
+          <Link to={`/edituser/?userId=${param2._id}`}>
+            <EditOutlined
+              style={{
+                paddingLeft: 12,
+                paddingRight: 12,
+              }}
+            />
+          </Link>
+
           <DeleteOutlined onClick={() => deleteService(param2._id)} />
         </div>
       ),

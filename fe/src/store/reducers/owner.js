@@ -5,7 +5,8 @@ import axiosInstance from '../../services/axios.service';
 axiosInstance.defaults.headers.common['Authorization'] = localStorage.getItem('accessToken') ?? '';
 const initialState = {
   manageOwner: null,
-};
+  userByIdData: null,
+ }
 
 const token = localStorage.getItem('accessToken') ?? '';
 
@@ -29,6 +30,15 @@ export const fetchOwnersById = createAsyncThunk('/owner/fetchOwnersById', async 
   }
 });
 
+export const updateOwner = createAsyncThunk('owner/updateOwner', async ({ _id, data }) => {
+  try {
+    const response = await axiosInstance.put(`/users/${_id}`, data);
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+});
+
 export const createNewOwner = createAsyncThunk('/owner/createNewOwner', async (ownerData) => {
   try {
     const response = await axiosInstance.post('users', ownerData);
@@ -48,6 +58,9 @@ const ownerSlice = createSlice({
     });
     builder.addCase(fetchOwnersById.fulfilled, (state, action) => {
       state.ownerByIdData = action.payload;
+    });
+    builder.addCase(updateOwner.fulfilled, (state, action) => {
+      
     });
   },
 });
