@@ -67,7 +67,7 @@ const User = () => {
               }}
             />
           </Button>
-          <DeleteOutlined onClick={deleteService} />
+          <DeleteOutlined onClick={() => deleteService(param2._id)} />
         </div>
       ),
     },
