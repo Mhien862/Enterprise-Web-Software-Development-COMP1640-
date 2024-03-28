@@ -36,18 +36,23 @@ const DetailService = () => {
         <Form form={form} name="validateOnly" layout="vertical" autoComplete="off">
           <Row gutter={16}>
             <Col className="gutter-row" span={6}>
-              <Form.Item name="name" label="Name">
-                <div>Name</div>
+              <Form.Item name="username" label="UserName">
+                <div>User Name</div>
               </Form.Item>
             </Col>
             <Col className="gutter-row" span={6}>
-              <Form.Item name="min" label="Min price">
-                <div>Minimum Price Text</div>
+              <Form.Item name="email" label="Email">
+                <div>Email</div>
               </Form.Item>
             </Col>
             <Col className="gutter-row" span={6}>
-              <Form.Item name="max" label="Max price">
-                <div>Maximum Price Text</div>
+              <Form.Item name="role" label="Role">
+                <div>Role</div>
+              </Form.Item>
+            </Col>
+            <Col className="gutter-row" span={6}>
+              <Form.Item name="faculty" label="Faculty">
+                <div>Faculty</div>
               </Form.Item>
             </Col>
           </Row>

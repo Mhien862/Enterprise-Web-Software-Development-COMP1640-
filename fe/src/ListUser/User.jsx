@@ -51,18 +51,22 @@ const User = () => {
       key: "action",
       render: (_, param2) => (
         <div>
-          <Link to={`/detailservice/${param2._id}`}>
+          <Link to={`/detailservice/${param2.id}`}>
             <EyeOutlined />
           </Link>
-          <Link to={`/edituser/?userId=${param2._id}`}>
+          <Button
+            type="link"
+            onClick={() => {
+              navigate(`/user/edit/${param2?._id}`);
+            }}
+          >
             <EditOutlined
               style={{
                 paddingLeft: 12,
                 paddingRight: 12,
               }}
             />
-          </Link>
-
+          </Button>
           <DeleteOutlined onClick={() => deleteService(param2._id)} />
         </div>
       ),
@@ -83,7 +87,6 @@ const User = () => {
   const [type, setType] = useState("Name");
   const [value, setValue] = useState("");
 
-  const dispatch = useDispatch();
   const fetchService = async () => {
     const response = await axiosInstance.get("/user-list", {
       params: query,
@@ -132,9 +135,10 @@ const User = () => {
   // //xoa
   const token = localStorage.getItem("accessToken") ?? "";
 
-  const deleteService = async (id) => {
-    const apiURL = `user-list/?userId=${id}`;
-    await axiosInstance
+  const apiURL = `user-list/?userId=${idNew}`;
+
+  const deleteService = () => {
+    axiosInstance
       .delete(apiURL, {
         headers: {
           "Content-Type": "application/json",
