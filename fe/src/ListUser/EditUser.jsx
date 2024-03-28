@@ -2,7 +2,7 @@
 import { Button, Col, Form, Input, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fetchServices } from "../store/reducers/service";
 import axiosInstance from "../services/axios.service";
 import { updateUser } from "../services/UserService";
@@ -10,6 +10,7 @@ import { updateUser } from "../services/UserService";
 const EditService = () => {
   let location = useLocation();
   console.log("location :", location);
+  const navigate = useNavigate();
   const id = location.pathname.substring(
     location.pathname.lastIndexOf("/") + 1
   );
@@ -50,6 +51,7 @@ const EditService = () => {
           values
         );
         console.log("reponse :", reponse);
+        navigate("/user");
       })
       .catch((error) => {
         console.error("Form validation error:", error);
