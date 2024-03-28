@@ -11,6 +11,7 @@ import {
   getAllUser,
   updateUser,
   deleteUser,
+  getUserById,
   createEvent,
   updateEvent,
   createAcademicYear,
@@ -37,7 +38,7 @@ router.post("/upload", authenticate, uploadFile, handleUpload);
 router.post("/register", authenticate, authenticateAdmin, registerUser);
 router
   .route("/user-list")
-  .get(authenticate, authenticateAdmin, getAllUser)
+  .get(authenticate, authenticateAdmin, getUserById)
   .put(authenticate, authenticateAdmin, updateUser)
   .delete(authenticate, authenticateAdmin, deleteUser);
 router
