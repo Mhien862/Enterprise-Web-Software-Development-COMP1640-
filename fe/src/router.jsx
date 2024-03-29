@@ -6,6 +6,9 @@ import ResetPassword from "./formlogins/ResetPassword";
 import LayoutLogin from "./formlogins/LayoutLogin";
 import Profile from "./profile/Profile";
 import ChangePassword from "./profile/ChangePassword";
+import User from "./ListUser/User";
+import CreateUser from "./ListUser/CreateUser";
+import Edituser from "./ListUser/EditUser";
 
 const router = createBrowserRouter([
   {
@@ -17,8 +20,21 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: "/changepassword",
-        element: <ChangePassword />,
+     
+        path: "/user",
+        element: <User />,
+      },
+      {
+        path: "user/edit/:id",
+        element: <Edituser />,
+      },
+      {
+        path: "/createuser",
+        element: <CreateUser />,
+      },
+      {
+        path: "/edituser:_id",
+        element: <Edituser />,
       },
     ],
   },
@@ -36,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "/reset",
         element: <ResetPassword />,
+      },
+      {
+        path: "/user",
+        element: <User />,
       },
     ],
   },

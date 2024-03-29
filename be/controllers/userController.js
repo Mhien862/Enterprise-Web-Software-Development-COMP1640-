@@ -1,47 +1,10 @@
 import User from "../models/userModels.js";
-import { Role } from "../models/roleModel.js"; // Import Role model
+
 import bcrypt from "bcryptjs";
-import { Faculty } from "../models/facultyModel.js";
+
 import createToken from "../utils/createToken.js";
-const registerUser = async (req, res) => {
-  try {
-    const { username, password, email, roleName, facultyName } = req.body;
 
-    // Mã hóa mật khẩu
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Tìm vai trò dựa trên tên vai trò
-    const role = await Role.findOne({ roleName });
-    const faculty = await Faculty.findOne({ facultyName });
-    // Kiểm tra xem vai trò có tồn tại không
-    if (!role) {
-      return res.status(400).json({ message: "Role not found" });
-    }
-    if (!faculty) {
-      return res.status(400).json({ message: "Faculty not found" });
-    }
-
-    // Tạo một đối tượng user mới từ dữ liệu được gửi từ client
-    const newUser = new User({
-      username,
-      password: hashedPassword,
-      email,
-      role: roleName,
-      faculty: facultyName, // Lưu tên của vai trò vào cơ sở dữ liệu
-    });
-
-    // Lưu user mới vào cơ sở dữ liệu
-    await newUser.save();
-    // Tạo và gửi token cho user sau khi đăng ký thành công
-    createToken(res, newUser._id);
-    // Trả về phản hồi thành công
-    res.status(201).json({ message: "User registered successfully" });
-  } catch (error) {
-    // Nếu có lỗi, trả về phản hồi lỗi và thông báo lỗi
-    console.error("Error: ", error);
-    res.status(500).json({ message: "Username or email already exists" });
-  }
-};
+import Contribution from "../models/contributionModel.js";
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -52,7 +15,13 @@ const loginUser = async (req, res) => {
       existingUser.password
     );
     if (isPasswordValid) {
-      createToken(res, existingUser._id);
+      const token = createToken(res, existingUser._id);
+      // res.cookie("jwt", token, {
+      //   httpOnly: true,
+      //   sameSite: "Lax",
+      //   secure: true,
+      //   maxAge: 24 * 60 * 60 * 1000,
+      // });
       res.status(200).json({
         _id: existingUser._id,
         username: existingUser.username,
@@ -60,6 +29,7 @@ const loginUser = async (req, res) => {
         isAdmin: existingUser.isAdmin,
         role: existingUser.role,
         faculty: existingUser.faculty,
+        accessToken: token,
       });
       return;
     }
@@ -73,4 +43,71 @@ const logoutUser = async (req, res) => {
 
   res.status(200).json({ message: "Logged out successfully" });
 };
-export { registerUser, loginUser, logoutUser };
+const getProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    res.json({
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      faculty: user.faculty,
+      agreement: user.agreement,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+};
+
+const handleUpload = async (req, res) => {
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const uploadedFilesInfo = await Promise.all(
+      req.files.map(async (file) => {
+        const { originalname, mimetype, filename, path } = file;
+        const userId = req.user._id;
+        const submissionDate = req.body.submissionDate
+          ? new Date(req.body.submissionDate).toISOString()
+          : new Date().toISOString();
+        const { faculty, status, isSelected } = req.body;
+
+        // Lưu thông tin file vào cơ sở dữ liệu
+        const newContribution = new Contribution({
+          user: userId,
+          faculty,
+          originalname,
+          mimetype,
+          filename,
+          path,
+          submissionDate,
+          status,
+          isSelected,
+        });
+        await newContribution.save();
+
+        // Trả về thông tin về file
+        return {
+          user: userId,
+          faculty,
+          originalname,
+          mimetype,
+          filename,
+          path,
+        };
+      })
+    );
+
+    res.status(200).json({
+      message: "File uploaded successfully",
+      fileInfo: uploadedFilesInfo,
+    });
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    res.status(500).json({ message: "Failed to upload file" });
+  }
+};
+
+export { loginUser, logoutUser, getProfile, handleUpload };
