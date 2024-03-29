@@ -1,18 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   GroupOutlined,
   UserOutlined,
   IdcardOutlined,
+  GithubOutlined,
+  FireOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import "../assets/styles/headerlayout.css";
+import axiosInstance from "../services/axios.service";
 
 const { Header, Sider } = Layout;
 
 const LayOut = () => {
+  const [data, setProfile] = useState({
+    username: "",
+  });
+
+  const fetchService = async () => {
+    const response = await axiosInstance.get("/profile", {});
+    setProfile(response.data);
+    console.log(response);
+  };
+
+  useEffect(() => {
+    // call API
+    fetchService();
+  }, []);
+
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
 
@@ -71,7 +89,12 @@ const LayOut = () => {
             },
             {
               key: "3",
-              icon: <GroupOutlined />,
+              icon: <FireOutlined />,
+              label: <Link to="/">Event </Link>,
+            },
+            {
+              key: "4",
+              icon: <GithubOutlined />,
               label: <Link to="/">About us </Link>,
             },
           ]}
@@ -100,7 +123,7 @@ const LayOut = () => {
               alt=""
               className="img"
             />
-            <p className="nameAdmin">Admin</p>
+            <span className="nameAdmin">Admin</span>
             <div className="dropAdmin">
               <ul>
                 <li onClick={toProfile}>Profile</li>

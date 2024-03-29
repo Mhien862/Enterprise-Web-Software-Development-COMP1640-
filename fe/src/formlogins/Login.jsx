@@ -3,6 +3,11 @@ import "../assets/styles/login.css";
 import { loginAPI } from "../services/UserService";
 import { Link, useNavigate } from "react-router-dom";
 import { CookiesProvider, useCookies } from "react-cookie";
+import {
+  SmileOutlined,
+  CheckCircleOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,7 +25,14 @@ const Login = () => {
     } catch (error) {
       console.log(222, error);
       notification.open({
-        message: "LOGIN Fail",
+        message: "LOGIN FAIL",
+        icon: (
+          <WarningOutlined
+            style={{
+              color: "#e91010",
+            }}
+          />
+        ),
       });
     }
   };
@@ -28,6 +40,13 @@ const Login = () => {
   const openNotification = () => {
     notification.open({
       message: "LOGIN SUCCESS",
+      icon: (
+        <CheckCircleOutlined
+          style={{
+            color: "#00ff66",
+          }}
+        />
+      ),
     });
   };
 

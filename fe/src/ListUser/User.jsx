@@ -7,6 +7,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Option } from "rc-select";
 import Search from "antd/es/input/Search";
+import {
+  SmileOutlined,
+  CheckCircleOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
 
 const User = () => {
   const columns = [
@@ -67,7 +72,9 @@ const User = () => {
               }}
             />
           </Button>
-          <DeleteOutlined onClick={() => deleteService(param2._id)} />
+          <Link to={`/user`}>
+            <DeleteOutlined onClick={() => deleteService(param2._id)} />
+          </Link>
         </div>
       ),
     },
@@ -150,12 +157,26 @@ const User = () => {
         console.log(result);
         notification.open({
           message: "Delete Success",
+          icon: (
+            <CheckCircleOutlined
+              style={{
+                color: "#00ff66",
+              }}
+            />
+          ),
         });
       })
       .catch((error) => {
         console.log(error);
         notification.open({
           message: error.response,
+          icon: (
+            <WarningOutlined
+              style={{
+                color: "#e91010",
+              }}
+            />
+          ),
         });
       });
 

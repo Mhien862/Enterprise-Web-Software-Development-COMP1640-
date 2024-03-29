@@ -6,6 +6,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { fetchServices } from "../store/reducers/service";
 import axiosInstance from "../services/axios.service";
 import { updateUser } from "../services/UserService";
+import {
+  SmileOutlined,
+  CheckCircleOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
 
 const EditService = () => {
   let location = useLocation();
@@ -18,7 +23,7 @@ const EditService = () => {
   const [form] = Form.useForm();
   const SubmitButton = ({ form }) => {
     const values = Form.useWatch([], form);
-    React.useEffect(() => { }, [values, formSubmitted]);
+    React.useEffect(() => {}, [values, formSubmitted]);
 
     return (
       <Space>
@@ -55,12 +60,26 @@ const EditService = () => {
         navigate("/user");
         notification.open({
           message: "Edit Success",
+          icon: (
+            <CheckCircleOutlined
+              style={{
+                color: "#00ff66",
+              }}
+            />
+          ),
         });
       })
       .catch((error) => {
         console.error("Form validation error:", error);
         notification.open({
           message: error,
+          icon: (
+            <WarningOutlined
+              style={{
+                color: "#e91010",
+              }}
+            />
+          ),
         });
       });
   };
