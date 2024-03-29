@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Button, Col, Form, Input, Row, Space } from "antd";
+import { Button, Col, Form, Input, Row, Space, notification } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -51,6 +51,7 @@ const EditService = () => {
           values
         );
         console.log("reponse :", reponse);
+
         navigate("/user");
       })
       .catch((error) => {

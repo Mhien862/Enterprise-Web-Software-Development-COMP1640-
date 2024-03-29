@@ -137,8 +137,9 @@ const User = () => {
 
   const apiURL = `user-list/?userId=${idNew}`;
 
-  const deleteService = () => {
-    axiosInstance
+  const deleteService = async (id) => {
+    const apiURL = `user-list/?userId=${id}`;
+    await axiosInstance
       .delete(apiURL, {
         headers: {
           "Content-Type": "application/json",
