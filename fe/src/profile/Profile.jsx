@@ -18,22 +18,16 @@ const getProfile = () => {
   //     .then(json => setData(json))
   // },[]);
 
-
   const fetchService = async () => {
-    const response = await axiosInstance.get("/profile", {
-      
-    });
+    const response = await axiosInstance.get("/profile", {});
     setProfile(response.data);
     console.log(response);
-
-  
   };
 
   useEffect(() => {
     // call API
     fetchService();
   }, []);
-
 
   const navigate = useNavigate();
   const changePassword = () => {
@@ -44,13 +38,14 @@ const getProfile = () => {
       <h1 className="headingProfile">My Profile</h1>
       <div className="profile">
         <div className="profile-one">
-          <Row >
+          <Row>
             <Col span={8}>
               <div>
                 <Row>
                   <Col span={24}>
-                    <div className="profile-grid" >
-                      <span>Name</span><br></br>
+                    <div className="profile-grid">
+                      <span>Name</span>
+                      <br></br>
                       <span>{data.username}</span>
                     </div>
                   </Col>
@@ -87,13 +82,13 @@ const getProfile = () => {
             <Col span={8}>
               <div>
                 <Row>
-                  {/* <Col span={24}>
+                  <Col span={24}>
                     <div className="profile-grid">
-                      <span>Gender</span>
+                      <span>Faculty</span>
                       <br></br>
-                      <span>Male</span>
+                      <span>{data.faculty}</span>
                     </div>
-                  </Col> */}
+                  </Col>
                   <Col span={24}>
                     <div className="profile-grid">
                       <span>Role</span>
