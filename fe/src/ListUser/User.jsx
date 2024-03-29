@@ -148,6 +148,9 @@ const User = () => {
       })
       .then((result) => {
         console.log(result);
+        notification.open({
+          message: "Delete Success",
+        });
       })
       .catch((error) => {
         console.log(error);

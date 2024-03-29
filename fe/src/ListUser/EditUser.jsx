@@ -18,7 +18,7 @@ const EditService = () => {
   const [form] = Form.useForm();
   const SubmitButton = ({ form }) => {
     const values = Form.useWatch([], form);
-    React.useEffect(() => {}, [values, formSubmitted]);
+    React.useEffect(() => { }, [values, formSubmitted]);
 
     return (
       <Space>
@@ -53,9 +53,15 @@ const EditService = () => {
         console.log("reponse :", reponse);
 
         navigate("/user");
+        notification.open({
+          message: "Edit Success",
+        });
       })
       .catch((error) => {
         console.error("Form validation error:", error);
+        notification.open({
+          message: error,
+        });
       });
   };
   const validateNumber = (rule, value, callback) => {
