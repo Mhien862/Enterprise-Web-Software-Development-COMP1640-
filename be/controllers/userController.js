@@ -61,6 +61,14 @@ const getProfile = async (req, res) => {
 
 const handleUpload = async (req, res) => {
   try {
+    // Kiểm tra xem biến isSelected có được truyền là true không
+    const isSelected = req.body.isSelected === "true";
+    if (isSelected !== true) {
+      return res
+        .status(400)
+        .json({ message: "Files can only be uploaded if isSelected is true" });
+    }
+
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No file uploaded" });
     }
@@ -72,7 +80,7 @@ const handleUpload = async (req, res) => {
         const submissionDate = req.body.submissionDate
           ? new Date(req.body.submissionDate).toISOString()
           : new Date().toISOString();
-        const { faculty, status, isSelected } = req.body;
+        const { faculty, status } = req.body;
 
         // Lưu thông tin file vào cơ sở dữ liệu
         const newContribution = new Contribution({
@@ -84,7 +92,7 @@ const handleUpload = async (req, res) => {
           path,
           submissionDate,
           status,
-          isSelected,
+          isSelected: true, // Đảm bảo isSelected luôn là true
         });
         await newContribution.save();
 
@@ -96,6 +104,7 @@ const handleUpload = async (req, res) => {
           mimetype,
           filename,
           path,
+          submissionDate,
         };
       })
     );
@@ -110,4 +119,24 @@ const handleUpload = async (req, res) => {
   }
 };
 
-export { loginUser, logoutUser, getProfile, handleUpload };
+const deleteContribution = async (req, res) => {
+  try {
+    const contributionId = req.query.contributionId;
+
+    // Kiểm tra xem đóng góp có tồn tại không
+    const existingContribution = await Contribution.findById(contributionId);
+    if (!existingContribution) {
+      return res.status(404).json({ message: "Contribution not found" });
+    }
+
+    // Xóa đóng góp từ cơ sở dữ liệu
+    await Contribution.findByIdAndDelete(contributionId);
+
+    res.json({ message: "Contribution deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting contribution:", error);
+    res.status(500).json({ message: "Failed to delete contribution" });
+  }
+};
+
+export { loginUser, logoutUser, getProfile, handleUpload, deleteContribution };

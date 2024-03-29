@@ -4,10 +4,10 @@ import {
   logoutUser,
   getProfile,
   handleUpload,
+  deleteContribution,
 } from "../controllers/userController.js";
 import {
   registerUser,
-  getAllUser,
   updateUser,
   deleteUser,
   getUserById,
@@ -34,7 +34,11 @@ const router = express.Router();
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.get("/profile", authenticate, getProfile);
-router.post("/upload", authenticate, uploadFile, handleUpload);
+router
+  .route("/upload")
+  .post(authenticate, uploadFile, handleUpload)
+  .delete(authenticate, deleteContribution);
+
 //Admin role
 router.post("/register", authenticate, authenticateAdmin, registerUser);
 router.get("/user", authenticate, authenticateAdmin, getUserById);
