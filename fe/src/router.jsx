@@ -7,6 +7,7 @@ import LayoutLogin from "./formlogins/LayoutLogin";
 import User from "./ListUser/User";
 import CreateUser from "./ListUser/CreateUser";
 import EditUser from "./ListUser/EditUser";
+import UserProfiles from "./ListUser/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/user",
         element: <User />,
+      },
+      {
+        path: "/profile",
+        element: <UserProfiles />,
       },
     ],
   },

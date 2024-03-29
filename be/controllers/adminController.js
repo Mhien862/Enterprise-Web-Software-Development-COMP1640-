@@ -51,6 +51,11 @@ const getAllUser = async (req, res) => {
   const users = await User.find({});
   res.json(users);
 };
+
+// const getUser = async(req, res) => {
+//   const user = await User.findById(req.query.userId);
+//   res.json(user);
+// }
 const updateUser = async (req, res) => {
   const user = await User.findById(req.query.userId);
   if (user) {

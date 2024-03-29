@@ -29,6 +29,12 @@ const getserviceAPI = async (name, description, minPrice, maxPrice) => {
 
     return res.data.data
 }
-export { loginAPI, userAPI, forgotAPI, resetAPI, getserviceAPI };
+const getUserProfile= async () => {
+    const res = await axiosInstance.get("/profile ", {})
+
+    return res.data
+}
+
+export { loginAPI, userAPI, forgotAPI, resetAPI, getserviceAPI, getUserProfile };
 
 
