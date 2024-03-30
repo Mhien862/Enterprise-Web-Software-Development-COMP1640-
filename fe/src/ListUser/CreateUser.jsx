@@ -24,14 +24,14 @@ const Signup = () => {
     e.preventDefault();
     try {
       // const url = "http://localhost:1000/register";
-      const { data: res } = await userAPI(
+      const res = await userAPI(
         data.username,
         data.email,
         data.password,
         data.roleName,
         data.facultyName
       );
-
+      console.log(res)
       navigate("/user");
       notification.open({
         message: "Create Success",

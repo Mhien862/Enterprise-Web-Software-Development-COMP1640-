@@ -4,8 +4,11 @@ import Login from "./formlogins/Login";
 import ForgotPassword from "./formlogins/ForgotPassword";
 import ResetPassword from "./formlogins/ResetPassword";
 import LayoutLogin from "./formlogins/LayoutLogin";
+import Profile from "./profile/Profile";
+import ChangePassword from "./profile/ChangePassword";
 import User from "./ListUser/User";
 import CreateUser from "./ListUser/CreateUser";
+import Edituser from "./ListUser/EditUser";
 
 const router = createBrowserRouter([
   {
@@ -13,12 +16,25 @@ const router = createBrowserRouter([
     element: <LayOut />,
     children: [
       {
+        path: "/profile",
+        element: <Profile />,
+      },
+      {
+     
         path: "/user",
         element: <User />,
       },
       {
+        path: "user/edit/:id",
+        element: <Edituser />,
+      },
+      {
         path: "/createuser",
         element: <CreateUser />,
+      },
+      {
+        path: "/edituser:_id",
+        element: <Edituser />,
       },
     ],
   },

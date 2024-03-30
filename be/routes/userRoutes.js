@@ -3,12 +3,15 @@ import {
   loginUser,
   logoutUser,
   getProfile,
+  handleUpload,
 } from "../controllers/userController.js";
 import {
   registerUser,
   getAllUser,
   updateUser,
   deleteUser,
+  getUserById,
+  getUserList,
   createEvent,
   updateEvent,
   createAcademicYear,
@@ -22,6 +25,7 @@ import {
   authenticate,
   authenticateAdmin,
 } from "../middlewares/authMiddlewares.js";
+import { uploadFile } from "../middlewares/uploadMiddlewares.js";
 
 const router = express.Router();
 
@@ -30,13 +34,13 @@ const router = express.Router();
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.get("/profile", authenticate, getProfile);
-// router.get("/user-list/", authenticate, authenticateAdmin, getAllUser);
-
+router.post("/upload", authenticate, uploadFile, handleUpload);
 //Admin role
 router.post("/register", authenticate, authenticateAdmin, registerUser);
+router.get("/user", authenticate, authenticateAdmin, getUserById);
 router
   .route("/user-list")
-  .get(authenticate, authenticateAdmin, getAllUser)
+  .get(authenticate, authenticateAdmin, getUserList)
   .put(authenticate, authenticateAdmin, updateUser)
   .delete(authenticate, authenticateAdmin, deleteUser);
 router

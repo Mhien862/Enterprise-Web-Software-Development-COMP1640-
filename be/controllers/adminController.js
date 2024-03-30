@@ -81,6 +81,28 @@ const deleteUser = async (req, res) => {
     throw new Error("User not found");
   }
 };
+const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.query.userId);
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error retrieving user:", error);
+    res.status(500).json({ message: "Failed to retrieve user" });
+  }
+};
+const getUserList = async (req, res) => {
+  try {
+    const userList = await User.find({});
+    res.json(userList);
+  } catch (error) {
+    console.error("Error retrieving user list:", error);
+    res.status(500).json({ message: "Failed to retrieve user list" });
+  }
+};
 const createEvent = async (req, res) => {
   try {
     const {
@@ -294,6 +316,8 @@ export {
   getAllUser,
   updateUser,
   deleteUser,
+  getUserById,
+  getUserList,
   createEvent,
   updateEvent,
   deleteEvent,

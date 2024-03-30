@@ -7,6 +7,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Option } from "rc-select";
 import Search from "antd/es/input/Search";
+import {
+  SmileOutlined,
+  CheckCircleOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
 
 const User = () => {
   const columns = [
@@ -51,16 +56,25 @@ const User = () => {
       key: "action",
       render: (_, param2) => (
         <div>
-          <Link to={`/detailservice/${param2._id}`}>
+          <Link to={`/detailservice/${param2.id}`}>
             <EyeOutlined />
           </Link>
-          <EditOutlined
-            style={{
-              paddingLeft: 12,
-              paddingRight: 12,
+          <Button
+            type="link"
+            onClick={() => {
+              navigate(`/user/edit/${param2?._id}`);
             }}
-          />
-          <DeleteOutlined onClick={() => deleteService(param2._id)} />
+          >
+            <EditOutlined
+              style={{
+                paddingLeft: 12,
+                paddingRight: 12,
+              }}
+            />
+          </Button>
+          <Link to={`/user`}>
+            <DeleteOutlined onClick={() => deleteService(param2._id)} />
+          </Link>
         </div>
       ),
     },
@@ -80,7 +94,6 @@ const User = () => {
   const [type, setType] = useState("Name");
   const [value, setValue] = useState("");
 
-  const dispatch = useDispatch();
   const fetchService = async () => {
     const response = await axiosInstance.get("/user-list", {
       params: query,
@@ -129,6 +142,8 @@ const User = () => {
   // //xoa
   const token = localStorage.getItem("accessToken") ?? "";
 
+  const apiURL = `user-list/?userId=${idNew}`;
+
   const deleteService = async (id) => {
     const apiURL = `user-list/?userId=${id}`;
     await axiosInstance
@@ -140,11 +155,28 @@ const User = () => {
       })
       .then((result) => {
         console.log(result);
+        notification.open({
+          message: "Delete Success",
+          icon: (
+            <CheckCircleOutlined
+              style={{
+                color: "#00ff66",
+              }}
+            />
+          ),
+        });
       })
       .catch((error) => {
         console.log(error);
         notification.open({
           message: error.response,
+          icon: (
+            <WarningOutlined
+              style={{
+                color: "#e91010",
+              }}
+            />
+          ),
         });
       });
 

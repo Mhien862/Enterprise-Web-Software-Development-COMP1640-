@@ -3,6 +3,11 @@ import "../assets/styles/login.css";
 import { loginAPI } from "../services/UserService";
 import { Link, useNavigate } from "react-router-dom";
 import { CookiesProvider, useCookies } from "react-cookie";
+import {
+  SmileOutlined,
+  CheckCircleOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,8 +17,6 @@ const Login = () => {
       let res = await loginAPI(values.email, values.password);
       setCookie("user", values, { path: "/" });
 
-      console.log(`this res:`, res);
-      console.log(values);
       if (res && res.accessToken)
         localStorage.setItem("accessToken", res.accessToken);
 
@@ -22,7 +25,14 @@ const Login = () => {
     } catch (error) {
       console.log(222, error);
       notification.open({
-        message: "LOGIN Fail",
+        message: "LOGIN FAIL",
+        icon: (
+          <WarningOutlined
+            style={{
+              color: "#e91010",
+            }}
+          />
+        ),
       });
     }
   };
@@ -30,6 +40,13 @@ const Login = () => {
   const openNotification = () => {
     notification.open({
       message: "LOGIN SUCCESS",
+      icon: (
+        <CheckCircleOutlined
+          style={{
+            color: "#008cff",
+          }}
+        />
+      ),
     });
   };
 
@@ -80,9 +97,6 @@ const Login = () => {
           </Button>
           <div style={{ marginTop: 12 }}>
             <Link to="/forgot">Forgot password</Link>
-          </div>
-          <div style={{ marginTop: 12 }}>
-            <Link to="/register">Register</Link>
           </div>
         </div>
       </Form>
