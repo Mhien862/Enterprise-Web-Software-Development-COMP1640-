@@ -43,7 +43,7 @@ const Login = () => {
       icon: (
         <CheckCircleOutlined
           style={{
-            color: "#00ff66",
+            color: "#008cff",
           }}
         />
       ),
@@ -97,9 +97,6 @@ const Login = () => {
           </Button>
           <div style={{ marginTop: 12 }}>
             <Link to="/forgot">Forgot password</Link>
-          </div>
-          <div style={{ marginTop: 12 }}>
-            <Link to="/register">Register</Link>
           </div>
         </div>
       </Form>
