@@ -4,6 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { notification } from "antd";
 import { userAPI } from "../services/UserService";
+import {
+  SmileOutlined,
+  CheckCircleOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
 
 const Signup = () => {
   const [data, setData] = useState({
@@ -31,10 +36,17 @@ const Signup = () => {
         data.roleName,
         data.facultyName
       );
-      console.log(res)
+      console.log(res);
       navigate("/user");
       notification.open({
         message: "Create Success",
+        icon: (
+          <CheckCircleOutlined
+            style={{
+              color: "#00ff66",
+            }}
+          />
+        ),
       });
       console.log(res.message);
     } catch (error) {
