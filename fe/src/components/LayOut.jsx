@@ -90,7 +90,7 @@ const LayOut = () => {
             {
               key: "3",
               icon: <FireOutlined />,
-              label: <Link to="/">Event </Link>,
+              label: <Link to="/event">Event </Link>,
             },
             {
               key: "4",

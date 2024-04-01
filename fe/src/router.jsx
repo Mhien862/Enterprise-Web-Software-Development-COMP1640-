@@ -9,6 +9,8 @@ import ChangePassword from "./profile/ChangePassword";
 import User from "./ListUser/User";
 import CreateUser from "./ListUser/CreateUser";
 import Edituser from "./ListUser/EditUser";
+import Event from "./event/event";
+import Contribute from "./event/contribute";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +22,6 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-     
         path: "/user",
         element: <User />,
       },
@@ -35,6 +36,14 @@ const router = createBrowserRouter([
       {
         path: "/edituser:_id",
         element: <Edituser />,
+      },
+      {
+        path: "/event",
+        element: <Event />,
+      },
+      {
+        path: "/contribute",
+        element: <Contribute />,
       },
     ],
   },

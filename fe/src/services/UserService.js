@@ -24,6 +24,12 @@ const userAPI = async (username, email, password, roleName, facultyName) => {
     return res.data.data
 }
 
+const uploadAPI = async (user, faculty, originalname, filename) => {
+    const res = await axiosInstance.post("upload ", { user, faculty, originalname, filename })
+
+    return res.data.data
+}
+
 const getserviceAPI = async (name, description, minPrice, maxPrice) => {
     const res = await axiosInstance.get("/services ", { name, description, minPrice, maxPrice })
 
@@ -36,6 +42,6 @@ const updateUser = async (url, data) => {
     return res.data.data
 }
 
-export { loginAPI, userAPI, forgotAPI, resetAPI, getserviceAPI, updateUser };
+export { loginAPI, userAPI, forgotAPI, resetAPI, getserviceAPI, updateUser, uploadAPI };
 
 
