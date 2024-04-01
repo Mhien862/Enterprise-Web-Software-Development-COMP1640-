@@ -87,13 +87,13 @@ const getProfile = () => {
             <Col span={8}>
               <div>
                 <Row>
-                  {/* <Col span={24}>
+                  <Col span={24}>
                     <div className="profile-grid">
-                      <span>Gender</span>
+                      <span>Faculty</span>
                       <br></br>
-                      <span>Male</span>
+                      <span>{data.faculty}</span>
                     </div>
-                  </Col> */}
+                  </Col>
                   <Col span={24}>
                     <div className="profile-grid">
                       <span>Role</span>
