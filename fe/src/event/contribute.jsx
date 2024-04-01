@@ -1,64 +1,10 @@
 import { useState } from "react";
-import { Form, Input, Button, Upload, Radio, notification } from "antd";
+import { Form, Input, Button, Upload, Radio } from "antd";
 import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
-import {
-  SmileOutlined,
-  CheckCircleOutlined,
-  WarningOutlined,
-} from "@ant-design/icons";
-import { uploadAPI } from "../services/UserService";
 
 const { TextArea } = Input;
 
 const PostForm = () => {
-  const [data, setData] = useState({
-    user: "",
-    faculty: "",
-    originalname: "",
-    filename: "",
-  });
-
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-
-  const handleChange = ({ currentTarget: input }) => {
-    setData({ ...data, [input.name]: input.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // const url = "http://localhost:1000/register";
-      const res = await uploadAPI(
-        data.user,
-        data.faculty,
-        data.originalname,
-        data.filename
-      );
-      console.log(res);
-      navigate("/event");
-      notification.open({
-        message: "Post Success",
-        icon: (
-          <CheckCircleOutlined
-            style={{
-              color: "#00ff66",
-            }}
-          />
-        ),
-      });
-      console.log(res.message);
-    } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
-        setError(error.response.data.message);
-      }
-    }
-  };
-
   const [loading, setLoading] = useState(false);
   const normFile = (e) => {
     console.log("Upload event:", e);
@@ -68,40 +14,44 @@ const PostForm = () => {
     return e?.fileList;
   };
 
-  //   const onFinish = async (values) => {
-  //     setLoading(true);
-  //     try {
-  //       // Here you can make an API call to post the data to the social network
-  //       // Replace the following with your actual API call
-  //       console.log("Posting data:", values);
-  //       // Example API call using fetch
-  //       const response = await fetch("your-post-api-url", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(values),
-  //       });
-  //       if (response.ok) {
-  //         console.log("Posted successfully");
-  //         // You can do something after successful post, like showing a success message
-  //       } else {
-  //         console.error("Failed to post");
-  //         // Handle error here
-  //       }
-  //     } catch (error) {
-  //       console.error("Error posting:", error);
-  //       // Handle error here
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  const onChange = (e) => {
+    console.log(`radio checked:${e.target.value}`);
+  };
+
+  const onFinish = async (values) => {
+    setLoading(true);
+    try {
+      // Here you can make an API call to post the data to the social network
+      // Replace the following with your actual API call
+      console.log("Posting data:", values);
+      // Example API call using fetch
+      const response = await fetch("your-post-api-url", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      if (response.ok) {
+        console.log("Posted successfully");
+        // You can do something after successful post, like showing a success message
+      } else {
+        console.error("Failed to post");
+        // Handle error here
+      }
+    } catch (error) {
+      console.error("Error posting:", error);
+      // Handle error here
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Form
       name="postForm"
       initialValues={{ remember: true }}
-      onFinish={handleSubmit}
+      onFinish={onFinish}
     >
       <Form.Item
         name="Title"
@@ -118,7 +68,7 @@ const PostForm = () => {
       </Form.Item>
 
       <Form.Item name="Faculty" label="Faculty">
-        <Radio.Group onChange={handleChange} defaultValue="IT">
+        <Radio.Group onChange={onChange} defaultValue="IT">
           <Radio.Button value="IT">IT</Radio.Button>
           <Radio.Button value="Business">Business</Radio.Button>
           <Radio.Button value="Design">Design</Radio.Button>
