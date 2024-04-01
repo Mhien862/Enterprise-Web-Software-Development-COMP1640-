@@ -25,7 +25,7 @@ const PostForm = () => {
       // Replace the following with your actual API call
       console.log("Posting data:", values);
       // Example API call using fetch
-      const response = await fetch("your-post-api-url", {
+      const response = await fetch("http://localhost:1000/upload", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const PostForm = () => {
         getValueFromEvent={normFile}
         extra="Upload Text and Picture"
       >
-        <Upload name="logo" action="/upload.do" listType="picture">
+        <Upload name="logo" action="/upload" listType="picture">
           <Button icon={<UploadOutlined />}>Click to upload</Button>
         </Upload>
       </Form.Item>

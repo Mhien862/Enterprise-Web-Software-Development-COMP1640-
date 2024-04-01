@@ -9,7 +9,7 @@ const contributionSchema = mongoose.Schema({
   faculty: {
     type: String,
     ref: "Faculty",
-    required: true,
+    // required: true,
   },
   originalname: {
     type: String,

@@ -12,19 +12,14 @@ import { CheckCircleOutlined, WarningOutlined } from "@ant-design/icons";
 const Event = () => {
   const columns = [
     {
-      title: "#",
-      dataIndex: "_id",
-      key: "_id",
-    },
-    {
       title: "Event Name",
-      dataIndex: "eventname",
-      key: "eventname",
+      dataIndex: "eventName",
+      key: "eventName",
     },
     {
       title: "Frist Closure Date",
-      dataIndex: "frirstClosureDate",
-      key: "frirstClosureDate",
+      dataIndex: "firstClosureDate",
+      key: "firstClosureDate",
     },
     {
       title: "Final Closure Date",
@@ -41,13 +36,13 @@ const Event = () => {
       dataIndex: "faculty",
       key: "faculty",
 
-      render: (value) => (
+      render: (data) => (
         <div
           style={{
             textTransform: "lowercase",
           }}
         >
-          {value}
+          {data}
         </div>
       ),
     },
@@ -79,18 +74,27 @@ const Event = () => {
         </div>
       ),
     },
+    {
+      title: "Upload ",
+      dataIndex: "upload",
+      key: "upload",
+      render: () => (
+        <div>
+          <Link to={`/contribute`}>
+            <Button type="primary">Upload </Button>
+          </Link>
+        </div>
+      ),
+    },
   ];
 
   const [query, setQuery] = useState({
     page: 1,
     limit: 5,
-    name: "",
-    email: "",
-    status: "",
   });
 
   const navigate = useNavigate();
-  const [owners, setService] = useState([]);
+  const [events, setService] = useState([]);
   const [pagination, setPagination] = useState({});
   const [type, setType] = useState("Name");
   const [value, setValue] = useState("");
@@ -101,7 +105,7 @@ const Event = () => {
     });
     console.log(response);
 
-    setService(response.data);
+    setService(response.data.events);
   };
 
   const onTableChange = (values) => {
@@ -136,7 +140,7 @@ const Event = () => {
 
   //-------------------------
   let idNew = null;
-  const data = owners;
+  const data = events;
   if (data && data.length > 0) {
     idNew = data[0]._id;
   }
@@ -244,7 +248,7 @@ const Event = () => {
 
       <Table
         rowKey="id"
-        dataSource={owners}
+        dataSource={events}
         columns={columns}
         pagination={{
           current: pagination.page,
