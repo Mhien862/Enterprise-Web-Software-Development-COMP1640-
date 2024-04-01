@@ -1,84 +1,260 @@
-import { LikeOutlined, MessageOutlined, StarOutlined } from "@ant-design/icons";
-import React from "react";
-import { Avatar, Button, List, Space } from "antd";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Button, Col, Row, Select, Space, Table, notification } from "antd";
+import { useEffect, useState } from "react";
+import axiosInstance from "../services/axios.service";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+// import { fetchServicesById } from "../store/reducers/service";
 
-const data = Array.from({
-  length: 23,
-}).map((_, i) => ({
-  href: "https://ant.design",
-  title: `ant design part ${i}`,
-  avatar: `https://api.dicebear.com/7.x/miniavs/svg?seed=${i}`,
-  description:
-    "Ant Design, a design language for background applications, is refined by Ant UED Team.",
-  content:
-    "We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.",
-}));
-const IconText = ({ icon, text }) => (
-  <Space>
-    {React.createElement(icon)}
-    {text}
-  </Space>
-);
+import { Option } from "rc-select";
+import Search from "antd/es/input/Search";
+import { CheckCircleOutlined, WarningOutlined } from "@ant-design/icons";
 
-const App = () => (
-  <List
-    itemLayout="vertical"
-    size="large"
-    pagination={{
-      onChange: (page) => {
-        console.log(page);
-      },
-      pageSize: 3,
-    }}
-    dataSource={data}
-    footer={
-      <div>
-        <Button
-          onClick={() => {
-            Navigate(`/contribute`);
+const Event = () => {
+  const columns = [
+    {
+      title: "#",
+      dataIndex: "_id",
+      key: "_id",
+    },
+    {
+      title: "Event Name",
+      dataIndex: "eventname",
+      key: "eventname",
+    },
+    {
+      title: "Frist Closure Date",
+      dataIndex: "frirstClosureDate",
+      key: "frirstClosureDate",
+    },
+    {
+      title: "Final Closure Date",
+      dataIndex: "finalClosureDate",
+      key: "finalClosureDate",
+    },
+    {
+      title: "Academic Year",
+      dataIndex: "academicYear",
+      key: "academicYear",
+    },
+    {
+      title: "Faculty",
+      dataIndex: "faculty",
+      key: "faculty",
+
+      render: (value) => (
+        <div
+          style={{
+            textTransform: "lowercase",
           }}
         >
-          New Post
-        </Button>
-      </div>
+          {value}
+        </div>
+      ),
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      render: (_, param2) => (
+        <div>
+          <Link to={`/detailservice/${param2.id}`}>
+            <EyeOutlined />
+          </Link>
+          <Button
+            type="link"
+            onClick={() => {
+              navigate(`/user/edit/${param2?._id}`);
+            }}
+          >
+            <EditOutlined
+              style={{
+                paddingLeft: 12,
+                paddingRight: 12,
+              }}
+            />
+          </Button>
+          <Link to={`/user`}>
+            <DeleteOutlined onClick={() => deleteService(param2._id)} />
+          </Link>
+        </div>
+      ),
+    },
+  ];
+
+  const [query, setQuery] = useState({
+    page: 1,
+    limit: 5,
+    name: "",
+    email: "",
+    status: "",
+  });
+
+  const navigate = useNavigate();
+  const [owners, setService] = useState([]);
+  const [pagination, setPagination] = useState({});
+  const [type, setType] = useState("Name");
+  const [value, setValue] = useState("");
+
+  const fetchService = async () => {
+    const response = await axiosInstance.get("/event", {
+      params: query,
+    });
+    console.log(response);
+
+    setService(response.data);
+  };
+
+  const onTableChange = (values) => {
+    setQuery({ ...query, page: values });
+  };
+
+  const handleTypeChange = (value) => {
+    setType(value);
+  };
+
+  const onInputChange = (event) => {
+    const value = event.target.value;
+    setValue(value);
+  };
+
+  const onSearch = () => {
+    if (type === "Name") {
+      setQuery({ ...query, name: value });
+    } else {
+      setQuery({ ...query, email: value });
     }
-    renderItem={(item) => (
-      <List.Item
-        key={item.title}
-        actions={[
-          <IconText
-            icon={StarOutlined}
-            text="156"
-            key="list-vertical-star-o"
-          />,
-          <IconText
-            icon={LikeOutlined}
-            text="156"
-            key="list-vertical-like-o"
-          />,
-          <IconText
-            icon={MessageOutlined}
-            text="2"
-            key="list-vertical-message"
-          />,
-        ]}
-        extra={
-          <img
-            width={272}
-            alt="logo"
-            src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-          />
-        }
+  };
+
+  const toCreateService = () => {
+    navigate("/createuser");
+  };
+
+  useEffect(() => {
+    // call API
+    fetchService();
+  }, [query]);
+
+  //-------------------------
+  let idNew = null;
+  const data = owners;
+  if (data && data.length > 0) {
+    idNew = data[0]._id;
+  }
+  // //xoa
+  const token = localStorage.getItem("accessToken") ?? "";
+
+  const apiURL = `user-list/?userId=${idNew}`;
+
+  const deleteService = async (id) => {
+    const apiURL = `user-list/?userId=${id}`;
+    await axiosInstance
+      .delete(apiURL, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        console.log(result);
+        notification.open({
+          message: "Delete Success",
+          icon: (
+            <CheckCircleOutlined
+              style={{
+                color: "#00ff66",
+              }}
+            />
+          ),
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        notification.open({
+          message: error.response,
+          icon: (
+            <WarningOutlined
+              style={{
+                color: "#e91010",
+              }}
+            />
+          ),
+        });
+      });
+
+    onTableChange();
+  };
+
+  return (
+    <div
+      className="profile"
+      style={{
+        marginTop: 30,
+        paddingLeft: 40,
+        paddingRight: 40,
+      }}
+    >
+      <div>
+        <Row gutter={24}>
+          <Col className="gutter-row" span={6}>
+            <h2>List Event</h2>
+          </Col>
+          <Col className="gutter-row" span={15}></Col>
+          <Col className="gutter-row" span={3}>
+            <Button onClick={toCreateService}>Create Event</Button>
+          </Col>
+        </Row>
+      </div>
+
+      {/* --------------------------- */}
+      <div
+        style={{
+          marginBottom: 20,
+        }}
       >
-        <List.Item.Meta
-          avatar={<Avatar src={item.avatar} />}
-          title={<a href={item.href}>{item.title}</a>}
-          description={item.description}
-        />
-        {item.content}
-      </List.Item>
-    )}
-  />
-);
-export default App;
+        <Row gutter={24}>
+          <Col className="gutter-row" span={8}>
+            <Space.Compact
+              style={{
+                position: "relative",
+              }}
+              block
+            >
+              <Select
+                defaultValue={type}
+                allowClear
+                onChange={handleTypeChange}
+              >
+                <Option value="Name">User Name</Option>
+                <Option value="Email">Email</Option>
+              </Select>
+              <Search
+                onChange={onInputChange}
+                value={value}
+                allowClear
+                onSearch={onSearch}
+                style={{
+                  width: "100%",
+                }}
+              />
+            </Space.Compact>
+          </Col>
+          <Col span={10}></Col>
+        </Row>
+      </div>
+
+      <Table
+        rowKey="id"
+        dataSource={owners}
+        columns={columns}
+        pagination={{
+          current: pagination.page,
+          pageSize: pagination.limit,
+          total: pagination.total,
+        }}
+        onChange={onTableChange}
+      />
+    </div>
+  );
+};
+
+export default Event;
