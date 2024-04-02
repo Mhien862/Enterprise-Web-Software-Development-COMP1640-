@@ -6,6 +6,7 @@ const { TextArea } = Input;
 
 const PostForm = () => {
   const [loading, setLoading] = useState(false);
+  const [fileList, setFileList] = useState([]);
   const normFile = (e) => {
     console.log("Upload event:", e);
     if (Array.isArray(e)) {
@@ -19,6 +20,14 @@ const PostForm = () => {
   };
 
   const onFinish = async (values) => {
+    console.log(fileList)
+    const formData = new FormData();
+    fileList.forEach((file) => {
+      formData.append('files', file);
+    });
+    formData.append('Title', values.Title)
+    formData.append('Content', values.Content)
+    formData.append('Faculty', values.Faculty)
     setLoading(true);
     try {
       // Here you can make an API call to post the data to the social network
@@ -27,10 +36,12 @@ const PostForm = () => {
       // Example API call using fetch
       const response = await fetch("http://localhost:1000/upload", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
+        credentials: 'include',
+        // body: JSON.stringify(values),
+        body: formData
       });
       if (response.ok) {
         console.log("Posted successfully");
@@ -45,6 +56,20 @@ const PostForm = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const props = {
+    onRemove: (file) => {
+      const index = fileList.indexOf(file);
+      const newFileList = fileList.slice();
+      newFileList.splice(index, 1);
+      setFileList(newFileList);
+    },
+    beforeUpload: (file) => {
+      setFileList([...fileList, file]);
+      return false;
+    },
+    fileList,
   };
 
   return (
@@ -82,7 +107,7 @@ const PostForm = () => {
         getValueFromEvent={normFile}
         extra="Upload Text and Picture"
       >
-        <Upload name="logo" action="/upload" listType="picture">
+        <Upload {...props} name="logo" listType="picture">
           <Button icon={<UploadOutlined />}>Click to upload</Button>
         </Upload>
       </Form.Item>
@@ -94,7 +119,7 @@ const PostForm = () => {
           getValueFromEvent={normFile}
           noStyle
         >
-          <Upload.Dragger name="files" action="/upload.do">
+          <Upload.Dragger {...props} name="files">
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
             </p>
