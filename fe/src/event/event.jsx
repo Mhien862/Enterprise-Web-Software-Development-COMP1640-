@@ -74,18 +74,6 @@ const Event = () => {
         </div>
       ),
     },
-    {
-      title: "Upload ",
-      dataIndex: "upload",
-      key: "upload",
-      render: () => (
-        <div>
-          <Link to={`/contribute`}>
-            <Button type="primary">Upload </Button>
-          </Link>
-        </div>
-      ),
-    },
   ];
 
   const [query, setQuery] = useState({

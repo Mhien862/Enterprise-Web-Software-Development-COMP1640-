@@ -42,7 +42,7 @@ const router = createBrowserRouter([
         element: <Event />,
       },
       {
-        path: "/contribute",
+        path: "/contribute:_id",
         element: <Contribute />,
       },
     ],
