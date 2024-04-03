@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
 
 import Contribution from "../models/contributionModel.js";
+import File from "../models/fileModel.js";
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -61,57 +62,41 @@ const getProfile = async (req, res) => {
 
 const handleUpload = async (req, res) => {
   try {
-    // Kiểm tra xem biến isSelected có được truyền là true không
-    const isSelected = req.body.isSelected === "true";
-    if (isSelected !== true) {
-      return res
-        .status(400)
-        .json({ message: "Files can only be uploaded if isSelected is true" });
-    }
-
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No file uploaded" });
     }
+    const fileIds = [];
+    for (const file of req.files) {
+      const { originalname, mimetype, filename, path } = file;
+      const newFile = new File({
+        originalname,
+        mimetype,
+        filename,
+        path,
+      });
+      const savedFile = await newFile.save();
+      fileIds.push(savedFile._id);
+    }
 
-    const uploadedFilesInfo = await Promise.all(
-      req.files.map(async (file) => {
-        const { originalname, mimetype, filename, path } = file;
-        const userId = req.user._id;
-        const submissionDate = req.body.submissionDate
-          ? new Date(req.body.submissionDate).toISOString()
-          : new Date().toISOString();
-        const { faculty, status } = req.body;
-
-        // Lưu thông tin file vào cơ sở dữ liệu
-        const newContribution = new Contribution({
-          user: userId,
-          faculty,
-          originalname,
-          mimetype,
-          filename,
-          path,
-          submissionDate,
-          status,
-          isSelected: true, // Đảm bảo isSelected luôn là true
-        });
-        await newContribution.save();
-
-        // Trả về thông tin về file
-        return {
-          user: userId,
-          faculty,
-          originalname,
-          mimetype,
-          filename,
-          path,
-          submissionDate,
-        };
-      })
-    );
+    // Tạo một bản ghi Contribution và thêm các ID của tệp tin vào trường files
+    const userId = req.user._id;
+    const submissionDate = req.body.submissionDate
+      ? new Date(req.body.submissionDate).toISOString()
+      : new Date().toISOString();
+    const { faculty, status } = req.body;
+    const newContribution = new Contribution({
+      user: userId,
+      faculty,
+      files: fileIds, // Thêm ID của các tệp tin vào mảng files
+      submissionDate,
+      status,
+      isSelected: true,
+    });
+    await newContribution.save();
 
     res.status(200).json({
       message: "File uploaded successfully",
-      fileInfo: uploadedFilesInfo,
+      fileInfo: fileIds,
     });
   } catch (error) {
     console.error("Error uploading file:", error);
@@ -138,5 +123,31 @@ const deleteContribution = async (req, res) => {
     res.status(500).json({ message: "Failed to delete contribution" });
   }
 };
+const getContributionById = async (req, res) => {
+  try {
+    const contributionId = req.query.contributionId;
 
-export { loginUser, logoutUser, getProfile, handleUpload, deleteContribution };
+    // Truy vấn đóng góp dựa trên contributionId
+    const contribution = await Contribution.findById(contributionId);
+
+    // Kiểm tra xem đóng góp có tồn tại không
+    if (!contribution) {
+      return res.status(404).json({ message: "Contribution not found" });
+    }
+
+    // Trả về thông tin về đóng góp
+    res.status(200).json({ contribution });
+  } catch (error) {
+    console.error("Error fetching contribution by ID:", error);
+    res.status(500).json({ message: "Failed to fetch contribution by ID" });
+  }
+};
+
+export {
+  loginUser,
+  logoutUser,
+  getProfile,
+  handleUpload,
+  deleteContribution,
+  getContributionById,
+};

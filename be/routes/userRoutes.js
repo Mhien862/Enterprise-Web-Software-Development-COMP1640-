@@ -5,6 +5,7 @@ import {
   getProfile,
   handleUpload,
   deleteContribution,
+  getContributionById,
 } from "../controllers/userController.js";
 import {
   registerUser,
@@ -37,7 +38,8 @@ router.get("/profile", authenticate, getProfile);
 router
   .route("/upload")
   .post(authenticate, uploadFile, handleUpload)
-  .delete(authenticate, deleteContribution);
+  .delete(authenticate, deleteContribution)
+  .get(authenticate, getContributionById);
 
 //Admin role
 router.post("/register", authenticate, authenticateAdmin, registerUser);
