@@ -27,7 +27,7 @@ import {
   authenticateAdmin,
 } from "../middlewares/authMiddlewares.js";
 import { uploadFile } from "../middlewares/uploadMiddlewares.js";
-
+import { downloadAllFiles } from "../controllers/marketingManagerController.js";
 const router = express.Router();
 
 //User role
@@ -61,4 +61,6 @@ router
   .post(authenticate, authenticateAdmin, createAcademicYear)
   .put(authenticate, authenticateAdmin, updateAcademicYear)
   .delete(authenticate, authenticateAdmin, deleteAcademicYear);
+
+router.get("/download-all", authenticate, downloadAllFiles);
 export default router;
