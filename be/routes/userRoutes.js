@@ -32,6 +32,11 @@ import {
   getContribution,
   getDashboardStatistics,
 } from "../controllers/marketingManagerController.js";
+import {
+  sendEmailNotification,
+  getContributionsPerFaculty,
+} from "../controllers/marketingCoordinatorController.js";
+import { isMarketingCoordinator } from "../middlewares/marketingCoordinatorMiddlewares.js";
 const router = express.Router();
 
 //User role
@@ -69,4 +74,12 @@ router
 router.get("/download-all", authenticate, downloadAllFiles);
 router.get("/contribution", authenticate, getContribution);
 router.get("/dashboard", authenticate, getDashboardStatistics);
+router.post("/send-email", authenticate, sendEmailNotification);
+router.get(
+  "/contribution-per-faculty",
+  authenticate,
+  isMarketingCoordinator,
+  getContributionsPerFaculty
+);
+
 export default router;

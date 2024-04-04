@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 const contributionSchema = mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
+  username: {
+    type: String,
     ref: "User",
     required: true,
   },

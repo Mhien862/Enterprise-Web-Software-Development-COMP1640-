@@ -6,6 +6,7 @@ import createToken from "../utils/createToken.js";
 
 import Contribution from "../models/contributionModel.js";
 import File from "../models/fileModel.js";
+import { sendEmailNotification } from "./marketingCoordinatorController.js";
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -79,13 +80,13 @@ const handleUpload = async (req, res) => {
     }
 
     // Tạo một bản ghi Contribution và thêm các ID của tệp tin vào trường files
-    const userId = req.user._id;
+    const userId = req.user.username;
     const submissionDate = req.body.submissionDate
       ? new Date(req.body.submissionDate).toISOString()
       : new Date().toISOString();
     const { faculty, status } = req.body;
     const newContribution = new Contribution({
-      user: userId,
+      username: userId,
       faculty,
       files: fileIds, // Thêm ID của các tệp tin vào mảng files
       submissionDate,
@@ -93,7 +94,7 @@ const handleUpload = async (req, res) => {
       isSelected: true,
     });
     await newContribution.save();
-
+    sendEmailNotification([newContribution]);
     res.status(200).json({
       message: "File uploaded successfully",
       fileInfo: fileIds,
