@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Image } from "antd";
+import { Card, Image, List } from "antd";
 import axios from "axios";
 import axiosInstance from "../services/axios.service";
 
@@ -23,31 +23,33 @@ const App = () => {
   }, []);
 
   const renderCards = () => {
-    if (Array.isArray(data)) {
-      return data.map((item) => {
-        return (
-          <Card
-            key={item._id}
-            title={item.username}
-            description={
-              <ul>
-                {item.files.map((file) => (
-                  <li key={file}>
+    return data.map((item) => (
+      <Card key={item._id} title={item.faculty}>
+        {/* Username */}
+        <p>Username: {item.username}</p>
+
+        {/* Files */}
+        <List
+          itemLayout="horizontal"
+          dataSource={item.files}
+          renderItem={(file) => (
+            <List.Item>
+              <List.Item.Meta
+                avatar={
+                  file.mimetype.startsWith("image/") ? (
                     <Image
-                      src={file}
-                      alt={item.faculty + " Image"}
-                      width={200}
+                      src={`http://localhost:1000/contribution/${file.filename}`} // Replace with image URL provider
+                      width={500}
                     />
-                  </li>
-                ))}
-              </ul>
-            }
-          />
-        );
-      });
-    } else {
-      return <div>No data available</div>;
-    }
+                  ) : null
+                }
+                title={file.originalname}
+              />
+            </List.Item>
+          )}
+        />
+      </Card>
+    ));
   };
 
   return <div>{renderCards()}</div>;
