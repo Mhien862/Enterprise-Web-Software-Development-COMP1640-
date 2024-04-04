@@ -27,7 +27,11 @@ import {
   authenticateAdmin,
 } from "../middlewares/authMiddlewares.js";
 import { uploadFile } from "../middlewares/uploadMiddlewares.js";
-import { downloadAllFiles } from "../controllers/marketingManagerController.js";
+import {
+  downloadAllFiles,
+  getContribution,
+  getDashboardStatistics,
+} from "../controllers/marketingManagerController.js";
 const router = express.Router();
 
 //User role
@@ -63,4 +67,6 @@ router
   .delete(authenticate, authenticateAdmin, deleteAcademicYear);
 
 router.get("/download-all", authenticate, downloadAllFiles);
+router.get("/contribution", authenticate, getContribution);
+router.get("/dashboard", authenticate, getDashboardStatistics);
 export default router;

@@ -2,7 +2,8 @@ import archiver from "archiver";
 import fs from "fs";
 import path from "path";
 import File from "../models/fileModel.js";
-
+import Contribution from "../models/contributionModel.js";
+import User from "../models/userModels.js";
 const downloadAllFiles = async (req, res) => {
   try {
     // Create a new archiver instance
@@ -42,5 +43,56 @@ const downloadAllFiles = async (req, res) => {
     res.status(500).json({ message: "Failed to download all files" });
   }
 };
+const getContribution = async (req, res) => {
+  try {
+    const contributions = await Contribution.find({});
+    res.status(200).json(contributions);
+  } catch (error) {
+    console.error("Error retrieving contributions:", error);
+    throw new Error("Failed to retrieve contributions");
+  }
+};
+const getDashboardStatistics = async (req, res) => {
+  try {
+    // Số lượng đóng góp từ mỗi khoa
+    const contributionsPerFaculty = await Contribution.aggregate([
+      { $group: { _id: "$faculty", count: { $sum: 1 } } },
+    ]);
 
-export { downloadAllFiles };
+    // Số lượng sinh viên của mỗi khoa
+
+    // Đếm số lượng sinh viên trong mỗi khoa từ collection người dùng
+    const studentsCountPerFaculty = await User.aggregate([
+      { $match: { role: "student" } }, // Lọc các người dùng có vai trò là sinh viên
+      { $group: { _id: "$faculty", count: { $sum: 1 } } }, // Đếm số lượng sinh viên theo khoa
+    ]);
+
+    // Tổng số lượng sinh viên
+    const totalStudents = studentsCountPerFaculty.reduce(
+      (acc, cur) => acc + cur.count,
+      0
+    );
+
+    // Tính tỉ lệ đóng góp từ mỗi khoa
+    const totalContributions = contributionsPerFaculty.reduce(
+      (acc, cur) => acc + cur.count,
+      0
+    );
+    const percentagePerFaculty = contributionsPerFaculty.map((faculty) => ({
+      faculty: faculty._id,
+      percentage: ((faculty.count / totalContributions) * 100).toFixed(2),
+    }));
+
+    res.status(200).json({
+      contributionsPerFaculty,
+
+      studentsCountPerFaculty,
+      totalStudents,
+      percentagePerFaculty,
+    });
+  } catch (error) {
+    console.error("Error getting dashboard statistics:", error);
+    res.status(500).json({ message: "Failed to get dashboard statistics" });
+  }
+};
+export { downloadAllFiles, getContribution, getDashboardStatistics };
