@@ -11,24 +11,13 @@ const contributionSchema = mongoose.Schema({
     ref: "Faculty",
     // required: true,
   },
-  originalname: {
-    type: String,
-    require: true,
-  },
-  mimetype: {
-    type: String,
-    required: true,
-  },
-  filename: {
-    type: String,
-    required: true,
-  },
-  path: {
-    type: String,
-    required: true,
-  },
-  submissionDate: Date,
-  status: String,
+  files: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "File",
+    },
+  ],
+
   isSelected: Boolean,
 });
 

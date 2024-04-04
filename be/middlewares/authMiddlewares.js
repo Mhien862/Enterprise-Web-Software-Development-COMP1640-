@@ -1,12 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModels.js";
 const authenticate = async (req, res, next) => {
-  // let authHeader = req.headers.authorization || req.headers.Authorization
-
-  // if (!authHeader?.startsWith('Bearer ')) {
-  //   return res.status(401).send('Unauthorized')
-  // }
-  // let token = authHeader.split(' ')[1]
   let token = req.cookies.jwt;
 
   if (token) {

@@ -4,10 +4,11 @@ import {
   logoutUser,
   getProfile,
   handleUpload,
+  deleteContribution,
+  getContributionById,
 } from "../controllers/userController.js";
 import {
   registerUser,
-  getAllUser,
   updateUser,
   deleteUser,
   getUserById,
@@ -26,7 +27,11 @@ import {
   authenticateAdmin,
 } from "../middlewares/authMiddlewares.js";
 import { uploadFile } from "../middlewares/uploadMiddlewares.js";
-
+import {
+  downloadAllFiles,
+  getContribution,
+  getDashboardStatistics,
+} from "../controllers/marketingManagerController.js";
 const router = express.Router();
 
 //User role
@@ -34,7 +39,12 @@ const router = express.Router();
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.get("/profile", authenticate, getProfile);
-router.post("/upload", authenticate, uploadFile, handleUpload);
+router
+  .route("/upload")
+  .post(authenticate, uploadFile, handleUpload)
+  .delete(authenticate, deleteContribution)
+  .get(authenticate, getContributionById);
+
 //Admin role
 router.post("/register", authenticate, authenticateAdmin, registerUser);
 router.get("/user", authenticate, authenticateAdmin, getUserById);
@@ -55,4 +65,8 @@ router
   .post(authenticate, authenticateAdmin, createAcademicYear)
   .put(authenticate, authenticateAdmin, updateAcademicYear)
   .delete(authenticate, authenticateAdmin, deleteAcademicYear);
+
+router.get("/download-all", authenticate, downloadAllFiles);
+router.get("/contribution", authenticate, getContribution);
+router.get("/dashboard", authenticate, getDashboardStatistics);
 export default router;
