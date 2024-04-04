@@ -1,39 +1,56 @@
-import { useEffect, useState } from "react";
-import { Card } from "antd";
+import React, { useEffect, useState } from "react";
+import { Card, Image } from "antd";
 import axios from "axios";
+import axiosInstance from "../services/axios.service";
 
 const App = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Update the URL with your actual API endpoint
-    axios.get("/contribution").then((response) => {
-      setData(response.data);
-    });
+    const fetchData = async () => {
+      try {
+        const response = await axiosInstance.get(
+          "http://localhost:1000/contribution"
+        );
+        setData(response.data);
+        console.log(response);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  return (
-    <div>
-      {data.map((item) => (
-        <Card
-          key={item._id}
-          title={item.faculty}
-          description={
-            <ul>
-              {item.files.map((file) => (
-                <li key={file}>
-                  {/* Assuming 'file' contains a downloadable URL */}
-                  <a href={file} target="_blank" rel="noreferrer">
-                    {file}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          }
-        />
-      ))}
-    </div>
-  );
+  const renderCards = () => {
+    if (Array.isArray(data)) {
+      return data.map((item) => {
+        return (
+          <Card
+            key={item._id}
+            title={item.username}
+            description={
+              <ul>
+                {item.files.map((file) => (
+                  <li key={file}>
+                    <Image
+                      src={file}
+                      alt={item.faculty + " Image"}
+                      width={200}
+                    />
+                  </li>
+                ))}
+              </ul>
+            }
+          />
+        );
+      });
+    } else {
+      return <div>No data available</div>;
+    }
+  };
+
+  return <div>{renderCards()}</div>;
 };
 
 export default App;
