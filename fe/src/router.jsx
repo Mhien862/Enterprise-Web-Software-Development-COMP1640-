@@ -10,7 +10,8 @@ import User from "./ListUser/User";
 import CreateUser from "./ListUser/CreateUser";
 import Edituser from "./ListUser/EditUser";
 import Event from "./event/event";
-import Contribute from "./event/contribute";
+import Contribute from "./contribute/contribute";
+import ListConTribute from "./contribute/listcontribute";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: "/contribute:_id",
         element: <Contribute />,
+      },
+      {
+        path: "/listcontribute",
+        element: <ListConTribute />,
       },
     ],
   },

@@ -95,6 +95,11 @@ const LayOut = () => {
             {
               key: "4",
               icon: <GithubOutlined />,
+              label: <Link to="/listcontribute">Contribute </Link>,
+            },
+            {
+              key: "5",
+              icon: <GithubOutlined />,
               label: <Link to="/">About us </Link>,
             },
           ]}
