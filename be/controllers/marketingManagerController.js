@@ -45,21 +45,23 @@ const downloadAllFiles = async (req, res) => {
 };
 const getContribution = async (req, res) => {
   try {
-    const contributions = await Contribution.find({});
+    const contributions = await Contribution.find({})
+      .populate("files") // Nối (populate) các tệp từ model "File"
+      .exec();
+
     res.status(200).json(contributions);
   } catch (error) {
     console.error("Error retrieving contributions:", error);
     throw new Error("Failed to retrieve contributions");
   }
 };
+
 const getDashboardStatistics = async (req, res) => {
   try {
     // Số lượng đóng góp từ mỗi khoa
     const contributionsPerFaculty = await Contribution.aggregate([
       { $group: { _id: "$faculty", count: { $sum: 1 } } },
     ]);
-
-    // Số lượng sinh viên của mỗi khoa
 
     // Đếm số lượng sinh viên trong mỗi khoa từ collection người dùng
     const studentsCountPerFaculty = await User.aggregate([
