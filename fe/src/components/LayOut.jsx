@@ -7,6 +7,7 @@ import {
   IdcardOutlined,
   GithubOutlined,
   FireOutlined,
+  InstagramOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
@@ -94,7 +95,7 @@ const LayOut = () => {
             },
             {
               key: "4",
-              icon: <GithubOutlined />,
+              icon: <InstagramOutlined />,
               label: <Link to="/listcontribute">Contribute </Link>,
             },
             {
