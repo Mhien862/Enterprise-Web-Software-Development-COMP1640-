@@ -30,6 +30,7 @@ import { uploadFile } from "../middlewares/uploadMiddlewares.js";
 import {
   downloadAllFiles,
   getContribution,
+  getContributionImg,
   getDashboardStatistics,
 } from "../controllers/marketingManagerController.js";
 import {
@@ -73,6 +74,7 @@ router
 
 router.get("/download-all", authenticate, downloadAllFiles);
 router.get("/contribution", authenticate, getContribution);
+router.get("/contribution-img/:name", authenticate, getContributionImg);
 router.get("/dashboard", authenticate, getDashboardStatistics);
 router.post("/send-email", authenticate, sendEmailNotification);
 router.get(
