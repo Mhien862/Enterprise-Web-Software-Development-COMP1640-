@@ -39,7 +39,7 @@ const App = () => {
                   file.mimetype.startsWith("image/") ? (
                     <Image
                       src={`http://localhost:1000/contribution-img/${file.filename}`} // Replace with image URL provider
-                      width={500}
+                      width={200}
                     />
                   ) : null
                 }
