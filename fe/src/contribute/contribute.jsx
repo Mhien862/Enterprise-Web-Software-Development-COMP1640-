@@ -1,6 +1,12 @@
 import { useState } from "react";
-import { Form, Input, Button, Upload, Radio } from "antd";
+import { Form, Input, Button, Upload, Radio, notification } from "antd";
 import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  SmileOutlined,
+  CheckCircleOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const { TextArea } = Input;
 
@@ -14,20 +20,20 @@ const PostForm = () => {
     }
     return e?.fileList;
   };
-
+  const navigate = useNavigate();
   const onChange = (e) => {
     console.log(`radio checked:${e.target.value}`);
   };
 
   const onFinish = async (values) => {
-    console.log(fileList)
+    console.log(fileList);
     const formData = new FormData();
     fileList.forEach((file) => {
-      formData.append('files', file);
+      formData.append("files", file);
     });
-    formData.append('Title', values.Title)
-    formData.append('Content', values.Content)
-    formData.append('Faculty', values.Faculty)
+    formData.append("Title", values.Title);
+    formData.append("Content", values.Content);
+    formData.append("Faculty", values.faculty);
     setLoading(true);
     try {
       // Here you can make an API call to post the data to the social network
@@ -39,12 +45,24 @@ const PostForm = () => {
         // headers: {
         //   "Content-Type": "application/json",
         // },
-        credentials: 'include',
+        credentials: "include",
         // body: JSON.stringify(values),
-        body: formData
+        body: formData,
       });
       if (response.ok) {
         console.log("Posted successfully");
+        navigate("/listcontribute");
+        notification.open({
+          message: "Post Successfully",
+          icon: (
+            <CheckCircleOutlined
+              style={{
+                color: "#00ff66",
+              }}
+            />
+          ),
+        });
+
         // You can do something after successful post, like showing a success message
       } else {
         console.error("Failed to post");
@@ -92,7 +110,7 @@ const PostForm = () => {
         <TextArea rows={4} placeholder="Content" />
       </Form.Item>
 
-      <Form.Item name="Faculty" label="Faculty">
+      <Form.Item name="faculty" label="Faculty">
         <Radio.Group onChange={onChange} defaultValue="IT">
           <Radio.Button value="IT">IT</Radio.Button>
           <Radio.Button value="Business">Business</Radio.Button>
