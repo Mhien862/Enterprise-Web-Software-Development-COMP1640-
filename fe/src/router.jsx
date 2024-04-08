@@ -3,7 +3,7 @@ import CreateUser from "./ListUser/CreateUser";
 import Edituser from "./ListUser/EditUser";
 import User from "./ListUser/User";
 import LayOut from "./components/LayOut";
-import Event from "./event/Event";
+import Event from "./event/event";
 import ForgotPassword from "./formlogins/ForgotPassword";
 import LayoutLogin from "./formlogins/LayoutLogin";
 import Login from "./formlogins/Login";
