@@ -3,7 +3,6 @@ import CreateUser from "./ListUser/CreateUser";
 import Edituser from "./ListUser/EditUser";
 import User from "./ListUser/User";
 import LayOut from "./components/LayOut";
-import Contribute from "./event/contribute";
 import Event from "./event/Event";
 import ForgotPassword from "./formlogins/ForgotPassword";
 import LayoutLogin from "./formlogins/LayoutLogin";
@@ -12,6 +11,8 @@ import ResetPassword from "./formlogins/ResetPassword";
 import Profile from "./profile/Profile";
 import CreateEvent from "./event/CreateEvent";
 import EditEvent from "./event/EditEvent";
+import Contribute from "./contribute/contribute";
+import ListConTribute from "./contribute/listcontribute";
 
 const router = createBrowserRouter([
   {
@@ -44,15 +45,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/createevent",
-        element: <CreateEvent/>
+        element: <CreateEvent />,
       },
       {
         path: "/event/edit/:id",
-        element: <EditEvent/>
+        element: <EditEvent />,
       },
       {
         path: "/contribute",
         element: <Contribute />,
+      },
+      {
+        path: "/Listcontribute",
+        element: <ListConTribute />,
       },
     ],
   },
