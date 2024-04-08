@@ -12,7 +12,7 @@ import Profile from "./profile/Profile";
 import CreateEvent from "./event/CreateEvent";
 import EditEvent from "./event/EditEvent";
 import Contribute from "./contribute/contribute";
-import ListConTribute from "./contribute/listcontribute";
+import Listcontribute from "./contribute/listcontribute";
 
 const router = createBrowserRouter([
   {
@@ -56,8 +56,8 @@ const router = createBrowserRouter([
         element: <Contribute />,
       },
       {
-        path: "/Listcontribute",
-        element: <ListConTribute />,
+        path: "/listcontribute",
+        element: <Listcontribute />,
       },
     ],
   },

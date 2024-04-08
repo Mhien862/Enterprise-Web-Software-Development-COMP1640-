@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Image, List, Tooltip } from "antd";
 import axiosInstance from "../services/axios.service";
-import {
-  CommentOutlined,
-  LikeOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { CommentOutlined, LikeOutlined } from "@ant-design/icons";
 import { Navigate, useNavigate } from "react-router-dom";
 
 const App = () => {
@@ -44,14 +40,6 @@ const App = () => {
     setData((prevData) => {
       const newData = [...prevData];
       newData[index].commented = !newData[index].commented;
-      return newData;
-    });
-  };
-
-  const handleDelete = (index) => {
-    setData((prevData) => {
-      const newData = [...prevData];
-      newData.splice(index, 1);
       return newData;
     });
   };
@@ -100,13 +88,6 @@ const App = () => {
               {item.commented && (
                 <Comment content={<p>Your comment content here...</p>} />
               )}
-              <Tooltip title="Delete">
-                <Button
-                  icon={<DeleteOutlined />}
-                  type="danger"
-                  onClick={() => handleDelete(index)}
-                />
-              </Tooltip>
             </List.Item>
           )}
         />
