@@ -4,11 +4,10 @@ import {
   logoutUser,
   getProfile,
   handleUpload,
-  deleteContribution,
-  getContributionById,
 } from "../controllers/userController.js";
 import {
   registerUser,
+  getAllUser,
   updateUser,
   deleteUser,
   getUserById,
@@ -20,6 +19,7 @@ import {
   deleteAcademicYear,
   deleteEvent,
   getEventList,
+  getEventById,
 } from "../controllers/adminController.js";
 
 import {
@@ -27,17 +27,7 @@ import {
   authenticateAdmin,
 } from "../middlewares/authMiddlewares.js";
 import { uploadFile } from "../middlewares/uploadMiddlewares.js";
-import {
-  downloadAllFiles,
-  getContribution,
-  getContributionImg,
-  getDashboardStatistics,
-} from "../controllers/marketingManagerController.js";
-import {
-  sendEmailNotification,
-  getContributionsPerFaculty,
-} from "../controllers/marketingCoordinatorController.js";
-import { isMarketingCoordinator } from "../middlewares/marketingCoordinatorMiddlewares.js";
+
 const router = express.Router();
 
 //User role
@@ -45,12 +35,7 @@ const router = express.Router();
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.get("/profile", authenticate, getProfile);
-router
-  .route("/upload")
-  .post(authenticate, uploadFile, handleUpload)
-  .delete(authenticate, deleteContribution)
-  .get(authenticate, getContributionById);
-
+uter.post("/upload", authenticate, uploadFile, handleUpload);ro
 //Admin role
 router.post("/register", authenticate, authenticateAdmin, registerUser);
 router.get("/user", authenticate, authenticateAdmin, getUserById);
@@ -65,23 +50,10 @@ router
   .post(authenticate, authenticateAdmin, createEvent)
   .put(authenticate, authenticateAdmin, updateEvent)
   .delete(authenticate, authenticateAdmin, deleteEvent);
-
+router.get("/eventDetail", authenticate, authenticateAdmin, getEventById);
 router
   .route("/academic-year")
   .post(authenticate, authenticateAdmin, createAcademicYear)
   .put(authenticate, authenticateAdmin, updateAcademicYear)
   .delete(authenticate, authenticateAdmin, deleteAcademicYear);
-
-router.get("/download-all", authenticate, downloadAllFiles);
-router.get("/contribution", authenticate, getContribution);
-router.get("/contribution-img/:name", authenticate, getContributionImg);
-router.get("/dashboard", authenticate, getDashboardStatistics);
-router.post("/send-email", authenticate, sendEmailNotification);
-router.get(
-  "/contribution-per-faculty",
-  authenticate,
-  isMarketingCoordinator,
-  getContributionsPerFaculty
-);
-
 export default router;

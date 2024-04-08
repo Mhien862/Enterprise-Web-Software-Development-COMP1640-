@@ -5,8 +5,6 @@ import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
 
 import Contribution from "../models/contributionModel.js";
-import File from "../models/fileModel.js";
-import { sendEmailNotification } from "./marketingCoordinatorController.js";
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -66,38 +64,45 @@ const handleUpload = async (req, res) => {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No file uploaded" });
     }
-    const fileIds = [];
-    for (const file of req.files) {
-      const { originalname, mimetype, filename, path } = file;
-      const newFile = new File({
-        originalname,
-        mimetype,
-        filename,
-        path,
-      });
-      const savedFile = await newFile.save();
-      fileIds.push(savedFile._id);
-    }
 
-    // Tạo một bản ghi Contribution và thêm các ID của tệp tin vào trường files
-    const userId = req.user.username;
-    const submissionDate = req.body.submissionDate
-      ? new Date(req.body.submissionDate).toISOString()
-      : new Date().toISOString();
-    const { faculty, status } = req.body;
-    const newContribution = new Contribution({
-      username: userId,
-      faculty,
-      files: fileIds, // Thêm ID của các tệp tin vào mảng files
-      submissionDate,
-      status,
-      isSelected: true,
-    });
-    await newContribution.save();
-    sendEmailNotification([newContribution]);
+    const uploadedFilesInfo = await Promise.all(
+      req.files.map(async (file) => {
+        const { originalname, mimetype, filename, path } = file;
+        const userId = req.user._id;
+        const submissionDate = req.body.submissionDate
+          ? new Date(req.body.submissionDate).toISOString()
+          : new Date().toISOString();
+        const { faculty, status, isSelected } = req.body;
+
+        // Lưu thông tin file vào cơ sở dữ liệu
+        const newContribution = new Contribution({
+          user: userId,
+          faculty,
+          originalname,
+          mimetype,
+          filename,
+          path,
+          submissionDate,
+          status,
+          isSelected,
+        });
+        await newContribution.save();
+
+        // Trả về thông tin về file
+        return {
+          user: userId,
+          faculty,
+          originalname,
+          mimetype,
+          filename,
+          path,
+        };
+      })
+    );
+
     res.status(200).json({
       message: "File uploaded successfully",
-      fileInfo: fileIds,
+      fileInfo: uploadedFilesInfo,
     });
   } catch (error) {
     console.error("Error uploading file:", error);
@@ -105,50 +110,4 @@ const handleUpload = async (req, res) => {
   }
 };
 
-const deleteContribution = async (req, res) => {
-  try {
-    const contributionId = req.query.contributionId;
-
-    // Kiểm tra xem đóng góp có tồn tại không
-    const existingContribution = await Contribution.findById(contributionId);
-    if (!existingContribution) {
-      return res.status(404).json({ message: "Contribution not found" });
-    }
-
-    // Xóa đóng góp từ cơ sở dữ liệu
-    await Contribution.findByIdAndDelete(contributionId);
-
-    res.json({ message: "Contribution deleted successfully" });
-  } catch (error) {
-    console.error("Error deleting contribution:", error);
-    res.status(500).json({ message: "Failed to delete contribution" });
-  }
-};
-const getContributionById = async (req, res) => {
-  try {
-    const contributionId = req.query.contributionId;
-
-    // Truy vấn đóng góp dựa trên contributionId
-    const contribution = await Contribution.findById(contributionId);
-
-    // Kiểm tra xem đóng góp có tồn tại không
-    if (!contribution) {
-      return res.status(404).json({ message: "Contribution not found" });
-    }
-
-    // Trả về thông tin về đóng góp
-    res.status(200).json({ contribution });
-  } catch (error) {
-    console.error("Error fetching contribution by ID:", error);
-    res.status(500).json({ message: "Failed to fetch contribution by ID" });
-  }
-};
-
-export {
-  loginUser,
-  logoutUser,
-  getProfile,
-  handleUpload,
-  deleteContribution,
-  getContributionById,
-};
+export { loginUser, logoutUser, getProfile, handleUpload };

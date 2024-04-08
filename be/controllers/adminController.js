@@ -106,34 +106,32 @@ const getUserList = async (req, res) => {
 const createEvent = async (req, res) => {
   try {
     const {
-      eventName,
-      firstClosureDate = new Date(firstClosureDate).toISOString(),
-      finalClosureDate = new Date(finalClosureDate).toISOString(),
+      eventname,
+      fristClosureDate = new Date(fristClosureDate).toISOString(),
+      finalClosureDate = new Date(finalClosureDate).toISOString(), 
       faculty,
-      academicYearId,
-    } = req.body;
-
-    if (!eventName || !firstClosureDate || !finalClosureDate || !faculty) {
+      academicYear,
+    } = req.body.eventname;
+    if (!eventname || !fristClosureDate || !finalClosureDate || !faculty) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    if (finalClosureDate <= firstClosureDate) {
+    if (finalClosureDate <= fristClosureDate) {
       return res.status(400).json({
         message: "Final closure date must be after first closure date",
       });
     }
-
+    
     // Tạo sự kiện mới
     const newEvent = new Event({
-      eventName,
-      firstClosureDate,
-      finalClosureDate,
-      faculty,
-      academicYear: academicYearId,
-    });
-
+      eventName: eventname,
+      firstClosureDate: fristClosureDate,
+      finalClosureDate: finalClosureDate,
+      faculty: faculty,
+      academicYear,
+  })
     await newEvent.save();
-    await AcademicYear.findByIdAndUpdate(academicYearId, {
+    await AcademicYear.findByIdAndUpdate(academicYear, {
       $push: { events: newEvent._id },
     });
 
@@ -143,6 +141,20 @@ const createEvent = async (req, res) => {
   } catch (error) {
     console.error("Error creating event:", error);
     return res.status(500).json({ message: "Event name already exists" });
+  }
+};
+
+const getEventById = async (req, res) => {
+  try {
+    const event = await Event.findById(req.query.eventId);
+    if (event) {
+      res.json(event);
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error retrieving user:", error);
+    res.status(500).json({ message: "Failed to retrieve user" });
   }
 };
 const getEventList = async (req, res) => {
@@ -325,4 +337,5 @@ export {
   updateAcademicYear,
   deleteAcademicYear,
   getEventList,
+  getEventById
 };

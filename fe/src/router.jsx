@@ -1,17 +1,17 @@
 import { createBrowserRouter } from "react-router-dom";
-import LayOut from "./components/LayOut";
-import Login from "./formlogins/Login";
-import ForgotPassword from "./formlogins/ForgotPassword";
-import ResetPassword from "./formlogins/ResetPassword";
-import LayoutLogin from "./formlogins/LayoutLogin";
-import Profile from "./profile/Profile";
-import ChangePassword from "./profile/ChangePassword";
-import User from "./ListUser/User";
 import CreateUser from "./ListUser/CreateUser";
 import Edituser from "./ListUser/EditUser";
-import Event from "./Event/event";
-import Contribute from "./contribute/contribute";
-import ListConTribute from "./contribute/listcontribute";
+import User from "./ListUser/User";
+import LayOut from "./components/LayOut";
+import Contribute from "./event/contribute";
+import Event from "./event/Event";
+import ForgotPassword from "./formlogins/ForgotPassword";
+import LayoutLogin from "./formlogins/LayoutLogin";
+import Login from "./formlogins/Login";
+import ResetPassword from "./formlogins/ResetPassword";
+import Profile from "./profile/Profile";
+import CreateEvent from "./event/CreateEvent";
+import EditEvent from "./event/EditEvent";
 
 const router = createBrowserRouter([
   {
@@ -43,12 +43,16 @@ const router = createBrowserRouter([
         element: <Event />,
       },
       {
-        path: "/contribute",
-        element: <Contribute />,
+        path: "/createevent",
+        element: <CreateEvent/>
       },
       {
-        path: "/listcontribute",
-        element: <ListConTribute />,
+        path: "/event/edit/:id",
+        element: <EditEvent/>
+      },
+      {
+        path: "/contribute:_id",
+        element: <Contribute />,
       },
     ],
   },
