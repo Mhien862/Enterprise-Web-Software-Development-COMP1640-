@@ -9,7 +9,7 @@ import ChangePassword from "./profile/ChangePassword";
 import User from "./ListUser/User";
 import CreateUser from "./ListUser/CreateUser";
 import Edituser from "./ListUser/EditUser";
-import Event from "./Event/event";
+import Event from "./event/event";
 import Contribute from "./contribute/contribute";
 import ListConTribute from "./contribute/listcontribute";
 
