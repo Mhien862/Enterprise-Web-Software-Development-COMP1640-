@@ -51,7 +51,7 @@ const router = createBrowserRouter([
         element: <EditEvent/>
       },
       {
-        path: "/contribute:_id",
+        path: "/contribute",
         element: <Contribute />,
       },
     ],

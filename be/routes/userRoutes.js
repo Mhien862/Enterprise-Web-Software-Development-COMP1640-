@@ -35,7 +35,7 @@ const router = express.Router();
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.get("/profile", authenticate, getProfile);
-uter.post("/upload", authenticate, uploadFile, handleUpload);ro
+router.post("/upload", authenticate, uploadFile, handleUpload);
 //Admin role
 router.post("/register", authenticate, authenticateAdmin, registerUser);
 router.get("/user", authenticate, authenticateAdmin, getUserById);
