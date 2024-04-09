@@ -7,6 +7,7 @@ import createToken from "../utils/createToken.js";
 import Contribution from "../models/contributionModel.js";
 import File from "../models/fileModel.js";
 import { sendEmailNotification } from "./marketingCoordinatorController.js";
+import Event from "../models/eventModel.js";
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -66,6 +67,7 @@ const handleUpload = async (req, res) => {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No file uploaded" });
     }
+    const eventId = req.body.eventId;
     const fileIds = [];
     for (const file of req.files) {
       const { originalname, mimetype, filename, path } = file;
@@ -88,16 +90,23 @@ const handleUpload = async (req, res) => {
     const newContribution = new Contribution({
       username: userId,
       faculty,
-      files: fileIds, // Thêm ID của các tệp tin vào mảng files
+      files: fileIds,
+      eventId: eventId, // Thêm ID của các tệp tin vào mảng files
       submissionDate,
       status,
       isSelected: true,
     });
     await newContribution.save();
+
+    const event = await Event.findById(eventId);
+    event.contributions.push(newContribution._id);
+    await event.save();
+
     sendEmailNotification([newContribution]);
     res.status(200).json({
       message: "File uploaded successfully",
       fileInfo: fileIds,
+      eventId: eventId,
     });
   } catch (error) {
     console.error("Error uploading file:", error);
