@@ -74,6 +74,23 @@ const Event = () => {
         </div>
       ),
     },
+    {
+      title: "Upload",
+      dataIndex: "upload",
+      key: "upload",
+      render: (_, param2) => (
+        <div>
+          <Button
+            type="primary"
+            onClick={() => {
+              navigate(`/contribute/${param2?._id}`);
+            }}
+          >
+            Upload
+          </Button>
+        </div>
+      ),
+    },
   ];
 
   const [query, setQuery] = useState({

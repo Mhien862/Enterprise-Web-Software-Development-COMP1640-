@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Form, Input, Button, Upload, Radio, notification } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Upload,
+  Radio,
+  Checkbox,
+  notification,
+} from "antd";
 import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
 import {
   SmileOutlined,
@@ -13,6 +21,7 @@ const { TextArea } = Input;
 const PostForm = () => {
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
+  const [isSelected, setIsSelected] = useState(false); // Thêm isSelected state
   const normFile = (e) => {
     console.log("Upload event:", e);
     if (Array.isArray(e)) {
@@ -34,6 +43,7 @@ const PostForm = () => {
     formData.append("Title", values.Title);
     formData.append("Content", values.Content);
     formData.append("Faculty", values.faculty);
+    formData.append("isSelected", isSelected); // Thêm isSelected vào formData
     setLoading(true);
     try {
       // Here you can make an API call to post the data to the social network
@@ -42,11 +52,7 @@ const PostForm = () => {
       // Example API call using fetch
       const response = await fetch("http://localhost:1000/upload", {
         method: "POST",
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
         credentials: "include",
-        // body: JSON.stringify(values),
         body: formData,
       });
       if (response.ok) {
@@ -62,15 +68,11 @@ const PostForm = () => {
             />
           ),
         });
-
-        // You can do something after successful post, like showing a success message
       } else {
         console.error("Failed to post");
-        // Handle error here
       }
     } catch (error) {
       console.error("Error posting:", error);
-      // Handle error here
     } finally {
       setLoading(false);
     }
@@ -96,26 +98,21 @@ const PostForm = () => {
       initialValues={{ remember: true }}
       onFinish={onFinish}
     >
-      <Form.Item
-        name="Title"
-        rules={[{ required: true, message: "Please input your title!" }]}
-      >
-        <Input placeholder="Title" />
-      </Form.Item>
-
-      <Form.Item
-        name="Content"
-        rules={[{ required: true, message: "Please input your content!" }]}
-      >
-        <TextArea rows={4} placeholder="Content" />
-      </Form.Item>
-
       <Form.Item name="faculty" label="Faculty">
         <Radio.Group onChange={onChange} defaultValue="IT">
           <Radio.Button value="IT">IT</Radio.Button>
           <Radio.Button value="Business">Business</Radio.Button>
           <Radio.Button value="Design">Design</Radio.Button>
         </Radio.Group>
+      </Form.Item>
+
+      <Form.Item label="Check if selected">
+        <Checkbox
+          checked={isSelected}
+          onChange={(e) => setIsSelected(e.target.checked)}
+        >
+          Is Selected
+        </Checkbox>
       </Form.Item>
 
       <Form.Item
