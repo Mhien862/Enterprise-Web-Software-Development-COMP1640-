@@ -20,6 +20,7 @@ import {
   deleteAcademicYear,
   deleteEvent,
   getEventList,
+  getEventById,
 } from "../controllers/adminController.js";
 
 import {
@@ -59,6 +60,7 @@ router
   .get(authenticate, authenticateAdmin, getUserList)
   .put(authenticate, authenticateAdmin, updateUser)
   .delete(authenticate, authenticateAdmin, deleteUser);
+router.get("/event-by-id", authenticate, getEventById);
 router
   .route("/event")
   .get(authenticate, authenticateAdmin, getEventList)

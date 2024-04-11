@@ -157,6 +157,32 @@ const getEventList = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch event list" });
   }
 };
+const getEventById = async (req, res) => {
+  try {
+    // Lấy ID của sự kiện từ yêu cầu
+    const eventId = req.query.eventId;
+
+    // Kiểm tra xem eventId có hợp lệ không
+    if (!eventId) {
+      return res.status(400).json({ message: "Event ID is required" });
+    }
+
+    // Tìm sự kiện từ cơ sở dữ liệu bằng ID
+    const event = await Event.findById(eventId);
+
+    // Kiểm tra xem sự kiện có tồn tại không
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    // Trả về thông tin của sự kiện
+    res.status(200).json({ event });
+  } catch (error) {
+    console.error("Error fetching event by ID:", error);
+    res.status(500).json({ message: "Failed to fetch event by ID" });
+  }
+};
+
 const updateEvent = async (req, res) => {
   try {
     const eventId = req.query.eventId;
@@ -325,4 +351,5 @@ export {
   updateAcademicYear,
   deleteAcademicYear,
   getEventList,
+  getEventById,
 };
