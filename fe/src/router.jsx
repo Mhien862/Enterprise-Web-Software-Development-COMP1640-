@@ -13,6 +13,7 @@ import Event from "./event/event";
 import Contribute from "./contribute/contribute";
 import ListConTribute from "./contribute/listcontribute";
 import DetailEvent from "./event/detailEvent";
+import PostEvent from "./event/postEvent";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
       {
         path: "/event/detail/:id",
         element: <DetailEvent />,
+      },
+      {
+        path: "/event/post/:id",
+        element: <PostEvent />,
       },
     ],
   },

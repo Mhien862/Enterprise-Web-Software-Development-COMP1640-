@@ -83,7 +83,7 @@ const Event = () => {
           <Button
             type="primary"
             onClick={() => {
-              navigate(`/contribute/${param2?._id}`);
+              navigate(`/event/post/${param2?._id}`);
             }}
           >
             Upload
