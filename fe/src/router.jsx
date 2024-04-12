@@ -12,6 +12,7 @@ import Edituser from "./ListUser/EditUser";
 import Event from "./event/event";
 import Contribute from "./contribute/contribute";
 import ListConTribute from "./contribute/listcontribute";
+import DetailEvent from "./event/detailEvent";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,14 @@ const router = createBrowserRouter([
       {
         path: "/listcontribute",
         element: <ListConTribute />,
+      },
+      {
+        path: "/listcontribute",
+        element: <ListConTribute />,
+      },
+      {
+        path: "/event/detail/:id",
+        element: <DetailEvent />,
       },
     ],
   },

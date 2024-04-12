@@ -52,7 +52,7 @@ const Event = () => {
       key: "action",
       render: (_, param2) => (
         <div>
-          <Link to={`/detailservice/${param2.id}`}>
+          <Link to={`/event/detail/${param2?._id}`}>
             <EyeOutlined />
           </Link>
           <Button
