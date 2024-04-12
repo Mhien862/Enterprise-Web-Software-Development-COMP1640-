@@ -12,7 +12,7 @@ const App = () => {
 
   const fetchData = async () => {
     const response = await axiosInstance.get(`/event-by-id?eventId=${id}`);
-    setData(response.data.event);
+    setData([...data, response.data.event]);
     console.log(response.data.event);
   };
 
