@@ -138,7 +138,9 @@ const getContributionById = async (req, res) => {
     const contributionId = req.query.contributionId;
 
     // Truy vấn đóng góp dựa trên contributionId
-    const contribution = await Contribution.findById(contributionId);
+    const contribution = await Contribution.findById(contributionId)
+    .populate("files")
+    .exec();
 
     // Kiểm tra xem đóng góp có tồn tại không
     if (!contribution) {

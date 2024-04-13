@@ -12,8 +12,19 @@ const App = () => {
 
   const fetchData = async () => {
     const response = await axiosInstance.get(`/event-by-id?eventId=${id}`);
-    setData([...data, response.data.event]);
-    console.log(response.data.event);
+    const eventData = response.data.event;
+
+    const contributionDetails = await Promise.all(
+      eventData.contributions.map(async (contributionId) => {
+        const contributionResponse = await axiosInstance.get(
+          `/upload?contributionId=${contributionId}`
+        );
+        return contributionResponse.data.contribution;
+      })
+    );
+
+    setData(contributionDetails); // Combine event and contribution details
+    console.log(data);
   };
 
   useEffect(() => {
@@ -90,7 +101,7 @@ const App = () => {
             )}
           />
         </Card>
-      ));
+      ))
     }
   };
 
