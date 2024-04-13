@@ -12,8 +12,19 @@ const App = () => {
 
   const fetchData = async () => {
     const response = await axiosInstance.get(`/event-by-id?eventId=${id}`);
-    setData([...data, response.data.event]);
-    console.log(response.data.event);
+    const eventData = response.data.event;
+
+    const contributionDetails = await Promise.all(
+      eventData.contributions.map(async (contributionId) => {
+        const contributionResponse = await axiosInstance.get(
+          `/upload?contributionId=${contributionId}`
+        );
+        return contributionResponse.data.contribution;
+      })
+    );
+
+    setData({ ...eventData, contributionsDetails }); // Combine event and contribution details
+    console.log(data);
   };
 
   useEffect(() => {
@@ -43,54 +54,59 @@ const App = () => {
 
   const renderCards = () => {
     if (data && data.length > 0) {
-      return data.map((item, index) => (
-        <Card key={item._id} title={item.faculty}>
-          {/* Username */}
-          <p>USERNAME: {item.username}</p>
+      return data.contributions.map((contributionId, index) => {
+        // Access contribution details if fetched
+        const contributionDetail = data.contributionsDetails?.[index];
 
-          {/* Files */}
-          <List
-            itemLayout="horizontal"
-            dataSource={item.files}
-            renderItem={(file) => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={
-                    file.mimetype.startsWith("image/") ? (
-                      <Image
-                        src={`http://localhost:1000/contribution-img/${file.filename}`} // Replace with image URL provider
-                        width={200}
-                      />
-                    ) : null
-                  }
-                  title={file.originalname}
-                />
-                <Tooltip title={item.liked ? "Unlike" : "Like"}>
-                  <Button
-                    icon={<LikeOutlined />}
-                    type={item.liked ? "primary" : "default"}
-                    onClick={() => handleLike(index)}
-                  >
-                    {item.liked ? "Liked" : "Like"}
-                  </Button>
-                </Tooltip>
-                <Tooltip title={item.commented ? "Hide comment" : "Comment"}>
-                  <Button
-                    icon={<CommentOutlined />}
-                    type={item.commented ? "primary" : "default"}
-                    onClick={() => handleComment(index)}
-                  >
-                    {item.commented ? "Commented" : "Comment"}
-                  </Button>
-                </Tooltip>
-                {item.commented && (
-                  <Comment content={<p>Your comment content here...</p>} />
-                )}
-              </List.Item>
-            )}
-          />
-        </Card>
-      ));
+        return (
+          <Card key={contributionId} title={data.faculty}>
+            {/* Username */}
+            <p>USERNAME: {data.username}</p>
+
+            {/* Files */}
+            <List
+              itemLayout="horizontal"
+              dataSource={[contributionDetail]} // Assuming single file per contribution
+              renderItem={(file) => (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={
+                      file?.mimetype?.startsWith("image/") ? (
+                        <Image
+                          src={`http://localhost:1000/contribution-img/${file?.filename}`} // Replace with image URL provider
+                          width={200}
+                        />
+                      ) : null
+                    }
+                    title={file?.originalname || "Contribution File"} // Display filename if details fetched
+                  />
+                  <Tooltip title={data.liked ? "Unlike" : "Like"}>
+                    <Button
+                      icon={<LikeOutlined />}
+                      type={data.liked ? "primary" : "default"}
+                      onClick={() => handleLike(index)}
+                    >
+                      {data.liked ? "Liked" : "Like"}
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title={data.commented ? "Hide comment" : "Comment"}>
+                    <Button
+                      icon={<CommentOutlined />}
+                      type={data.commented ? "primary" : "default"}
+                      onClick={() => handleComment(index)}
+                    >
+                      {data.commented ? "Commented" : "Comment"}
+                    </Button>
+                  </Tooltip>
+                  {data.commented && (
+                    <Comment content={<p>Your comment content here...</p>} />
+                  )}
+                </List.Item>
+              )}
+            />
+          </Card>
+        );
+      });
     }
   };
 
