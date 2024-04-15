@@ -27,7 +27,18 @@ import {
   authenticateAdmin,
 } from "../middlewares/authMiddlewares.js";
 import { uploadFile } from "../middlewares/uploadMiddlewares.js";
-
+import {
+  downloadAllFiles,
+  getContribution,
+  getContributionImg,
+  getDashboardStatistics,
+} from "../controllers/marketingManagerController.js";
+import {
+  sendEmailNotification,
+  getContributionsPerFaculty,
+  sendEmail,
+} from "../controllers/marketingCoordinatorController.js";
+import { isMarketingCoordinator } from "../middlewares/marketingCoordinatorMiddlewares.js";
 const router = express.Router();
 
 //User role
@@ -44,6 +55,7 @@ router
   .get(authenticate, authenticateAdmin, getUserList)
   .put(authenticate, authenticateAdmin, updateUser)
   .delete(authenticate, authenticateAdmin, deleteUser);
+router.get("/event-by-id/", authenticate, getEventById);
 router
   .route("/event")
   .get(authenticate, authenticateAdmin, getEventList)
@@ -56,4 +68,18 @@ router
   .post(authenticate, authenticateAdmin, createAcademicYear)
   .put(authenticate, authenticateAdmin, updateAcademicYear)
   .delete(authenticate, authenticateAdmin, deleteAcademicYear);
+
+router.get("/download-all", authenticate, downloadAllFiles);
+router.get("/contribution", authenticate, getContribution);
+router.get("/contribution-img/:name", authenticate, getContributionImg);
+router.get("/dashboard", authenticate, getDashboardStatistics);
+router.post("/send-notification", authenticate, sendEmailNotification);
+router.post("/send-email", authenticate, sendEmail);
+router.get(
+  "/contribution-per-faculty",
+  authenticate,
+  isMarketingCoordinator,
+  getContributionsPerFaculty
+);
+
 export default router;

@@ -18,6 +18,13 @@ const eventSchema = mongoose.Schema({
     ref: "AcademicYear",
     required: true,
   },
+  contributions: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Contribution",
+      required: true,
+    },
+  ],
 });
 
 const Event = mongoose.model("Event", eventSchema);

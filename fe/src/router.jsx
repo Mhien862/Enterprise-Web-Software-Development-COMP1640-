@@ -12,7 +12,9 @@ import Profile from "./profile/Profile";
 import CreateEvent from "./event/CreateEvent";
 import EditEvent from "./event/EditEvent";
 import Contribute from "./contribute/contribute";
-import Listcontribute from "./contribute/listcontribute";
+import ListConTribute from "./contribute/listcontribute";
+import DetailEvent from "./event/detailEvent";
+import PostEvent from "./event/postEvent";
 
 const router = createBrowserRouter([
   {
@@ -44,12 +46,8 @@ const router = createBrowserRouter([
         element: <Event />,
       },
       {
-        path: "/createevent",
-        element: <CreateEvent />,
-      },
-      {
-        path: "/event/edit/:id",
-        element: <EditEvent />,
+        path: "/contribute/:id",
+        element: <Contribute />,
       },
       {
         path: "/contribute",
@@ -58,6 +56,18 @@ const router = createBrowserRouter([
       {
         path: "/listcontribute",
         element: <Listcontribute />,
+      },
+      {
+        path: "/listcontribute",
+        element: <ListConTribute />,
+      },
+      {
+        path: "/event/detail/:id",
+        element: <DetailEvent />,
+      },
+      {
+        path: "/event/post/:id",
+        element: <PostEvent />,
       },
     ],
   },
