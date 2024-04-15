@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Image, List, Tooltip } from "antd";
 import axiosInstance from "../services/axios.service";
 import { CommentOutlined, LikeOutlined } from "@ant-design/icons";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -11,20 +11,23 @@ const App = () => {
   );
 
   const fetchData = async () => {
-    const response = await axiosInstance.get(`/event-by-id?eventId=${id}`);
-    const eventData = response.data.event;
+    try {
+      const response = await axiosInstance.get(`/event-by-id?eventId=${id}`);
+      const eventData = response.data.event;
 
-    const contributionDetails = await Promise.all(
-      eventData.contributions.map(async (contributionId) => {
-        const contributionResponse = await axiosInstance.get(
-          `/upload?contributionId=${contributionId}`
-        );
-        return contributionResponse.data.contribution;
-      })
-    );
+      const contributionDetails = await Promise.all(
+        eventData.contributions.map(async (contributionId) => {
+          const contributionResponse = await axiosInstance.get(
+            `/upload?contributionId=${contributionId}`
+          );
+          return contributionResponse.data.contribution;
+        })
+      );
 
-    setData(contributionDetails); // Combine event and contribution details
-    console.log(data);
+      setData(contributionDetails); // Combine event and contribution details
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   useEffect(() => {
@@ -32,6 +35,7 @@ const App = () => {
   }, [id]);
 
   const navigate = useNavigate();
+
   const handleCreate = () => {
     navigate("/contribute");
   };
@@ -55,7 +59,7 @@ const App = () => {
   const renderCards = () => {
     if (data && data.length > 0) {
       return data.map((item, index) => (
-        <Card key={item._id} title={item.faculty}>
+        <Card key={item._id} style={{ marginBottom: 20 }}>
           {/* Username */}
           <p>USERNAME: {item.username}</p>
 
@@ -71,6 +75,12 @@ const App = () => {
                       <Image
                         src={`http://localhost:1000/contribution-img/${file.filename}`} // Replace with image URL provider
                         width={200}
+                      />
+                    ) : file.mimetype === "application/msword" ? (
+                      <Image
+                        src="path_to_doc_icon" // Provide path to a doc icon image
+                        width={200}
+                        alt="doc"
                       />
                     ) : null
                   }
@@ -101,13 +111,20 @@ const App = () => {
             )}
           />
         </Card>
-      ))
+      ));
+    } else {
+      return <p>No data available</p>;
     }
   };
 
   return (
-    <div>
-      <Button onClick={handleCreate} type="primary" block>
+    <div style={{ padding: 20 }}>
+      <Button
+        block
+        onClick={handleCreate}
+        type="primary"
+        style={{ marginBottom: 20 }}
+      >
         New Post
       </Button>
       {renderCards()}

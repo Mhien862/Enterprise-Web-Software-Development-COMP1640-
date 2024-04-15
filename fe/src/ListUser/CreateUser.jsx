@@ -1,52 +1,31 @@
 import { useState } from "react";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import styles from "./styles.module.css";
-import { notification } from "antd";
-import { userAPI } from "../services/UserService";
+import { Form, Input, Button, notification } from "antd";
+import { useNavigate } from "react-router-dom";
 import {
   SmileOutlined,
   CheckCircleOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
+import { userAPI } from "../services/UserService";
 
 const Signup = () => {
-  const [data, setData] = useState({
-    username: "",
-    roleName: "",
-    faculty: "",
-    email: "",
-    password: "",
-  });
-  const [error, setError] = useState("");
+  const [form] = Form.useForm();
   const navigate = useNavigate();
 
-  const handleChange = ({ currentTarget: input }) => {
-    setData({ ...data, [input.name]: input.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values) => {
     try {
-      // const url = "http://localhost:1000/register";
       const res = await userAPI(
-        data.username,
-        data.email,
-        data.password,
-        data.roleName,
-        data.facultyName
+        values.username,
+        values.email,
+        values.password,
+        values.roleName,
+        values.facultyName
       );
       console.log(res);
       navigate("/user");
       notification.open({
         message: "Create Success",
-        icon: (
-          <CheckCircleOutlined
-            style={{
-              color: "#00ff66",
-            }}
-          />
-        ),
+        icon: <CheckCircleOutlined style={{ color: "#00ff66" }} />,
       });
       console.log(res.message);
     } catch (error) {
@@ -55,68 +34,94 @@ const Signup = () => {
         error.response.status >= 400 &&
         error.response.status <= 500
       ) {
-        setError(error.response.data.message);
+        notification.open({
+          message: error.response.data.message,
+          icon: <WarningOutlined style={{ color: "#e91010" }} />,
+        });
       }
     }
   };
 
   return (
-    <div className={styles.signup_container}>
-      <div className={styles.signup_form_container}>
-        <div className={styles.right}>
-          <form className={styles.form_container} onSubmit={handleSubmit}>
-            <h1>Create Account</h1>
-            <input
-              type="text"
-              placeholder="UserName"
-              name="username"
-              onChange={handleChange}
-              value={data.username}
-              required
-              className={styles.input}
-            />
-            <input
-              type="text"
-              placeholder="Role"
-              name="roleName"
-              onChange={handleChange}
-              value={data.roleName}
-              required
-              className={styles.input}
-            />
-            <input
-              type="text"
-              placeholder="Faculty"
-              name="facultyName"
-              onChange={handleChange}
-              value={data.facultyNameName}
-              required
-              className={styles.input}
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              name="email"
-              onChange={handleChange}
-              value={data.email}
-              required
-              className={styles.input}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              name="password"
-              onChange={handleChange}
-              value={data.password}
-              required
-              className={styles.input}
-            />
-            {error && <div className={styles.error_msg}>{error}</div>}
-            <button type="submit" className={styles.green_btn}>
+    <div style={{ padding: 20 }}>
+      <div style={{ maxWidth: 400, margin: "auto" }}>
+        <Form
+          form={form}
+          name="signup"
+          onFinish={handleSubmit}
+          layout="vertical"
+          initialValues={{
+            remember: true,
+          }}
+        >
+          <h1>Create Account</h1>
+          <Form.Item
+            label="Username"
+            name="username"
+            rules={[
+              {
+                required: true,
+                message: "Please input your username!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Role"
+            name="roleName"
+            rules={[
+              {
+                required: true,
+                message: "Please input your role!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Faculty"
+            name="facultyName"
+            rules={[
+              {
+                required: true,
+                message: "Please input your faculty!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              {
+                required: true,
+                type: "email",
+                message: "Please input a valid email address!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
               Create
-            </button>
-          </form>
-        </div>
+            </Button>
+          </Form.Item>
+        </Form>
       </div>
     </div>
   );
