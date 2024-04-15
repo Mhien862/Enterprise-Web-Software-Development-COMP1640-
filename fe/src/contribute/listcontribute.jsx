@@ -107,11 +107,15 @@ const App = () => {
                 description={item.faculty}
               />
               <div style={{ marginBottom: 10 }}>{item.content}</div>
-              {item.files.map((file, fileIndex) => (
-                <div key={fileIndex} style={{ marginBottom: 10 }}>
-                  {renderFile(file)}
+              {item.files && item.files.length > 0 && (
+                <div>
+                  {item.files.map((file, fileIndex) => (
+                    <div key={fileIndex} style={{ marginBottom: 10 }}>
+                      {renderFile(file)}
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
               {item.commented && (
                 <List
                   dataSource={item.comments}
