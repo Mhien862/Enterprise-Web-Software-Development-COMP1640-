@@ -48,7 +48,7 @@ router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.get("/profile", authenticate, getProfile);
 router
-  .route("/upload")
+  .route("/upload/:eventId")
   .post(authenticate, uploadFile, handleUpload)
   .delete(authenticate, deleteContribution)
   .get(authenticate, getContributionById);
