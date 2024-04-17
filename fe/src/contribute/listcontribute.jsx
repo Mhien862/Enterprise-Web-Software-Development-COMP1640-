@@ -11,7 +11,7 @@ const App = () => {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get(
-          "http://localhost:1000/contribution"
+          "https://enterprise-web-software-development.onrender.com/contribution"
         );
         setData(response.data);
         console.log(response);
@@ -60,7 +60,7 @@ const App = () => {
                 avatar={
                   file.mimetype.startsWith("image/") ? (
                     <Image
-                      src={`http://localhost:1000/contribution-img/${file.filename}`} // Replace with image URL provider
+                      src={`https://enterprise-web-software-development.onrender.com/contribution-img/${file.filename}`} // Replace with image URL provider
                       width={200}
                     />
                   ) : null

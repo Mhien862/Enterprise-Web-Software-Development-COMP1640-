@@ -50,11 +50,14 @@ const PostForm = () => {
       // Replace the following with your actual API call
       console.log("Posting data:", values);
       // Example API call using fetch
-      const response = await fetch("http://localhost:1000/upload", {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://enterprise-web-software-development.onrender.com/upload",
+        {
+          method: "POST",
+          credentials: "include",
+          body: formData,
+        }
+      );
       if (response.ok) {
         console.log("Posted successfully");
         navigate("/listcontribute");

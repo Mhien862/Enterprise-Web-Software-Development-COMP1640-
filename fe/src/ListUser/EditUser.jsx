@@ -52,7 +52,7 @@ const EditService = () => {
       .validateFields()
       .then(async (values) => {
         const reponse = await updateUser(
-          `http://localhost:1000/user-list?userId=${id}`,
+          `https://enterprise-web-software-development.onrender.com/user-list?userId=${id}`,
           values
         );
         console.log("reponse :", reponse);

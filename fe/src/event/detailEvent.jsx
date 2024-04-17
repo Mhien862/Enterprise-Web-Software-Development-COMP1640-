@@ -69,7 +69,7 @@ const App = () => {
                   avatar={
                     file.mimetype.startsWith("image/") ? (
                       <Image
-                        src={`http://localhost:1000/contribution-img/${file.filename}`} // Replace with image URL provider
+                        src={`https://enterprise-web-software-development.onrender.com/contribution-img/${file.filename}`} // Replace with image URL provider
                         width={200}
                       />
                     ) : null
@@ -101,7 +101,7 @@ const App = () => {
             )}
           />
         </Card>
-      ))
+      ));
     }
   };
 
