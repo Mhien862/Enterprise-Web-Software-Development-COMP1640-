@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, Input, Button, notification } from "antd";
+import { Form, Input, Button, notification, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
   SmileOutlined,
@@ -65,7 +65,7 @@ const Signup = () => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Enter your username" />
           </Form.Item>
           <Form.Item
             label="Role"
@@ -73,11 +73,21 @@ const Signup = () => {
             rules={[
               {
                 required: true,
-                message: "Please input your role!",
+                message: "Please select your role!",
               },
             ]}
           >
-            <Input />
+            <Select placeholder="Select a role">
+              <Select.Option value="marketing manager">
+                Marketing Manager
+              </Select.Option>
+              <Select.Option value="marketing coordinator">
+                Marketing Coordinator
+              </Select.Option>
+              <Select.Option value="guest">Guest</Select.Option>
+              <Select.Option value="student">Student</Select.Option>
+              <Select.Option value="admin">Admin</Select.Option>
+            </Select>
           </Form.Item>
           <Form.Item
             label="Faculty"
@@ -85,11 +95,15 @@ const Signup = () => {
             rules={[
               {
                 required: true,
-                message: "Please input your faculty!",
+                message: "Please select your faculty!",
               },
             ]}
           >
-            <Input />
+            <Select placeholder="Select a faculty">
+              <Select.Option value="IT">IT</Select.Option>
+              <Select.Option value="Business">Business</Select.Option>
+              <Select.Option value="Design">Design</Select.Option>
+            </Select>
           </Form.Item>
           <Form.Item
             label="Email"
@@ -102,7 +116,7 @@ const Signup = () => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Enter your email" />
           </Form.Item>
           <Form.Item
             label="Password"
@@ -114,7 +128,7 @@ const Signup = () => {
               },
             ]}
           >
-            <Input.Password />
+            <Input.Password placeholder="Enter your password" />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" style={{ width: "100%" }}>

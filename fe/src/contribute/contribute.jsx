@@ -21,23 +21,22 @@ const { TextArea } = Input;
 const PostForm = () => {
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
-  const [isSelected, setIsSelected] = useState(false); // Thêm isSelected state
-  const [eventId, setEventId] = useState(""); // State for event ID
+  const [isSelected, setIsSelected] = useState(false);
+  const [eventId, setEventId] = useState("");
+  const navigate = useNavigate();
 
   const normFile = (e) => {
-    console.log("Upload event:", e);
     if (Array.isArray(e)) {
       return e;
     }
     return e?.fileList;
   };
-  const navigate = useNavigate();
+
   const onChange = (e) => {
     console.log(`radio checked:${e.target.value}`);
   };
 
   const onFinish = async (values) => {
-    console.log(fileList);
     const formData = new FormData();
     fileList.forEach((file) => {
       formData.append("files", file);
@@ -45,31 +44,20 @@ const PostForm = () => {
     formData.append("Title", values.Title);
     formData.append("Content", values.Content);
     formData.append("Faculty", values.faculty);
-    formData.append("isSelected", isSelected); // Thêm isSelected vào formData
-    formData.append("eventId", eventId); // Append eventId to formData
+    formData.append("isSelected", isSelected);
+    formData.append("eventId", eventId);
     setLoading(true);
     try {
-      // Here you can make an API call to post the data to the social network
-      // Replace the following with your actual API call
-      console.log("Posting data:", values);
-      // Example API call using fetch
       const response = await fetch("http://localhost:1000/upload", {
         method: "POST",
         credentials: "include",
         body: formData,
       });
       if (response.ok) {
-        console.log("Posted successfully");
         navigate("/listcontribute");
         notification.open({
           message: "Post Successfully",
-          icon: (
-            <CheckCircleOutlined
-              style={{
-                color: "#00ff66",
-              }}
-            />
-          ),
+          icon: <CheckCircleOutlined style={{ color: "#00ff66" }} />,
         });
       } else {
         console.error("Failed to post");
@@ -96,75 +84,71 @@ const PostForm = () => {
   };
 
   return (
-    <Form
-      name="postForm"
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-    >
-      <Form.Item name="faculty" label="Faculty">
-        <Radio.Group onChange={onChange} defaultValue="IT">
-          <Radio.Button value="IT">IT</Radio.Button>
-          <Radio.Button value="Business">Business</Radio.Button>
-          <Radio.Button value="Design">Design</Radio.Button>
-        </Radio.Group>
-      </Form.Item>
-
-      <Form.Item label="Check if selected">
-        <Checkbox
-          checked={isSelected}
-          onChange={(e) => setIsSelected(e.target.checked)}
+    <div style={{ padding: 20 }}>
+      <div style={{ maxWidth: 400, margin: "auto" }}>
+        <Form
+          name="postForm"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+          layout="vertical"
         >
-          Is Selected
-        </Checkbox>
-      </Form.Item>
+          <h1>Create Post</h1>
+          <Form.Item name="faculty" label="Faculty">
+            <Radio.Group onChange={onChange} defaultValue="IT">
+              <Radio.Button value="IT">IT</Radio.Button>
+              <Radio.Button value="Business">Business</Radio.Button>
+              <Radio.Button value="Design">Design</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
 
-      <Form.Item
-        name="eventId"
-        label="Event ID"
-        rules={[{ required: true, message: "Please input the event ID!" }]}
-      >
-        <Input value={eventId} onChange={(e) => setEventId(e.target.value)} />
-      </Form.Item>
+          <Form.Item
+            name="eventId"
+            label="Event ID"
+            rules={[{ required: true, message: "Please input the event ID!" }]}
+          >
+            <Input
+              value={eventId}
+              onChange={(e) => setEventId(e.target.value)}
+            />
+          </Form.Item>
 
-      <Form.Item
-        name="upload"
-        label="Upload"
-        valuePropName="fileList"
-        getValueFromEvent={normFile}
-        extra="Upload Text and Picture"
-      >
-        <Upload {...props} name="logo" listType="picture">
-          <Button icon={<UploadOutlined />}>Click to upload</Button>
-        </Upload>
-      </Form.Item>
+          <Form.Item label="Dragger">
+            <Form.Item
+              name="dragger"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+              noStyle
+            >
+              <Upload.Dragger {...props} name="files">
+                <p className="ant-upload-drag-icon">
+                  <InboxOutlined />
+                </p>
+                <p className="ant-upload-text">
+                  Click or drag file to this area to upload
+                </p>
+                <p className="ant-upload-hint">
+                  Support for a single or bulk upload.
+                </p>
+              </Upload.Dragger>
+            </Form.Item>
+          </Form.Item>
+          <Form.Item label="Check if selected">
+            <Checkbox
+              checked={isSelected}
+              onChange={(e) => setIsSelected(e.target.checked)}
+            >
+              Is Selected
+            </Checkbox>
+          </Form.Item>
 
-      <Form.Item label="Dragger">
-        <Form.Item
-          name="dragger"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-          noStyle
-        >
-          <Upload.Dragger {...props} name="files">
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">
-              Click or drag file to this area to upload
-            </p>
-            <p className="ant-upload-hint">
-              Support for a single or bulk upload.
-            </p>
-          </Upload.Dragger>
-        </Form.Item>
-      </Form.Item>
-
-      <Form.Item>
-        <Button block type="primary" htmlType="submit" loading={loading}>
-          Post
-        </Button>
-      </Form.Item>
-    </Form>
+          <Form.Item>
+            <Button block type="primary" htmlType="submit" loading={loading}>
+              Post
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </div>
   );
 };
 

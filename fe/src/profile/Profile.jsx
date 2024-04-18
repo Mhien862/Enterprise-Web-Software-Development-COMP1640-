@@ -1,10 +1,9 @@
 import { Button, Col, Row } from "antd";
-import "./../assets/styles/profile.css";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axios.service";
 import { useEffect, useState } from "react";
 
-const getProfile = () => {
+const Profile = () => {
   const [data, setProfile] = useState({
     username: "",
     roleName: "",
@@ -12,110 +11,58 @@ const getProfile = () => {
     email: "",
     password: "",
   });
-  // useEffect(()=>{
-  //   fetch('http://localhost:1000/profile')
-  //     .then(response => response.json())
-  //     .then(json => setData(json))
-  // },[]);
 
-  const fetchService = async () => {
-    const response = await axiosInstance.get("/profile", {});
-    setProfile(response.data);
-    console.log(response);
+  const fetchProfile = async () => {
+    try {
+      const response = await axiosInstance.get("/profile");
+      setProfile(response.data);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
   };
 
   useEffect(() => {
-    // call API
-    fetchService();
+    fetchProfile();
   }, []);
 
   const navigate = useNavigate();
+
   const changePassword = () => {
     navigate("/change_password");
   };
+
   return (
     <div>
       <h1 className="headingProfile">My Profile</h1>
       <div className="profile">
-        <div className="profile-one">
-          <Row>
-            <Col span={8}>
-              <div>
-                <Row>
-                  <Col span={24}>
-                    <div className="profile-grid">
-                      <span>Name</span>
-                      <br></br>
-                      <span>{data.username}</span>
-                    </div>
-                  </Col>
-                  <Col span={24}>
-                    <div className="profile-grid">
-                      <span>Email</span>
-                      <br></br>
-                      <span>{data.email}</span>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-            </Col>
-            {/* <Col span={8}>
-              <div>
-                <Row>
-                  <Col span={24}>
-                    <div className="profile-grid">
-                      <span>Phone Number</span>
-                      <br></br>
-                      <span></span>
-                    </div>
-                  </Col>
-                  <Col span={24}>
-                    <div className="profile-grid">
-                      <span>DOB</span>
-                      <br></br>
-                      <span>21/03/2023</span>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-            </Col> */}
-            <Col span={8}>
-              <div>
-                <Row>
-                  <Col span={24}>
-                    <div className="profile-grid">
-                      <span>Faculty</span>
-                      <br></br>
-                      <span>{data.faculty}</span>
-                    </div>
-                  </Col>
-                  <Col span={24}>
-                    <div className="profile-grid">
-                      <span>Role</span>
-                      <br></br>
-                      <span>{data.role}</span>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-            </Col>
-          </Row>
-        </div>
-        <div className="buttonProfile">
-          <Row
-            gutter={16}
-            style={{
-              paddingLeft: 16,
-            }}
-          >
-            <Col>
-              <Button onClick={changePassword}>Change Password</Button>
-            </Col>
-          </Row>
+        <div className="profile-container">
+          <div className="profile-info">
+            <div className="profile-grid">
+              <span style={{ color: "blue" }}>Name:</span>
+              <span>{data.username}</span>
+            </div>
+            <div className="profile-grid">
+              <span style={{ color: "green" }}>Email:</span>
+              <span>{data.email}</span>
+            </div>
+            <div className="profile-grid">
+              <span style={{ color: "red" }}>Faculty:</span>
+              <span>{data.faculty}</span>
+            </div>
+            <div className="profile-grid">
+              <span style={{ color: "purple" }}>Role:</span>
+              <span>{data.role}</span>
+            </div>
+          </div>
+          <div className="profile-buttons">
+            <Button type="primary" onClick={changePassword}>
+              Change Password
+            </Button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default getProfile;
+export default Profile;

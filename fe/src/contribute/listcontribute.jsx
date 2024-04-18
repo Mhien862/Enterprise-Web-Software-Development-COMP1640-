@@ -54,7 +54,11 @@ const App = () => {
           style={{ maxWidth: "100%", marginBottom: 10 }}
         />
       );
-    } else if (file.mimetype === "application/msword") {
+    } else if (
+      file.mimetype === "application/msword" ||
+      file.mimetype ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
       return (
         <a
           href={`http://localhost:1000/contribution-file/${file.filename}`}
@@ -107,11 +111,15 @@ const App = () => {
                 description={item.faculty}
               />
               <div style={{ marginBottom: 10 }}>{item.content}</div>
-              {item.files.map((file, fileIndex) => (
-                <div key={fileIndex} style={{ marginBottom: 10 }}>
-                  {renderFile(file)}
+              {item.files && item.files.length > 0 && (
+                <div>
+                  {item.files.map((file, fileIndex) => (
+                    <div key={fileIndex} style={{ marginBottom: 10 }}>
+                      {renderFile(file)}
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
               {item.commented && (
                 <List
                   dataSource={item.comments}

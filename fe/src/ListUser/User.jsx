@@ -141,6 +141,11 @@ const User = () => {
 
   return (
     <div style={{ padding: 16 }}>
+      <div style={{ textAlign: "center", marginBottom: 20 }}>
+        <Button block type="primary" onClick={toCreateService}>
+          Create Account
+        </Button>
+      </div>
       <h2>List User</h2>
       <div style={{ marginBottom: 20 }}>
         <Space>
@@ -168,11 +173,6 @@ const User = () => {
         }}
         onChange={onTableChange}
       />
-      <div style={{ textAlign: "center", marginTop: 20 }}>
-        <Button block type="primary" onClick={toCreateService}>
-          Create Account
-        </Button>
-      </div>
     </div>
   );
 };
