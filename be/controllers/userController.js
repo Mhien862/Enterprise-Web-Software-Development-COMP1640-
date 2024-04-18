@@ -68,7 +68,6 @@ const handleUpload = async (req, res) => {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    // Thay đổi cách truy cập eventId từ req.body.eventId sang req.params.eventId
     const eventId = req.params.eventId;
     const fileIds = [];
     for (const file of req.files) {
