@@ -42,5 +42,8 @@
   "bugs": {
     "url": "https://github.com/Mhien862/Enterprise-Web-Software-Development-COMP1640-/issues"
   },
-  "homepage": "https://github.com/Mhien862/Enterprise-Web-Software-Development-COMP1640-#readme"
+  "homepage": "https://github.com/Mhien862/Enterprise-Web-Software-Development-COMP1640-#readme",
+  "devDependencies": {
+    "vite": "^5.2.9"
+  }
 }
