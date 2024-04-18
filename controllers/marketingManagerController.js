@@ -59,9 +59,9 @@ const getContribution = async (req, res) => {
 const getContributionImg = async (req, res) => {
   let image = req.params.name;
   const __dirname = path.resolve();
-  let filePath = path.join(__dirname, `be/uploads/${image}`);
+  let filePath = path.join(__dirname, `uploads/${image}`);
   res.sendFile(filePath);
-}
+};
 
 const getDashboardStatistics = async (req, res) => {
   try {
@@ -104,4 +104,9 @@ const getDashboardStatistics = async (req, res) => {
     res.status(500).json({ message: "Failed to get dashboard statistics" });
   }
 };
-export { downloadAllFiles, getContribution, getDashboardStatistics, getContributionImg };
+export {
+  downloadAllFiles,
+  getContribution,
+  getDashboardStatistics,
+  getContributionImg,
+};
