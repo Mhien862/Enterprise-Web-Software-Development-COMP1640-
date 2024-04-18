@@ -44,6 +44,7 @@
   },
   "homepage": "https://github.com/Mhien862/Enterprise-Web-Software-Development-COMP1640-#readme",
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
     "vite": "^5.2.9"
   }
 }
