@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, Input, Button, notification } from "antd";
+import { Form, Input, Button, notification, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
   SmileOutlined,
@@ -7,6 +7,8 @@ import {
   WarningOutlined,
 } from "@ant-design/icons";
 import { userAPI } from "../services/UserService";
+
+const { Option } = Select;
 
 const Signup = () => {
   const [form] = Form.useForm();
@@ -65,7 +67,7 @@ const Signup = () => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Enter your username" />
           </Form.Item>
           <Form.Item
             label="Role"
@@ -73,11 +75,19 @@ const Signup = () => {
             rules={[
               {
                 required: true,
-                message: "Please input your role!",
+                message: "Please select your role!",
               },
             ]}
           >
-            <Input />
+            <Select placeholder="Select your role">
+              <Option value="marketing manager">Marketing Manager</Option>
+              <Option value="marketing coordinator">
+                Marketing Coordinator
+              </Option>
+              <Option value="guest">Guest</Option>
+              <Option value="student">Student</Option>
+              <Option value="admin">Admin</Option>
+            </Select>
           </Form.Item>
           <Form.Item
             label="Faculty"
@@ -85,11 +95,15 @@ const Signup = () => {
             rules={[
               {
                 required: true,
-                message: "Please input your faculty!",
+                message: "Please select your faculty!",
               },
             ]}
           >
-            <Input />
+            <Select placeholder="Select your faculty">
+              <Option value="IT">IT</Option>
+              <Option value="Business">Business</Option>
+              <Option value="Design">Design</Option>
+            </Select>
           </Form.Item>
           <Form.Item
             label="Email"
@@ -102,7 +116,7 @@ const Signup = () => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Example@gmail.com" />
           </Form.Item>
           <Form.Item
             label="Password"
@@ -114,7 +128,7 @@ const Signup = () => {
               },
             ]}
           >
-            <Input.Password />
+            <Input.Password placeholder="Enter your password" />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
