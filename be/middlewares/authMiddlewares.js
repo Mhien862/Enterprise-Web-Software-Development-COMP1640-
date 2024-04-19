@@ -9,12 +9,12 @@ const authenticate = async (req, res, next) => {
       req.user = await User.findById(decoded.userId).select("-password");
       next();
     } catch (error) {
-      res.status(401);
-      throw new Error("Not authorized, token failed");
+      res.status(401).json({ message: "Not authorized, token failed" });
+      // throw new Error("Not authorized, token failed");
     }
   } else {
-    res.status(401);
-    throw new Error("Not authorized, no token");
+    res.status(401).json({ message: "Not authorized, no token" });
+    // throw new Error("Not authorized, no token");
   }
 };
 const authenticateAdmin = async (req, res, next) => {
