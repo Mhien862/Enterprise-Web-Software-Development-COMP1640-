@@ -54,11 +54,19 @@ const LayOut = () => {
   return (
     <Layout
       style={{
-        minHeight: 740,
+        minHeight: "100vh", // 100% chiều cao của viewport
         width: "100%",
       }}
     >
-      <Sider trigger={null} theme="light" collapsible collapsed={collapsed}>
+      <Sider
+        trigger={null}
+        theme="light"
+        collapsible
+        collapsed={collapsed}
+        breakpoint="lg" // Thu gọn menu khi màn hình nhỏ hơn
+        collapsedWidth={0} // Ẩn Sider khi menu đã thu gọn
+        style={{ zIndex: 1 }} // Đặt z-index cao hơn để nằm trên Header
+      >
         <div className="demo-logo-vertical" />
         <div
           style={{
@@ -111,18 +119,23 @@ const LayOut = () => {
           style={{
             padding: 0,
             background: colorBgContainer,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: "16px",
-              width: 64,
-              height: 64,
-            }}
-          />
+          <div>
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                fontSize: "16px",
+                width: 64,
+                height: 64,
+              }}
+            />
+          </div>
           <div className="dropdown">
             <img
               src="src/assets/witch-155291_640.webp"

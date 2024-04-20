@@ -16,11 +16,6 @@ const { Option: AntdOption } = Select;
 const User = () => {
   const columns = [
     {
-      title: "#",
-      dataIndex: "_id",
-      key: "_id",
-    },
-    {
       title: "User Name",
       dataIndex: "username",
       key: "username",
@@ -142,6 +137,11 @@ const User = () => {
   return (
     <div style={{ padding: 16 }}>
       <h2>List User</h2>
+      <div style={{ marginBottom: 20, textAlign: "right" }}>
+        <Button block type="primary" onClick={toCreateService}>
+          Create Account
+        </Button>
+      </div>
       <div style={{ marginBottom: 20 }}>
         <Space>
           <Select defaultValue={type} onChange={handleTypeChange}>
@@ -168,11 +168,6 @@ const User = () => {
         }}
         onChange={onTableChange}
       />
-      <div style={{ textAlign: "center", marginTop: 20 }}>
-        <Button block type="primary" onClick={toCreateService}>
-          Create Account
-        </Button>
-      </div>
     </div>
   );
 };
