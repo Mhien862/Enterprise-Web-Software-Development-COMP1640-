@@ -8,6 +8,7 @@ import Contribution from "../models/contributionModel.js";
 import File from "../models/fileModel.js";
 import { sendEmailNotification } from "./marketingCoordinatorController.js";
 import Event from "../models/eventModel.js";
+import uploadMultiFile from "../config/upload.js";
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -47,12 +48,8 @@ const logoutUser = async (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 };
 const getProfile = async (req, res) => {
-  const params = req.body;
-  console.log(params);
-
-  try {
-    const user = await User.findById(params._id);
-
+  const user = await User.findById(req.user._id);
+  if (user) {
     res.json({
       username: user.username,
       email: user.email,
@@ -60,8 +57,9 @@ const getProfile = async (req, res) => {
       faculty: user.faculty,
       agreement: user.agreement,
     });
-  } catch (error) {
-    console.log(error);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
   }
 };
 
@@ -73,7 +71,9 @@ const handleUpload = async (req, res) => {
 
     const eventId = req.params.eventId;
     const fileIds = [];
-    for (const file of req.files) {
+    const files = await uploadMultiFile(req.files);
+    console.log(files);
+    for (const file of files) {
       const { originalname, mimetype, filename, path } = file;
       const newFile = new File({
         originalname,
