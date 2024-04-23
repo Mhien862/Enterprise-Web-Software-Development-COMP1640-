@@ -6,8 +6,8 @@ const eventSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
-  firstClosureDate: Date,
-  finalClosureDate: Date,
+  firstClosureDate: String,
+  finalClosureDate: String,
   faculty: {
     type: String,
     ref: "Faculty",

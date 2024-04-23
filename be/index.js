@@ -28,7 +28,11 @@ connectDB();
 // File();
 
 const app = express();
-let whitelist = ["http://localhost:5173", "http://127.0.0.1:5173"];
+let whitelist = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+ ,
+];
 let corsOptions = {
   origin: (origin, callback) => {
     if (!origin) {

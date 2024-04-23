@@ -30,7 +30,7 @@
   },
   "scripts": {
     "backend": "nodemon be/index.js",
-    "frontend": "npm run dev --prefix frontend",
+    "frontend": "npm run dev --prefix fe",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\""
   },
   "repository": {
@@ -43,5 +43,9 @@
   "bugs": {
     "url": "https://github.com/Mhien862/Enterprise-Web-Software-Development-COMP1640-/issues"
   },
-  "homepage": "https://github.com/Mhien862/Enterprise-Web-Software-Development-COMP1640-#readme"
+  "homepage": "https://github.com/Mhien862/Enterprise-Web-Software-Development-COMP1640-#readme",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.2.9"
+  }
 }

@@ -21,7 +21,7 @@ const Login = () => {
         localStorage.setItem("accessToken", res.accessToken);
 
       openNotification();
-      navigate("/createuser");
+      navigate("/");
     } catch (error) {
       console.log(222, error);
       notification.open({

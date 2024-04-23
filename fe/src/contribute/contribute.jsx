@@ -22,6 +22,8 @@ const PostForm = () => {
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [isSelected, setIsSelected] = useState(false); // Thêm isSelected state
+  const [eventId, setEventId] = useState(""); // State for event ID
+
   const normFile = (e) => {
     console.log("Upload event:", e);
     if (Array.isArray(e)) {
@@ -44,6 +46,7 @@ const PostForm = () => {
     formData.append("Content", values.Content);
     formData.append("Faculty", values.faculty);
     formData.append("isSelected", isSelected); // Thêm isSelected vào formData
+    formData.append("eventId", eventId); // Append eventId to formData
     setLoading(true);
     try {
       // Here you can make an API call to post the data to the social network
@@ -113,6 +116,14 @@ const PostForm = () => {
         >
           Is Selected
         </Checkbox>
+      </Form.Item>
+
+      <Form.Item
+        name="eventId"
+        label="Event ID"
+        rules={[{ required: true, message: "Please input the event ID!" }]}
+      >
+        <Input value={eventId} onChange={(e) => setEventId(e.target.value)} />
       </Form.Item>
 
       <Form.Item
