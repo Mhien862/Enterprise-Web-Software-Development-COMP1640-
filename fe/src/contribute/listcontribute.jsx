@@ -102,9 +102,16 @@ const App = () => {
               ]}
             >
               <List.Item.Meta
-                avatar={<Avatar src={item.avatar} />}
-                title={<span>{item.username}</span>}
-                description={item.faculty}
+                avatar={
+                  file.mimetype.startsWith("image/") ? (
+                    <Image
+                      src={file.path}
+                      // src={`http://localhost:1000/contribution-img/${file.filename}`} // Replace with image URL provider
+                      width={200}
+                    />
+                  ) : null
+                }
+                title={file.originalname}
               />
               <div style={{ marginBottom: 10 }}>{item.content}</div>
               {item.files && item.files.length > 0 && (

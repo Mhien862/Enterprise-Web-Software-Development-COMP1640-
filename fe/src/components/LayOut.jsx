@@ -20,15 +20,30 @@ const LayOut = () => {
   const [data, setProfile] = useState({
     username: "",
   });
+  const [isHide, setIsHide] = useState(true);
 
-  const fetchService = async () => {
-    const response = await axiosInstance.get("/profile", {});
-    setProfile(response.data);
-    console.log(response);
-  };
+  // const fetchService = async () => {
+  //   const response = await axiosInstance.get("/profile", {});
+  //   setProfile(response.data);
+  //   console.log(response);
+  // };
 
   useEffect(() => {
     // call API
+    const fetchService = async () => {
+      try {
+        const response = await axiosInstance.get("/profile", {});
+        setProfile(response.data);
+        setIsHide(false);
+        console.log(data);
+      } catch (error) {
+        navigate("/login");
+        setIsHide(false);
+        console.log(data);
+        console.log(error);
+      }
+    };
+
     fetchService();
   }, []);
 
@@ -40,8 +55,9 @@ const LayOut = () => {
     navigate("/profile");
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.clear();
+    const response = await axiosInstance.post("/logout", {});
     navigate("/login");
     // localStorage.removeItem('accessToken') ?? '';
     // window.location.href = '/login';
@@ -52,110 +68,101 @@ const LayOut = () => {
   } = theme.useToken();
 
   return (
-    <Layout
-      style={{
-        minHeight: "100vh", // 100% chiều cao của viewport
-        width: "100%",
-      }}
-    >
-      <Sider
-        trigger={null}
-        theme="light"
-        collapsible
-        collapsed={collapsed}
-        breakpoint="lg" // Thu gọn menu khi màn hình nhỏ hơn
-        collapsedWidth={0} // Ẩn Sider khi menu đã thu gọn
-        style={{ zIndex: 1 }} // Đặt z-index cao hơn để nằm trên Header
-      >
-        <div className="demo-logo-vertical" />
-        <div
+    <>
+      {isHide ? null : (
+        <Layout
           style={{
-            color: "black",
-            backgroundColor: "white",
-            paddingTop: 4,
-            paddingBottom: 4,
-            paddingLeft: 28,
-            fontSize: 15,
-            fontWeight: 600,
+            minHeight: 740,
+            width: "100%",
           }}
         >
-          <p>Menu</p>
-        </div>
-        <Menu
-          theme="light"
-          mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={[
-            {
-              key: "1",
-              icon: <IdcardOutlined />,
-              label: <Link to="/">Home</Link>,
-            },
-            {
-              key: "2",
-              icon: <UserOutlined />,
-              label: <Link to="/user">User</Link>,
-            },
-            {
-              key: "3",
-              icon: <FireOutlined />,
-              label: <Link to="/event">Event </Link>,
-            },
-            {
-              key: "4",
-              icon: <InstagramOutlined />,
-              label: <Link to="/listcontribute">Contribute </Link>,
-            },
-            {
-              key: "5",
-              icon: <GithubOutlined />,
-              label: <Link to="/">About us </Link>,
-            },
-          ]}
-        />
-      </Sider>
-      <Layout>
-        <Header
-          style={{
-            padding: 0,
-            background: colorBgContainer,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <div>
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
+          <Sider trigger={null} theme="light" collapsible collapsed={collapsed}>
+            <div className="demo-logo-vertical" />
+            <div
               style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
+                color: "black",
+                backgroundColor: "white",
+                paddingTop: 4,
+                paddingBottom: 4,
+                paddingLeft: 28,
+                fontSize: 15,
+                fontWeight: 600,
               }}
-            />
-          </div>
-          <div className="dropdown">
-            <img
-              src="src/assets/witch-155291_640.webp"
-              alt=""
-              className="img"
-            />
-            <span className="nameAdmin">Admin</span>
-            <div className="dropAdmin">
-              <ul>
-                <li onClick={toProfile}>Profile</li>
-                <li onClick={handleLogout} className="logout-profile">
-                  Log Out
-                </li>
-              </ul>
+            >
+              <p>Menu</p>
             </div>
-          </div>
-        </Header>
-        <Outlet />
-      </Layout>
-    </Layout>
+            <Menu
+              theme="light"
+              mode="inline"
+              defaultSelectedKeys={["1"]}
+              items={[
+                {
+                  key: "1",
+                  icon: <IdcardOutlined />,
+                  label: <Link to="/">Home</Link>,
+                },
+                {
+                  key: "2",
+                  icon: <UserOutlined />,
+                  label: <Link to="/user">User</Link>,
+                },
+                {
+                  key: "3",
+                  icon: <FireOutlined />,
+                  label: <Link to="/event">Event </Link>,
+                },
+                {
+                  key: "4",
+                  icon: <InstagramOutlined />,
+                  label: <Link to="/listcontribute">Contribute </Link>,
+                },
+                {
+                  key: "5",
+                  icon: <GithubOutlined />,
+                  label: <Link to="/">About us </Link>,
+                },
+              ]}
+            />
+          </Sider>
+          <Layout>
+            <Header
+              style={{
+                padding: 0,
+                background: colorBgContainer,
+              }}
+            >
+              <Button
+                type="text"
+                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                  fontSize: "16px",
+                  width: 64,
+                  height: 64,
+                }}
+              />
+              <div className="dropdown">
+                <img
+                  src="src/assets/witch-155291_640.webp"
+                  alt=""
+                  className="img"
+                />
+                <span className="nameAdmin">Admin</span>
+                <div className="dropAdmin">
+                  <ul>
+                    <li onClick={toProfile}>Profile</li>
+                    <li onClick={handleLogout} className="logout-profile">
+                      Log Out
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </Header>
+            <Outlet />
+          </Layout>
+        </Layout>
+      )}
+    </>
   );
 };
 export default LayOut;
