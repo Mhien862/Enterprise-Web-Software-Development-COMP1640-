@@ -49,11 +49,11 @@ export const createNewUser = createAsyncThunk('http://localhost:1000/register', 
   }
 });
 
-const loginAPI = async (email, password) => {
-  const res = await axiosInstance.post("http://localhost:1000/login ",{email, password})
+// const loginAPI = async (email, password) => {
+//   const res = await axiosInstance.post("http://localhost:1000/login ",{email, password})
 
-  return res.data.data
-}
+//   return res.data.data
+// }
 
 const ownerSlice = createSlice({
   name: 'service',

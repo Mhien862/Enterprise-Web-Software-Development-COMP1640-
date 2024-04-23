@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  GroupOutlined,
   UserOutlined,
   IdcardOutlined,
   GithubOutlined,
@@ -52,7 +51,7 @@ const LayOut = () => {
 
   // tới trang profile
   const toProfile = () => {
-    navigate("/profile");
+    navigate("/");
   };
 
   const handleLogout = async () => {
