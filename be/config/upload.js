@@ -7,9 +7,19 @@ cloudinary.config({
     api_secret: 'qDsBX-y2jXSdTK8RxSQp1QBwNIk'
 });
 
-const uploadFile = async (file) => {
+const uploadImage = async (file) => {
     try {
-        const result = await cloudinary.uploader.upload(file)
+        const result = await cloudinary.uploader.upload(file, { resource_type: 'auto' })
+        return result
+    } catch (error) {
+        console.log(error)
+        throw new Error(error);
+    }
+}
+
+const uploadDocx = async (file) => {
+    try {
+        const result = await cloudinary.uploader.upload(file, { format: "docx", resource_type: 'auto' })
         return result
     } catch (error) {
         console.log(error)
@@ -20,16 +30,22 @@ const uploadFile = async (file) => {
 const uploadMultiFile = async (files) => {
     try {
         const urls = files
+        console.log(files)
+        let result = {}
         for (let i = 0; i < files.length; i++) {
             //diskStorage
-            const result = await uploadFile(files[i].path)
-
+            if (files[i].mimetype === `application/vnd.openxmlformats-officedocument.wordprocessingml.document`) {
+                result = await uploadDocx(files[i].path)
+            } else {
+                result = await uploadImage(files[i].path)
+            }
             // memoryStorage
             // const b64 = Buffer.from(files[i].buffer).toString("base64");
             // let dataURI = "data:" + files[i].mimetype + ";base64," + b64;
             // const result = await uploadFile(dataURI)
             urls[i].path = result.url
         }
+        console.log(urls)
         return urls
     } catch (error) {
         console.log(error)
