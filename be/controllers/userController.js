@@ -139,7 +139,7 @@ const deleteContribution = async (req, res) => {
 };
 const getContributionById = async (req, res) => {
   try {
-    const contributionId = req.query.contributionId;
+    const contributionId = req.params.eventId;
 
     // Truy vấn đóng góp dựa trên contributionId
     const contribution = await Contribution.findById(contributionId)
@@ -147,7 +147,7 @@ const getContributionById = async (req, res) => {
       .exec();
 
     // Kiểm tra xem đóng góp có tồn tại không
-    if (!contribution) {
+    if (contribution === null || typeof contribution !== "object") {
       return res.status(404).json({ message: "Contribution not found" });
     }
 

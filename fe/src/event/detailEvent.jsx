@@ -18,12 +18,12 @@ const App = () => {
       const contributionDetails = await Promise.all(
         eventData.contributions.map(async (contributionId) => {
           const contributionResponse = await axiosInstance.get(
-            `/upload?contributionId=${contributionId}`
+            `/upload/${contributionId}`
           );
           return contributionResponse.data.contribution;
         })
       );
-
+      console.log(contributionDetails)
       setData(contributionDetails); // Combine event and contribution details
     } catch (error) {
       console.error("Error fetching data:", error);
