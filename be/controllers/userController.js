@@ -8,6 +8,7 @@ import Contribution from "../models/contributionModel.js";
 import File from "../models/fileModel.js";
 import { sendEmailNotification } from "./marketingCoordinatorController.js";
 import Event from "../models/eventModel.js";
+import uploadMultiFile from "../config/upload.js";
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -67,9 +68,12 @@ const handleUpload = async (req, res) => {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No file uploaded" });
     }
-    const eventId = req.body.eventId;
+
+    const eventId = req.params.eventId;
     const fileIds = [];
-    for (const file of req.files) {
+    const files = await uploadMultiFile(req.files)
+    console.log(files)
+    for (const file of files) {
       const { originalname, mimetype, filename, path } = file;
       const newFile = new File({
         originalname,
@@ -91,7 +95,7 @@ const handleUpload = async (req, res) => {
       username: userId,
       faculty,
       files: fileIds,
-      eventId: eventId, // Thêm ID của các tệp tin vào mảng files
+      eventId: eventId, // Sử dụng eventId từ req.params.eventId
       submissionDate,
       status,
       isSelected: true,
@@ -139,8 +143,8 @@ const getContributionById = async (req, res) => {
 
     // Truy vấn đóng góp dựa trên contributionId
     const contribution = await Contribution.findById(contributionId)
-    .populate("files")
-    .exec();
+      .populate("files")
+      .exec();
 
     // Kiểm tra xem đóng góp có tồn tại không
     if (!contribution) {

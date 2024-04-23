@@ -73,7 +73,8 @@ const App = () => {
                   avatar={
                     file.mimetype.startsWith("image/") ? (
                       <Image
-                        src={`http://localhost:1000/contribution-img/${file.filename}`} // Replace with image URL provider
+                        src={file.path}
+                        // src={`http://localhost:1000/contribution-img/${file.filename}`} // Replace with image URL provider
                         width={200}
                       />
                     ) : file.mimetype === "application/msword" ? (
