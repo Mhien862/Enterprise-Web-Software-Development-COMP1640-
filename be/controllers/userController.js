@@ -8,6 +8,7 @@ import Contribution from "../models/contributionModel.js";
 import File from "../models/fileModel.js";
 import { sendEmailNotification } from "./marketingCoordinatorController.js";
 import Event from "../models/eventModel.js";
+import uploadMultiFile from "../config/upload.js";
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -70,7 +71,9 @@ const handleUpload = async (req, res) => {
 
     const eventId = req.params.eventId;
     const fileIds = [];
-    for (const file of req.files) {
+    const files = await uploadMultiFile(req.files)
+    console.log(files)
+    for (const file of files) {
       const { originalname, mimetype, filename, path } = file;
       const newFile = new File({
         originalname,

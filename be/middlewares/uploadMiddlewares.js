@@ -1,14 +1,17 @@
 import multer from "multer";
 import path from "path";
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "be/uploads"); // Thư mục lưu trữ file, bạn có thể thay đổi đường dẫn tùy ý
-  },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    cb(null, Date.now() + "-" + file.fieldname + ext); // Tên file: timestamp-fieldname-originalname
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "be/uploads"); // Thư mục lưu trữ file, bạn có thể thay đổi đường dẫn tùy ý
+//   },
+//   filename: function (req, file, cb) {
+//     const ext = path.extname(file.originalname);
+//     cb(null, Date.now() + "-" + file.fieldname + ext); // Tên file: timestamp-fieldname-originalname
+//   },
+// });
+
+const storage = multer.diskStorage({});
+// const storage = multer.memoryStorage({});
 
 // Kiểm tra và lọc loại file cho phép
 const fileFilter = (req, file, cb) => {
