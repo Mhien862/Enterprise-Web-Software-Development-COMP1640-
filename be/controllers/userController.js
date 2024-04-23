@@ -72,7 +72,7 @@ const handleUpload = async (req, res) => {
     const eventId = req.params.eventId;
     const fileIds = [];
     const files = await uploadMultiFile(req.files)
-    console.log(files)
+
     for (const file of files) {
       const { originalname, mimetype, filename, path } = file;
       const newFile = new File({
