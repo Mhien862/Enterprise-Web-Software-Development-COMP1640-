@@ -15,7 +15,7 @@ const App = () => {
       const response = await axiosInstance.get(`/event-by-id?eventId=${id}`);
       const eventData = response.data.event;
 
-      const contributionDetails = await Promise.all(
+      const contributionDetails = await Promise.allSettled(
         eventData.contributions.map(async (contributionId) => {
           const contributionResponse = await axiosInstance.get(
             `/upload/${contributionId}`
@@ -57,16 +57,17 @@ const App = () => {
   };
 
   const renderCards = () => {
+    console.log(data)
     if (data && data.length > 0) {
-      return data.map((item, index) => (
-        <Card key={item._id} style={{ marginBottom: 20 }}>
+      return data.filter(data => data.status !== "rejected").map((item, index) => (
+        <Card key={item.value._id} style={{ marginBottom: 20 }}>
           {/* Username */}
-          <p>USERNAME: {item.username}</p>
+          <p>USERNAME: {item.value.username}</p>
 
           {/* Files */}
           <List
             itemLayout="horizontal"
-            dataSource={item.files}
+            dataSource={item.value.files}
             renderItem={(file) => (
               <List.Item>
                 <List.Item.Meta
@@ -87,25 +88,25 @@ const App = () => {
                   }
                   title={file.originalname}
                 />
-                <Tooltip title={item.liked ? "Unlike" : "Like"}>
+                <Tooltip title={item.value.liked ? "Unlike" : "Like"}>
                   <Button
                     icon={<LikeOutlined />}
-                    type={item.liked ? "primary" : "default"}
+                    type={item.value.liked ? "primary" : "default"}
                     onClick={() => handleLike(index)}
                   >
-                    {item.liked ? "Liked" : "Like"}
+                    {item.value.liked ? "Liked" : "Like"}
                   </Button>
                 </Tooltip>
-                <Tooltip title={item.commented ? "Hide comment" : "Comment"}>
+                <Tooltip title={item.value.commented ? "Hide comment" : "Comment"}>
                   <Button
                     icon={<CommentOutlined />}
-                    type={item.commented ? "primary" : "default"}
+                    type={item.value.commented ? "primary" : "default"}
                     onClick={() => handleComment(index)}
                   >
-                    {item.commented ? "Commented" : "Comment"}
+                    {item.value.commented ? "Commented" : "Comment"}
                   </Button>
                 </Tooltip>
-                {item.commented && (
+                {item.value.commented && (
                   <Comment content={<p>Your comment content here...</p>} />
                 )}
               </List.Item>
