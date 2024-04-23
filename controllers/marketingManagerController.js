@@ -40,7 +40,7 @@ const downloadAllFiles = async (req, res) => {
     res.status(200).json({ message: "Download all files successfully" });
   } catch (error) {
     console.error("Error downloading all files:", error);
-    res.status(500).json({ message: "Failed to download all files" });
+    res.status(404).json({ message: "Failed to download all files" });
   }
 };
 const getContribution = async (req, res) => {
@@ -52,7 +52,7 @@ const getContribution = async (req, res) => {
     res.status(200).json(contributions);
   } catch (error) {
     console.error("Error retrieving contributions:", error);
-    throw new Error("Failed to retrieve contributions");
+    // throw new Error("Failed to retrieve contributions");
   }
 };
 

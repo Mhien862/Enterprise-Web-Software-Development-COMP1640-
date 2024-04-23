@@ -12,7 +12,7 @@ const uploadFile = async (file) => {
     return result;
   } catch (error) {
     console.log(error);
-    throw new Error(error);
+    // throw new Error(error);
   }
 };
 

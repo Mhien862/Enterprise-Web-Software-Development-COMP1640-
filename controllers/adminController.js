@@ -68,7 +68,7 @@ const updateUser = async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("User not found");
+    // throw new Error("User not found");
   }
 };
 const deleteUser = async (req, res) => {
@@ -78,7 +78,7 @@ const deleteUser = async (req, res) => {
     res.json({ message: "User removed successfully" });
   } else {
     res.status(404);
-    throw new Error("User not found");
+    // throw new Error("User not found");
   }
 };
 const getUserById = async (req, res) => {

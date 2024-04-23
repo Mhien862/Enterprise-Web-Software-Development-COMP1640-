@@ -59,17 +59,16 @@ const getProfile = async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("User not found");
+    // throw new Error("User not found");
   }
 };
 
-const handleUpload = async (req, res) => {
+const uploadFile = async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ message: "No file uploaded" });
+      return res.status(404).json({ message: "No file uploaded" });
     }
 
-    const eventId = req.params.eventId;
     const fileIds = [];
     const files = await uploadMultiFile(req.files);
     console.log(files);
@@ -86,13 +85,14 @@ const handleUpload = async (req, res) => {
     }
 
     // Tạo một bản ghi Contribution và thêm các ID của tệp tin vào trường files
-    const userId = req.user.username;
+    const { faculty, status, _id } = req.body;
+    const { eventId } = req.params;
     const submissionDate = req.body.submissionDate
       ? new Date(req.body.submissionDate).toISOString()
       : new Date().toISOString();
-    const { faculty, status } = req.body;
+
     const newContribution = new Contribution({
-      username: userId,
+      username: _id,
       faculty,
       files: fileIds,
       eventId: eventId, // Sử dụng eventId từ req.params.eventId
@@ -100,6 +100,7 @@ const handleUpload = async (req, res) => {
       status,
       isSelected: true,
     });
+
     await newContribution.save();
 
     const event = await Event.findById(eventId);
@@ -114,7 +115,7 @@ const handleUpload = async (req, res) => {
     });
   } catch (error) {
     console.error("Error uploading file:", error);
-    res.status(500).json({ message: "Failed to upload file" });
+    res.status(404).json({ message: "Failed to upload file" });
   }
 };
 
@@ -134,7 +135,7 @@ const deleteContribution = async (req, res) => {
     res.json({ message: "Contribution deleted successfully" });
   } catch (error) {
     console.error("Error deleting contribution:", error);
-    res.status(500).json({ message: "Failed to delete contribution" });
+    res.status(404).json({ message: "Failed to delete contribution" });
   }
 };
 const getContributionById = async (req, res) => {
@@ -155,7 +156,7 @@ const getContributionById = async (req, res) => {
     res.status(200).json({ contribution });
   } catch (error) {
     console.error("Error fetching contribution by ID:", error);
-    res.status(500).json({ message: "Failed to fetch contribution by ID" });
+    res.status(404).json({ message: "Failed to fetch contribution by ID" });
   }
 };
 
@@ -163,7 +164,7 @@ export {
   loginUser,
   logoutUser,
   getProfile,
-  handleUpload,
+  uploadFile,
   deleteContribution,
   getContributionById,
 };

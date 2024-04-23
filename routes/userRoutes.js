@@ -3,9 +3,9 @@ import {
   loginUser,
   logoutUser,
   getProfile,
-  handleUpload,
   deleteContribution,
   getContributionById,
+  uploadFile,
 } from "../controllers/userController.js";
 import {
   registerUser,
@@ -27,7 +27,6 @@ import {
   authenticate,
   authenticateAdmin,
 } from "../middlewares/authMiddlewares.js";
-import { uploadFile } from "../middlewares/uploadMiddlewares.js";
 import {
   downloadAllFiles,
   getContribution,
@@ -40,6 +39,7 @@ import {
   sendEmail,
 } from "../controllers/marketingCoordinatorController.js";
 import { isMarketingCoordinator } from "../middlewares/marketingCoordinatorMiddlewares.js";
+import { uploadMiddleware } from "../middlewares/uploadMiddlewares.js";
 const router = express.Router();
 
 //User role
@@ -49,7 +49,7 @@ router.post("/logout", logoutUser);
 router.get("/profile", authenticate, getProfile);
 router
   .route("/upload/:eventId")
-  .post(authenticate, uploadFile, handleUpload)
+  .post(authenticate, uploadMiddleware, uploadFile)
   .delete(authenticate, deleteContribution)
   .get(authenticate, getContributionById);
 

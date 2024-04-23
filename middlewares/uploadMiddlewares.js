@@ -1,5 +1,6 @@
 import multer from "multer";
 import path from "path";
+
 // const storage = multer.diskStorage({
 //   destination: function (req, file, cb) {
 //     cb(null, "be/uploads"); // Thư mục lưu trữ file, bạn có thể thay đổi đường dẫn tùy ý
@@ -40,5 +41,5 @@ const upload = multer({
 });
 
 // API upload file
-const uploadFile = upload.array("files", 5);
-export { uploadFile };
+const uploadMiddleware = upload.array("files", 5);
+export { uploadMiddleware };
