@@ -95,9 +95,11 @@ const getUserById = async (req, res) => {
   }
 };
 const getUserList = async (req, res) => {
+  console.log("vo day");
   try {
     const userList = await User.find({});
-    res.json(userList);
+    console.log(userList);
+    res.status(200).json(userList);
   } catch (error) {
     console.error("Error retrieving user list:", error);
     res.status(500).json({ message: "Failed to retrieve user list" });
