@@ -52,7 +52,8 @@ const getContribution = async (req, res) => {
     res.status(200).json(contributions);
   } catch (error) {
     console.error("Error retrieving contributions:", error);
-    throw new Error("Failed to retrieve contributions");
+    res.status(500).json({ message: "Failed to retrieve contributions" });
+    // throw new Error("Failed to retrieve contributions");
   }
 };
 

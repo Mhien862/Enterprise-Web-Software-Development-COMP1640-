@@ -58,8 +58,8 @@ const getProfile = async (req, res) => {
       agreement: user.agreement,
     });
   } else {
-    res.status(404);
-    throw new Error("User not found");
+    res.status(404).json({ message: "User not found" });
+    // throw new Error("User not found");
   }
 };
 

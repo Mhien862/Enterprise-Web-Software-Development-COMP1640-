@@ -67,8 +67,8 @@ const updateUser = async (req, res) => {
       faculty: updatedUser.faculty,
     });
   } else {
-    res.status(404);
-    throw new Error("User not found");
+    res.status(404).json({ message: "User not found" });;
+    // throw new Error("User not found");
   }
 };
 const deleteUser = async (req, res) => {
@@ -77,8 +77,8 @@ const deleteUser = async (req, res) => {
     await User.deleteOne({ _id: user._id });
     res.json({ message: "User removed successfully" });
   } else {
-    res.status(404);
-    throw new Error("User not found");
+    res.status(404).json({ message: "User not found" });
+    // throw new Error("User not found");
   }
 };
 const getUserById = async (req, res) => {

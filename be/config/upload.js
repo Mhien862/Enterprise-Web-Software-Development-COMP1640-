@@ -30,7 +30,6 @@ const uploadDocx = async (file) => {
 const uploadMultiFile = async (files) => {
     try {
         const urls = files
-        console.log(files)
         let result = {}
         for (let i = 0; i < files.length; i++) {
             //diskStorage
@@ -45,7 +44,6 @@ const uploadMultiFile = async (files) => {
             // const result = await uploadFile(dataURI)
             urls[i].path = result.url
         }
-        console.log(urls)
         return urls
     } catch (error) {
         console.log(error)
