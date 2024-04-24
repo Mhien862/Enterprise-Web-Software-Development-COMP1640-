@@ -11,33 +11,28 @@ import path from "path";
 //   },
 // });
 
-const storage = multer.diskStorage({});
-// const storage = multer.memoryStorage({});
+const storage = multer.diskStorage({
+  // destination: './image',
+  filename: (_, file, cb) => {
+    const name = file.originalname.split(".")[0];
+    const fileExtension = file.originalname.split(".")[1];
+    const newFileName =
+      name.split(" ").join("_") + Date.now() + "." + fileExtension;
+    cb(null, newFileName);
+  },
+});
 
-// Kiểm tra và lọc loại file cho phép
-const fileFilter = (req, file, cb) => {
-  const allowedTypes = [
-    "image/jpeg",
-    "image/jpg",
-    "image/png",
-    "image/gif",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  ]; // Danh sách các loại file cho phép
-  if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true); // Chấp nhận file
-  } else {
-    cb(new Error("Only JPEG, PNG, and GIF files are allowed!"));
+const fileFilter = (_, file, cb) => {
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    return cb(null, false);
   }
+  cb(null, true);
 };
 
 // Khởi tạo middleware multer
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
-  limits: {
-    fileSize: 1024 * 1024 * 100,
-    files: 5,
-  },
 });
 
 // API upload file

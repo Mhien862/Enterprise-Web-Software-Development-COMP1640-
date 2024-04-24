@@ -58,7 +58,7 @@ router.post("/register", authenticate, authenticateAdmin, registerUser);
 router.get("/user", authenticate, authenticateAdmin, getUserById);
 router
   .route("/user-list")
-  .get(authenticateAdmin, getUserList)
+  .get(authenticate, authenticateAdmin, getUserList)
   .put(authenticate, authenticateAdmin, updateUser)
   .delete(authenticate, authenticateAdmin, deleteUser);
 router.get("/event-by-id/:name", authenticate, getEventById);

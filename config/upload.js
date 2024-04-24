@@ -21,12 +21,14 @@ const uploadMultiFile = async (files) => {
     const urls = files;
     for (let i = 0; i < files.length; i++) {
       //diskStorage
+
       const result = await uploadFile(files[i].path);
 
       // memoryStorage
       // const b64 = Buffer.from(files[i].buffer).toString("base64");
       // let dataURI = "data:" + files[i].mimetype + ";base64," + b64;
       // const result = await uploadFile(dataURI)
+
       urls[i].path = result.url;
     }
     return urls;

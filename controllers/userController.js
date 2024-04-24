@@ -13,31 +13,26 @@ import uploadMultiFile from "../config/upload.js";
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      existingUser.password
-    );
-    if (isPasswordValid) {
-      const token = createToken(res, existingUser._id);
-      // res.cookie("jwt", token, {
-      //   httpOnly: true,
-      //   sameSite: "Lax",
-      //   secure: true,
-      //   maxAge: 24 * 60 * 60 * 1000,
-      // });
-      res.status(200).json({
-        _id: existingUser._id,
-        username: existingUser.username,
-        email: existingUser.email,
-        isAdmin: existingUser.isAdmin,
-        role: existingUser.role,
-        faculty: existingUser.faculty,
-        accessToken: token,
-      });
-      return;
-    }
+
+  if (!existingUser) {
+    return res.status(404).json({ message: "Email invalid" });
   }
+
+  const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+  if (!isPasswordValid) {
+    res.status(404).json({ message: "Password invalid" });
+  }
+
+  const token = createToken(res, existingUser._id);
+  res.status(200).json({
+    _id: existingUser._id,
+    username: existingUser.username,
+    email: existingUser.email,
+    isAdmin: existingUser.isAdmin,
+    role: existingUser.role,
+    faculty: existingUser.faculty,
+    accessToken: token,
+  });
 };
 const logoutUser = async (req, res) => {
   res.cookie("jwt", "", {
@@ -65,7 +60,9 @@ const getProfile = async (req, res) => {
 
 const uploadFile = async (req, res) => {
   try {
-    if (!req.files || req.files.length === 0) {
+    console.log(req);
+
+    if (!req.files) {
       return res.status(404).json({ message: "No file uploaded" });
     }
 
