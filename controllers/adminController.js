@@ -160,11 +160,12 @@ const getEventList = async (req, res) => {
 const getEventById = async (req, res) => {
   try {
     // Lấy ID của sự kiện từ yêu cầu
-    const eventId = req.query.eventId;
+
+    const eventId = req.params.eventId;
 
     // Kiểm tra xem eventId có hợp lệ không
     if (!eventId) {
-      return res.status(400).json({ message: "Event ID is required" });
+      return res.status(404).json({ message: "Event ID is required" });
     }
 
     // Tìm sự kiện từ cơ sở dữ liệu bằng ID
@@ -172,7 +173,7 @@ const getEventById = async (req, res) => {
 
     // Kiểm tra xem sự kiện có tồn tại không
     if (!event) {
-      return res.status(404).json({ message: "Event not found" });
+      res.status(404).json({ message: "Event not found" });
     }
 
     // Trả về thông tin của sự kiện

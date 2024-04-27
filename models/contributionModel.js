@@ -11,13 +11,16 @@ const contributionSchema = mongoose.Schema({
     ref: "Faculty",
     // required: true,
   },
+  eventId: {
+    type: String,
+    // required: true,
+  },
   files: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "File",
     },
   ],
-
   isSelected: Boolean,
 });
 

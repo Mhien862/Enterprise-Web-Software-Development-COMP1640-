@@ -45,9 +45,8 @@ const downloadAllFiles = async (req, res) => {
 };
 const getContribution = async (req, res) => {
   try {
-    const contributions = await Contribution.find({})
-      .populate("files") // Nối (populate) các tệp từ model "File"
-      .exec();
+    const contributions = await Contribution.find().populate("files").exec();
+    //  // Nối (populate) các tệp từ model "File"
 
     res.status(200).json(contributions);
   } catch (error) {

@@ -90,13 +90,13 @@ const uploadFile = async (req, res) => {
       ? new Date(req.body.submissionDate).toISOString()
       : new Date().toISOString();
 
+    const user = await User.findById({ _id: _id });
+
     const newContribution = new Contribution({
-      username: _id,
+      username: user.username,
       faculty,
       files: fileIds,
       eventId: eventId, // Sử dụng eventId từ req.params.eventId
-      submissionDate,
-      status,
       isSelected: true,
     });
 
@@ -140,10 +140,10 @@ const deleteContribution = async (req, res) => {
 };
 const getContributionById = async (req, res) => {
   try {
-    const contributionId = req.query.contributionId;
+    const contributionId = req.params.eventId;
 
     // Truy vấn đóng góp dựa trên contributionId
-    const contribution = await Contribution.findById(contributionId)
+    const contribution = await Contribution.where({ eventId: contributionId })
       .populate("files")
       .exec();
 
@@ -151,7 +151,7 @@ const getContributionById = async (req, res) => {
     if (!contribution) {
       return res.status(404).json({ message: "Contribution not found" });
     }
-
+    console.log(contributionId);
     // Trả về thông tin về đóng góp
     res.status(200).json({ contribution });
   } catch (error) {
