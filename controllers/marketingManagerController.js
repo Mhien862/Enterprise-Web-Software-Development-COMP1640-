@@ -23,7 +23,7 @@ const downloadAllFiles = async (req, res) => {
 
     // Add each file to the archive
     files.forEach((file) => {
-      const filePath = path.join("be", "uploads", file.filename);
+      const filePath = path.join("uploads", file.filename);
 
       if (fs.existsSync(filePath)) {
         archive.append(fs.createReadStream(filePath), { name: file.filename });
