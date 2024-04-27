@@ -67,6 +67,7 @@ const uploadFile = async (req, res) => {
     }
 
     const fileIds = [];
+    const fileUrls = [];
     const files = await uploadMultiFile(req.files);
     console.log(files);
     for (const file of files) {
@@ -79,6 +80,7 @@ const uploadFile = async (req, res) => {
       });
       const savedFile = await newFile.save();
       fileIds.push(savedFile._id);
+      fileUrls.push(file.path);
     }
 
     // Tạo một bản ghi Contribution và thêm các ID của tệp tin vào trường files
@@ -109,6 +111,7 @@ const uploadFile = async (req, res) => {
       message: "File uploaded successfully",
       fileInfo: fileIds,
       eventId: eventId,
+      fileUrls: fileUrls,
     });
   } catch (error) {
     console.error("Error uploading file:", error);
