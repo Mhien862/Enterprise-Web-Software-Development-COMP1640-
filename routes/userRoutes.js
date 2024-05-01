@@ -64,8 +64,8 @@ router
 router.get("/event-by-id/:eventId", authenticate, getContributionById);
 router
   .route("/event")
-  .get(authenticate, getEventList)
-  .post(authenticate, createEvent)
+  .get(authenticate, authenticateAdmin, getEventList)
+  .post(authenticate, authenticateAdmin, createEvent)
   .put(authenticate, authenticateAdmin, updateEvent)
   .delete(authenticate, authenticateAdmin, deleteEvent);
 
