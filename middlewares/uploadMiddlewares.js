@@ -22,11 +22,26 @@ const storage = multer.diskStorage({
   },
 });
 
-const fileFilter = (_, file, cb) => {
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-    return cb(null, false);
+// const fileFilter = (_, file, cb) => {
+//   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+//     return cb(null, false);
+//   }
+//   cb(null, true);
+// };
+
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/gif",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ]; // Danh sách các loại file cho phép
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true); // Chấp nhận file
+  } else {
+    cb(new Error("Only JPEG, PNG, and GIF files are allowed!"));
   }
-  cb(null, true);
 };
 
 // Khởi tạo middleware multer

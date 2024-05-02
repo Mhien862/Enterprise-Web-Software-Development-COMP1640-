@@ -60,8 +60,6 @@ const getProfile = async (req, res) => {
 
 const uploadFile = async (req, res) => {
   try {
-    console.log(req);
-
     if (!req.files) {
       return res.status(404).json({ message: "No file uploaded" });
     }
