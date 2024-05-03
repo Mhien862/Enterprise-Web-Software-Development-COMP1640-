@@ -74,7 +74,7 @@ router
   .delete(authenticate, authenticateAdmin, deleteAcademicYear);
 
 router.get("/download-all", authenticate, downloadAllFiles);
-router.get("/contribution", authenticate, getContribution);
+router.get("/contribution", authenticate, authenticateAdmin, getContribution);
 router.get("/contribution-img/:name", authenticate, getContributionImg);
 router.get(
   "/dashboard",
