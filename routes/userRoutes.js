@@ -76,7 +76,12 @@ router
 router.get("/download-all", authenticate, downloadAllFiles);
 router.get("/contribution", authenticate, getContribution);
 router.get("/contribution-img/:name", authenticate, getContributionImg);
-router.get("/dashboard", authenticate, getDashboardStatistics);
+router.get(
+  "/dashboard",
+  authenticate,
+  authenticateAdmin,
+  getDashboardStatistics
+);
 router.post("/send-notification", authenticate, sendEmailNotification);
 router.post("/send-email", authenticate, sendEmail);
 

@@ -6,22 +6,17 @@ import Contribution from "../models/contributionModel.js";
 import User from "../models/userModels.js";
 const downloadAllFiles = async (req, res) => {
   try {
-    // Create a new archiver instance
     const archive = archiver("zip", {
-      zlib: { level: 5 }, // Sets the compression level
+      zlib: { level: 5 },
     });
 
-    // This is where we will store our files
     const outputFilePath = path.join("be", "file", "all_files.zip");
     const output = fs.createWriteStream(outputFilePath);
 
-    // Pipe archive data to the output file
     archive.pipe(output);
 
-    // Get all files from the database
     const files = await File.find({});
 
-    // Add each file to the archive
     files.forEach((file) => {
       const filePath = path.join("uploads", file.filename);
 
@@ -32,10 +27,8 @@ const downloadAllFiles = async (req, res) => {
       }
     });
 
-    // Finalize the archive (ie we are done appending files but streams have to finish yet)
     archive.finalize();
 
-    // Send the archive as a download to the client
     res.download(outputFilePath);
     res.status(200).json({ message: "Download all files successfully" });
   } catch (error) {
@@ -46,7 +39,6 @@ const downloadAllFiles = async (req, res) => {
 const getContribution = async (req, res) => {
   try {
     const contributions = await Contribution.find().populate("files").exec();
-    //  // Nối (populate) các tệp từ model "File"
 
     res.status(200).json(contributions);
   } catch (error) {
@@ -71,8 +63,8 @@ const getDashboardStatistics = async (req, res) => {
 
     // Đếm số lượng sinh viên trong mỗi khoa từ collection người dùng
     const studentsCountPerFaculty = await User.aggregate([
-      { $match: { role: "student" } }, // Lọc các người dùng có vai trò là sinh viên
-      { $group: { _id: "$faculty", count: { $sum: 1 } } }, // Đếm số lượng sinh viên theo khoa
+      { $match: { role: "student" } },
+      { $group: { _id: "$faculty", count: { $sum: 1 } } },
     ]);
 
     // Tổng số lượng sinh viên

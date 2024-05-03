@@ -12,7 +12,6 @@ const sendEmailNotification = async (newContributions) => {
         },
       });
 
-      // Tạo nội dung email
       const mailOptions = {
         from: "pvhh1072002@gmail.com",
         to: "pvh1072002@gmail.com",
@@ -20,7 +19,6 @@ const sendEmailNotification = async (newContributions) => {
         text: `There are ${newContributions.length} new contribution from students.`,
       };
 
-      // Gửi email
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.error("Error sending email:", error);
@@ -36,10 +34,8 @@ const sendEmailNotification = async (newContributions) => {
 
 const sendEmail = async (req, res) => {
   try {
-    // Lấy thông tin từ yêu cầu
     const { to, subject, message } = req.body;
 
-    // Kiểm tra xem địa chỉ email người nhận có hợp lệ không
     if (!to) {
       return res.status(400).json({ message: "Recipient email is required" });
     }
@@ -56,7 +52,7 @@ const sendEmail = async (req, res) => {
     // Tạo nội dung email
     const mailOptions = {
       from: "pvhh1072002@gmail.com",
-      to, // Gửi email đến địa chỉ email người nhận
+      to,
       subject: subject,
       text: message,
     };

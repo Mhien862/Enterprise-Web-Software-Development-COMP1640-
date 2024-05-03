@@ -7,10 +7,8 @@ const registerUser = async (req, res) => {
   try {
     const { username, password, email, roleName, facultyName } = req.body;
 
-    // Mã hóa mật khẩu
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Tạo một đối tượng user mới từ dữ liệu được gửi từ client
     const newUser = new User({
       username,
       password: hashedPassword,
@@ -19,14 +17,10 @@ const registerUser = async (req, res) => {
       faculty: facultyName,
     });
 
-    // Lưu user mới vào cơ sở dữ liệu
     await newUser.save();
-    // Tạo và gửi token cho user sau khi đăng ký thành công
 
-    // Trả về phản hồi thành công
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    // Nếu có lỗi, trả về phản hồi lỗi và thông báo lỗi
     console.error("Error: ", error);
     res.status(500).json({ message: "Username or email already exists" });
   }
@@ -201,16 +195,13 @@ const deleteEvent = async (req, res) => {
   try {
     const eventId = req.query.eventId;
 
-
     const event = await Event.findById(eventId);
 
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
     }
 
-
     await Event.findByIdAndDelete(eventId);
-
 
     res.status(200).json({ message: "Event deleted successfully" });
   } catch (error) {
@@ -284,13 +275,11 @@ const updateAcademicYear = async (req, res) => {
 };
 const deleteAcademicYear = async (req, res) => {
   try {
-    // Kiểm tra xem năm học có tồn tại không
     const academicYear = await AcademicYear.findById(req.query.academicYearId);
     if (!academicYear) {
       return res.status(404).json({ message: "Academic year not found" });
     }
 
-    // Nếu năm học tồn tại, xóa nó từ cơ sở dữ liệu
     await AcademicYear.findByIdAndDelete(academicYear);
 
     res.status(200).json({ message: "Academic year deleted successfully" });
