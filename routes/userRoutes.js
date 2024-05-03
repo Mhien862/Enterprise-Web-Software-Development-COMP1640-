@@ -59,7 +59,12 @@ router
   .get(authenticate, authenticateAdmin, getUserList)
   .put(authenticate, authenticateAdmin, updateUser)
   .delete(authenticate, authenticateAdmin, deleteUser);
-router.get("/event-by-id/:eventId", authenticate, getContributionById);
+router.get(
+  "/event-by-id/:eventId",
+  authenticate,
+  authenticateAdmin,
+  getContributionById
+);
 router
   .route("/event")
   .get(authenticate, getEventList)
