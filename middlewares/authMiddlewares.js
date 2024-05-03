@@ -6,11 +6,9 @@ const authenticate = async (req, res, next) => {
 
   try {
     jwt.verify(token, process.env.JWT_SECRET);
-
     next();
   } catch (error) {
-    res.send(401);
-    throw new Error("Not authorized, token failed");
+    res.status(401).json({ message: error });
   }
 };
 
