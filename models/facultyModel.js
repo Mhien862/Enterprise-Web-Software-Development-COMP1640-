@@ -17,7 +17,6 @@ const createFaculties = async () => {
       { facultyName: "Design" },
     ];
 
-    // Lưu các faculty vào cơ sở dữ liệu
     await Faculty.insertMany(facultiesData);
 
     console.log("Faculties created successfully");

@@ -1,29 +1,14 @@
 import User from "../models/userModels.js";
-import { Role } from "../models/roleModel.js";
 import bcrypt from "bcryptjs";
-import { Faculty } from "../models/facultyModel.js";
 import Event from "../models/eventModel.js";
 import AcademicYear from "../models/academicYearModel.js";
-import createToken from "../utils/createToken.js";
 
 const registerUser = async (req, res) => {
   try {
-    const { username, password, email, roleName, facultyName, agreement } =
-      req.body;
+    const { username, password, email, roleName, facultyName } = req.body;
 
     // Mã hóa mật khẩu
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Tìm vai trò dựa trên tên vai trò
-    const role = await Role.findOne({ roleName });
-    const faculty = await Faculty.findOne({ facultyName });
-    // Kiểm tra xem vai trò có tồn tại không
-    if (!role) {
-      return res.status(400).json({ message: "Role not found" });
-    }
-    if (!faculty) {
-      return res.status(400).json({ message: "Faculty not found" });
-    }
 
     // Tạo một đối tượng user mới từ dữ liệu được gửi từ client
     const newUser = new User({
@@ -32,13 +17,12 @@ const registerUser = async (req, res) => {
       email,
       role: roleName,
       faculty: facultyName,
-      agreement, // Lưu tên của vai trò vào cơ sở dữ liệu
     });
 
     // Lưu user mới vào cơ sở dữ liệu
     await newUser.save();
     // Tạo và gửi token cho user sau khi đăng ký thành công
-    // createToken(res, newUser._id);
+
     // Trả về phản hồi thành công
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
@@ -68,7 +52,7 @@ const updateUser = async (req, res) => {
     });
   } else {
     res.status(404);
-    // throw new Error("User not found");
+    throw new Error("User not found");
   }
 };
 const deleteUser = async (req, res) => {
@@ -78,7 +62,7 @@ const deleteUser = async (req, res) => {
     res.json({ message: "User removed successfully" });
   } else {
     res.status(404);
-    // throw new Error("User not found");
+    throw new Error("User not found");
   }
 };
 const getUserById = async (req, res) => {
@@ -123,7 +107,6 @@ const createEvent = async (req, res) => {
       });
     }
 
-    // Tạo sự kiện mới
     const newEvent = new Event({
       eventName,
       firstClosureDate,
@@ -147,10 +130,8 @@ const createEvent = async (req, res) => {
 };
 const getEventList = async (req, res) => {
   try {
-    // Lấy danh sách sự kiện từ cơ sở dữ liệu
     const events = await Event.find();
 
-    // Trả về danh sách sự kiện
     res.status(200).json({ events });
   } catch (error) {
     console.error("Error fetching event list:", error);
@@ -159,24 +140,18 @@ const getEventList = async (req, res) => {
 };
 const getEventById = async (req, res) => {
   try {
-    // Lấy ID của sự kiện từ yêu cầu
-
     const eventId = req.params.eventId;
 
-    // Kiểm tra xem eventId có hợp lệ không
     if (!eventId) {
       return res.status(404).json({ message: "Event ID is required" });
     }
 
-    // Tìm sự kiện từ cơ sở dữ liệu bằng ID
     const event = await Event.findById(eventId);
 
-    // Kiểm tra xem sự kiện có tồn tại không
     if (!event) {
       res.status(404).json({ message: "Event not found" });
     }
 
-    // Trả về thông tin của sự kiện
     res.status(200).json({ event });
   } catch (error) {
     console.error("Error fetching event by ID:", error);
@@ -194,39 +169,25 @@ const updateEvent = async (req, res) => {
       faculty,
     } = req.body;
 
-    // Tìm sự kiện trong cơ sở dữ liệu dựa trên eventId
     const event = await Event.findById(eventId);
 
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
+    } else {
+      event.eventName = eventName || event.eventName;
+      event.faculty = faculty || event.faculty;
     }
-
-    if (eventName) {
-      event.eventName = eventName;
-    }
-    if (firstClosureDate) {
-      // Chuyển đổi firstClosureDate sang đối tượng Moment với múi giờ Việt Nam
-      event.firstClosureDate = firstClosureDate;
-    }
-    if (finalClosureDate) {
-      // Chuyển đổi finalClosureDate sang đối tượng Moment với múi giờ Việt Nam
-      event.finalClosureDate = finalClosureDate;
-    }
-    if (faculty) {
-      event.faculty = faculty;
-    }
-
-    // Kiểm tra nếu finalClosureDate trước hoặc bằng firstClosureDate
     if (event.finalClosureDate <= event.firstClosureDate) {
       return res.status(400).json({
         message: "Final closure date must be after first closure date",
       });
+    } else {
+      event.firstClosureDate = firstClosureDate || event.firstClosureDate;
+      event.finalClosureDate = finalClosureDate || event.finalClosureDate;
     }
 
-    // Lưu lại sự kiện đã được cập nhật vào cơ sở dữ liệu
     const updatedEvent = await event.save();
 
-    // Trả về phản hồi thành công
     res
       .status(200)
       .json({ message: "Event updated successfully", event: updatedEvent });
@@ -240,17 +201,17 @@ const deleteEvent = async (req, res) => {
   try {
     const eventId = req.query.eventId;
 
-    // Tìm sự kiện trong cơ sở dữ liệu dựa trên eventId
+
     const event = await Event.findById(eventId);
 
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    // Xóa sự kiện từ cơ sở dữ liệu
+
     await Event.findByIdAndDelete(eventId);
 
-    // Trả về phản hồi thành công
+
     res.status(200).json({ message: "Event deleted successfully" });
   } catch (error) {
     console.error("Error deleting event:", error);

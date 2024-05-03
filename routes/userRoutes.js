@@ -34,10 +34,9 @@ import {
 } from "../controllers/marketingManagerController.js";
 import {
   sendEmailNotification,
-  getContributionsPerFaculty,
   sendEmail,
 } from "../controllers/marketingCoordinatorController.js";
-import { isMarketingCoordinator } from "../middlewares/marketingCoordinatorMiddlewares.js";
+
 import { uploadMiddleware } from "../middlewares/uploadMiddlewares.js";
 const router = express.Router();
 
@@ -80,11 +79,5 @@ router.get("/contribution-img/:name", authenticate, getContributionImg);
 router.get("/dashboard", authenticate, getDashboardStatistics);
 router.post("/send-notification", authenticate, sendEmailNotification);
 router.post("/send-email", authenticate, sendEmail);
-router.get(
-  "/contribution-per-faculty",
-  authenticate,
-  isMarketingCoordinator,
-  getContributionsPerFaculty
-);
 
 export default router;

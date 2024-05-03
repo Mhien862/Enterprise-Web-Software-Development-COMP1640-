@@ -1,9 +1,7 @@
 import nodemailer from "nodemailer";
-import Contribution from "../models/contributionModel.js";
 
 const sendEmailNotification = async (newContributions) => {
   try {
-    // Nếu có bài gửi mới, gửi email thông báo
     if (newContributions.length > 0) {
       // Thiết lập transporter cho dịch vụ email
       const transporter = nodemailer.createTransport({
@@ -35,20 +33,7 @@ const sendEmailNotification = async (newContributions) => {
     console.error("Error sending email notification:", error);
   }
 };
-const getContributionsPerFaculty = async (req, res) => {
-  try {
-    // Lấy thông tin về người dùng từ request (ví dụ: khoa của marketing coordinator)
-    const { faculty } = req.user;
 
-    // Tìm các đóng góp của sinh viên trong khoa của marketing coordinator
-    const contributions = await Contribution.find({ faculty });
-
-    res.status(200).json({ contributions });
-  } catch (error) {
-    console.error("Error fetching contributions:", error);
-    res.status(500).json({ message: "Failed to fetch contributions" });
-  }
-};
 const sendEmail = async (req, res) => {
   try {
     // Lấy thông tin từ yêu cầu
@@ -92,4 +77,4 @@ const sendEmail = async (req, res) => {
   }
 };
 
-export { sendEmailNotification, getContributionsPerFaculty, sendEmail };
+export { sendEmailNotification, sendEmail };

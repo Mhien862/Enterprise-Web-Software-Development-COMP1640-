@@ -21,7 +21,6 @@ const createRoles = async () => {
       { roleName: "admin" },
     ];
 
-    // Lưu các vai trò vào cơ sở dữ liệu
     await Role.insertMany(rolesData);
 
     console.log("Roles created successfully");
